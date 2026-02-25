@@ -101,17 +101,19 @@ export const reviewsApi = {
 
 // ==================== Wishlist ====================
 
+import { WishlistItem } from "@/types";
+
 export const wishlistApi = {
   getAll: (token: string) =>
-    fetchApi<{ data: unknown[] }>("/wishlist", { token }),
+    fetchApi<{ data: WishlistItem[] }>("/wishlist", { token }),
   add: (productId: string, token: string) =>
-    fetchApi("/wishlist", {
+    fetchApi<{ data: WishlistItem; message: string }>("/wishlist", {
       method: "POST",
       body: JSON.stringify({ product_id: productId }),
       token,
     }),
   remove: (productId: string, token: string) =>
-    fetchApi(`/wishlist/${productId}`, { method: "DELETE", token }),
+    fetchApi<{ message: string }>(`/wishlist/${productId}`, { method: "DELETE", token }),
 };
 
 // ==================== Discounts ====================

@@ -11,6 +11,7 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import StarRating from "@/components/reviews/StarRating";
 import ReviewForm from "@/components/reviews/ReviewForm";
 import ReviewList from "@/components/reviews/ReviewList";
+import WishlistButton from "@/components/wishlist/WishlistButton";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -142,9 +143,12 @@ export default function ProductDetailPage() {
               {product.category.name}
             </Link>
           )}
-          <h1 className="text-3xl font-bold text-dark mt-1 mb-2">
-            {product.name}
-          </h1>
+          <div className="flex items-start justify-between mt-1 mb-2">
+            <h1 className="text-3xl font-bold text-dark">
+              {product.name}
+            </h1>
+            <WishlistButton productId={product.id} size="md" />
+          </div>
 
           {/* Rating Summary */}
           {reviewCount > 0 && (

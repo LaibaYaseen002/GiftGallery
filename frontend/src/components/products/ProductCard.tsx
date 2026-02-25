@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { useCart } from "@/context/CartContext";
+import WishlistButton from "@/components/wishlist/WishlistButton";
 
 interface ProductCardProps {
   product: Product;
@@ -30,6 +31,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               </span>
             </div>
           )}
+          <div className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow-sm">
+            <WishlistButton productId={product.id} size="sm" />
+          </div>
         </div>
       </Link>
       <div className="p-4">
