@@ -1,17 +1,25 @@
-// Clerk auth middleware - will be configured in feature-auth branch
-// For now, this is a placeholder that allows all routes
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default function middleware() {
-  // Will be replaced with Clerk's authMiddleware in feature-auth
-}
+// Routes that require authentication
+const isProtectedRoute = createRouteMatcher([
+  "/checkout(.*)",
+  "/orders(.*)",
+  "/wishlist(.*)",
+  "/profile(.*)",
+  "/admin(.*)",
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
+});
 
 export const config = {
   matcher: [
-    // Protected routes that will require authentication
-    "/checkout/:path*",
-    "/orders/:path*",
-    "/wishlist/:path*",
-    "/profile/:path*",
-    "/admin/:path*",
+    // Skip Next.js internals and all static files
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
   ],
 };

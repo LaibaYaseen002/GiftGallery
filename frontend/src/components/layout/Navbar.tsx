@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
   const { totalItems } = useCart();
+  const { user } = useUser();
+
+  const isAdmin = user?.publicMetadata?.role === "admin";
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
@@ -36,31 +40,49 @@ export default function Navbar() {
             >
               Contact
             </Link>
+            <SignedIn>
+              <Link
+                href="/orders"
+                className="text-medium hover:text-primary transition-colors"
+              >
+                My Orders
+              </Link>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="text-primary font-medium hover:text-primary-dark transition-colors"
+                >
+                  Admin
+                </Link>
+              )}
+            </SignedIn>
           </div>
 
           {/* Right Side: Wishlist, Cart, Auth */}
           <div className="flex items-center gap-4">
             {/* Wishlist */}
-            <Link
-              href="/wishlist"
-              className="text-medium hover:text-primary transition-colors"
-              title="Wishlist"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
+            <SignedIn>
+              <Link
+                href="/wishlist"
+                className="text-medium hover:text-primary transition-colors"
+                title="Wishlist"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                />
-              </svg>
-            </Link>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                  />
+                </svg>
+              </Link>
+            </SignedIn>
 
             {/* Cart */}
             <Link
@@ -89,11 +111,48 @@ export default function Navbar() {
               )}
             </Link>
 
-            {/* Auth placeholder - will be replaced with Clerk in feature-auth */}
-            <Link href="/sign-in" className="btn-primary text-sm py-2 px-4">
-              Sign In
-            </Link>
+            {/* Auth */}
+            <SignedOut>
+              <Link href="/sign-in" className="btn-primary text-sm py-2 px-4">
+                Sign In
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: "w-9 h-9",
+                  },
+                }}
+              />
+            </SignedIn>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile Nav */}
+      <div className="md:hidden border-t border-border">
+        <div className="container-custom py-2 flex items-center gap-4 overflow-x-auto text-sm">
+          <Link href="/products" className="text-medium hover:text-primary whitespace-nowrap">
+            Products
+          </Link>
+          <Link href="/faq" className="text-medium hover:text-primary whitespace-nowrap">
+            FAQ
+          </Link>
+          <Link href="/contact" className="text-medium hover:text-primary whitespace-nowrap">
+            Contact
+          </Link>
+          <SignedIn>
+            <Link href="/orders" className="text-medium hover:text-primary whitespace-nowrap">
+              Orders
+            </Link>
+            {isAdmin && (
+              <Link href="/admin" className="text-primary font-medium whitespace-nowrap">
+                Admin
+              </Link>
+            )}
+          </SignedIn>
         </div>
       </div>
     </nav>

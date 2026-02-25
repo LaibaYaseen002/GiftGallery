@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { clerkAuth } from "./middleware/auth";
 
 import productRoutes from "./routes/products";
 import categoryRoutes from "./routes/categories";
@@ -24,6 +25,9 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+
+// Clerk authentication - makes auth available on all routes
+app.use(clerkAuth);
 
 // Health check
 app.get("/api/health", (_req, res) => {
