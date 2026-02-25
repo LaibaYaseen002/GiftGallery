@@ -84,17 +84,19 @@ export const ordersApi = {
 
 // ==================== Reviews ====================
 
+import { Review } from "@/types";
+
 export const reviewsApi = {
   getByProduct: (productId: string) =>
-    fetchApi<{ data: unknown[] }>(`/reviews/product/${productId}`),
-  create: (productId: string, data: unknown, token: string) =>
-    fetchApi(`/reviews/product/${productId}`, {
+    fetchApi<{ data: Review[]; average_rating: number; review_count: number }>(`/reviews/product/${productId}`),
+  create: (productId: string, data: { rating: number; comment?: string }, token: string) =>
+    fetchApi<{ data: Review; message: string }>(`/reviews/product/${productId}`, {
       method: "POST",
       body: JSON.stringify(data),
       token,
     }),
   delete: (id: string, token: string) =>
-    fetchApi(`/reviews/${id}`, { method: "DELETE", token }),
+    fetchApi<{ message: string }>(`/reviews/${id}`, { method: "DELETE", token }),
 };
 
 // ==================== Wishlist ====================

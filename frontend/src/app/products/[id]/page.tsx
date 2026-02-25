@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Product } from "@/types";
-import { productsApi } from "@/lib/api";
+import { Product, Review } from "@/types";
+import { productsApi, reviewsApi } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import StarRating from "@/components/reviews/StarRating";
+import ReviewForm from "@/components/reviews/ReviewForm";
+import ReviewList from "@/components/reviews/ReviewList";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -18,6 +21,28 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+
+  // Reviews state
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+
+  const fetchReviews = useCallback(() => {
+    if (!id) return;
+    reviewsApi
+      .getByProduct(id)
+      .then((res) => {
+        const data = res as {
+          data: Review[];
+          average_rating: number;
+          review_count: number;
+        };
+        setReviews(data.data || []);
+        setAverageRating(data.average_rating || 0);
+        setReviewCount(data.review_count || 0);
+      })
+      .catch(() => {});
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
@@ -32,7 +57,9 @@ export default function ProductDetailPage() {
         setProduct(null);
       })
       .finally(() => setLoading(false));
-  }, [id]);
+
+    fetchReviews();
+  }, [id, fetchReviews]);
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -115,9 +142,20 @@ export default function ProductDetailPage() {
               {product.category.name}
             </Link>
           )}
-          <h1 className="text-3xl font-bold text-dark mt-1 mb-4">
+          <h1 className="text-3xl font-bold text-dark mt-1 mb-2">
             {product.name}
           </h1>
+
+          {/* Rating Summary */}
+          {reviewCount > 0 && (
+            <div className="flex items-center gap-2 mb-4">
+              <StarRating rating={averageRating} size="sm" />
+              <span className="text-sm text-medium">
+                {averageRating.toFixed(1)} ({reviewCount} review
+                {reviewCount !== 1 ? "s" : ""})
+              </span>
+            </div>
+          )}
 
           <p className="text-3xl font-bold text-primary mb-6">
             ${product.price.toFixed(2)}
@@ -179,6 +217,30 @@ export default function ProductDetailPage() {
               <span className="font-medium text-dark">Product ID:</span>{" "}
               {product.id.slice(0, 8)}
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-16">
+        <h2 className="section-title">
+          Customer Reviews
+          {reviewCount > 0 && (
+            <span className="text-medium font-normal text-lg ml-2">
+              ({reviewCount})
+            </span>
+          )}
+        </h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Review Form */}
+          <div>
+            <ReviewForm productId={id} onReviewSubmitted={fetchReviews} />
+          </div>
+
+          {/* Review List */}
+          <div className="lg:col-span-2">
+            <ReviewList reviews={reviews} onReviewDeleted={fetchReviews} />
           </div>
         </div>
       </div>
