@@ -36,29 +36,31 @@ async function fetchApi<T>(
 
 // ==================== Products ====================
 
+import { Product, Category } from "@/types";
+
 export const productsApi = {
   getAll: (params?: { search?: string; category?: string }) => {
     const query = new URLSearchParams();
     if (params?.search) query.set("search", params.search);
     if (params?.category) query.set("category", params.category);
     const qs = query.toString();
-    return fetchApi<{ data: unknown[] }>(`/products${qs ? `?${qs}` : ""}`);
+    return fetchApi<{ data: Product[] }>(`/products${qs ? `?${qs}` : ""}`);
   },
-  getById: (id: string) => fetchApi<{ data: unknown }>(`/products/${id}`),
-  create: (data: unknown, token: string) =>
-    fetchApi("/products", { method: "POST", body: JSON.stringify(data), token }),
-  update: (id: string, data: unknown, token: string) =>
-    fetchApi(`/products/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
+  getById: (id: string) => fetchApi<{ data: Product }>(`/products/${id}`),
+  create: (data: Partial<Product>, token: string) =>
+    fetchApi<{ data: Product; message: string }>("/products", { method: "POST", body: JSON.stringify(data), token }),
+  update: (id: string, data: Partial<Product>, token: string) =>
+    fetchApi<{ data: Product; message: string }>(`/products/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
   delete: (id: string, token: string) =>
-    fetchApi(`/products/${id}`, { method: "DELETE", token }),
+    fetchApi<{ message: string }>(`/products/${id}`, { method: "DELETE", token }),
 };
 
 // ==================== Categories ====================
 
 export const categoriesApi = {
-  getAll: () => fetchApi<{ data: unknown[] }>("/categories"),
+  getAll: () => fetchApi<{ data: Category[] }>("/categories"),
   getProducts: (slug: string) =>
-    fetchApi<{ data: unknown[] }>(`/categories/${slug}/products`),
+    fetchApi<{ data: Product[]; category: Category }>(`/categories/${slug}/products`),
 };
 
 // ==================== Orders ====================
