@@ -65,15 +65,17 @@ export const categoriesApi = {
 
 // ==================== Orders ====================
 
+import { Order, DiscountCode, CreateOrderRequest } from "@/types";
+
 export const ordersApi = {
-  create: (data: unknown, token: string) =>
-    fetchApi("/orders", { method: "POST", body: JSON.stringify(data), token }),
+  create: (data: CreateOrderRequest, token: string) =>
+    fetchApi<{ data: Order; message: string }>("/orders", { method: "POST", body: JSON.stringify(data), token }),
   getAll: (token: string) =>
-    fetchApi<{ data: unknown[] }>("/orders", { token }),
+    fetchApi<{ data: Order[] }>("/orders", { token }),
   getById: (id: string, token: string) =>
-    fetchApi<{ data: unknown }>(`/orders/${id}`, { token }),
+    fetchApi<{ data: Order }>(`/orders/${id}`, { token }),
   updateStatus: (id: string, status: string, token: string) =>
-    fetchApi(`/orders/${id}/status`, {
+    fetchApi<{ data: Order; message: string }>(`/orders/${id}/status`, {
       method: "PATCH",
       body: JSON.stringify({ status }),
       token,
@@ -114,20 +116,20 @@ export const wishlistApi = {
 
 export const discountsApi = {
   validate: (code: string, token: string) =>
-    fetchApi<{ data: unknown }>("/discounts/validate", {
+    fetchApi<{ data: { code: string; discount_percent: number }; message: string }>("/discounts/validate", {
       method: "POST",
       body: JSON.stringify({ code }),
       token,
     }),
   // Admin
   getAll: (token: string) =>
-    fetchApi<{ data: unknown[] }>("/discounts/admin", { token }),
-  create: (data: unknown, token: string) =>
-    fetchApi("/discounts/admin", { method: "POST", body: JSON.stringify(data), token }),
-  update: (id: string, data: unknown, token: string) =>
-    fetchApi(`/discounts/admin/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
+    fetchApi<{ data: DiscountCode[] }>("/discounts/admin", { token }),
+  create: (data: Partial<DiscountCode>, token: string) =>
+    fetchApi<{ data: DiscountCode; message: string }>("/discounts/admin", { method: "POST", body: JSON.stringify(data), token }),
+  update: (id: string, data: Partial<DiscountCode>, token: string) =>
+    fetchApi<{ data: DiscountCode; message: string }>(`/discounts/admin/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
   delete: (id: string, token: string) =>
-    fetchApi(`/discounts/admin/${id}`, { method: "DELETE", token }),
+    fetchApi<{ message: string }>(`/discounts/admin/${id}`, { method: "DELETE", token }),
 };
 
 // ==================== Returns ====================

@@ -105,6 +105,18 @@ export interface Feedback {
   created_at: string;
 }
 
+// ==================== Request Types ====================
+
+export interface CreateOrderRequest {
+  items: { product_id: string; quantity: number }[];
+  shipping_name: string;
+  shipping_address: string;
+  shipping_city: string;
+  shipping_phone: string;
+  gift_message?: string;
+  discount_code?: string;
+}
+
 // ==================== Cart Types ====================
 
 export interface CartItem {

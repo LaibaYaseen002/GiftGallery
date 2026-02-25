@@ -1,25 +1,226 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
+import { supabase } from "../services/supabase";
+import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
+import { getAuth, clerkClient } from "@clerk/express";
+import { CreateOrderRequest } from "../types";
 
 const router = Router();
 
 // POST /api/orders - Create new order (User)
-router.post("/", async (_req, res) => {
-  res.json({ message: "POST /api/orders - TODO" });
+router.post("/", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const userId = getUserId(req)!;
+    const auth = getAuth(req);
+    const user = await clerkClient.users.getUser(auth.userId!);
+    const userEmail =
+      user.emailAddresses[0]?.emailAddress || "unknown@email.com";
+
+    const {
+      items,
+      shipping_name,
+      shipping_address,
+      shipping_city,
+      shipping_phone,
+      gift_message,
+      discount_code,
+    } = req.body as CreateOrderRequest;
+
+    if (!items || items.length === 0) {
+      res.status(400).json({ error: "Order must contain at least one item" });
+      return;
+    }
+
+    if (!shipping_name || !shipping_address || !shipping_city || !shipping_phone) {
+      res.status(400).json({ error: "All shipping fields are required" });
+      return;
+    }
+
+    // Fetch product details and calculate total
+    const productIds = items.map((item) => item.product_id);
+    const { data: products, error: prodError } = await supabase
+      .from("products")
+      .select("id, name, price")
+      .in("id", productIds);
+
+    if (prodError || !products) {
+      res.status(500).json({ error: "Failed to fetch product details" });
+      return;
+    }
+
+    let subtotal = 0;
+    const orderItems = items.map((item) => {
+      const product = products.find((p) => p.id === item.product_id);
+      if (!product) throw new Error(`Product ${item.product_id} not found`);
+      const lineTotal = product.price * item.quantity;
+      subtotal += lineTotal;
+      return {
+        product_id: product.id,
+        product_name: product.name,
+        price: product.price,
+        quantity: item.quantity,
+      };
+    });
+
+    // Apply discount if provided
+    let discountAmount = 0;
+    if (discount_code) {
+      const { data: discount } = await supabase
+        .from("discount_codes")
+        .select("*")
+        .eq("code", discount_code.toUpperCase())
+        .eq("is_active", true)
+        .single();
+
+      if (discount) {
+        const now = new Date();
+        const notExpired = !discount.expires_at || new Date(discount.expires_at) > now;
+        const hasUses = !discount.max_uses || discount.current_uses < discount.max_uses;
+
+        if (notExpired && hasUses) {
+          discountAmount = (subtotal * discount.discount_percent) / 100;
+          // Increment usage
+          await supabase
+            .from("discount_codes")
+            .update({ current_uses: discount.current_uses + 1 })
+            .eq("id", discount.id);
+        }
+      }
+    }
+
+    const totalAmount = subtotal - discountAmount;
+
+    // Create order
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .insert({
+        user_id: userId,
+        user_email: userEmail,
+        total_amount: totalAmount,
+        discount_code: discount_code?.toUpperCase() || null,
+        discount_amount: discountAmount,
+        status: "pending",
+        shipping_name,
+        shipping_address,
+        shipping_city,
+        shipping_phone,
+        gift_message: gift_message || null,
+      })
+      .select()
+      .single();
+
+    if (orderError || !order) {
+      res.status(500).json({ error: orderError?.message || "Failed to create order" });
+      return;
+    }
+
+    // Create order items
+    const itemsWithOrderId = orderItems.map((item) => ({
+      ...item,
+      order_id: order.id,
+    }));
+
+    const { error: itemsError } = await supabase
+      .from("order_items")
+      .insert(itemsWithOrderId);
+
+    if (itemsError) {
+      res.status(500).json({ error: "Order created but failed to save items" });
+      return;
+    }
+
+    res.status(201).json({
+      data: { ...order, items: itemsWithOrderId },
+      message: "Order placed successfully!",
+    });
+  } catch (err) {
+    console.error("Error creating order:", err);
+    res.status(500).json({ error: "Failed to create order" });
+  }
 });
 
 // GET /api/orders - Get user's orders (User)
-router.get("/", async (_req, res) => {
-  res.json({ message: "GET /api/orders - TODO" });
+router.get("/", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const userId = getUserId(req)!;
+
+    const { data: orders, error } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({ data: orders || [] });
+  } catch (err) {
+    console.error("Error fetching orders:", err);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
 });
 
 // GET /api/orders/:id - Get order detail (User)
-router.get("/:id", async (_req, res) => {
-  res.json({ message: "GET /api/orders/:id - TODO" });
+router.get("/:id", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const userId = getUserId(req)!;
+    const { id } = req.params;
+
+    const { data: order, error } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("id", id)
+      .eq("user_id", userId)
+      .single();
+
+    if (error || !order) {
+      res.status(404).json({ error: "Order not found" });
+      return;
+    }
+
+    // Fetch order items
+    const { data: items } = await supabase
+      .from("order_items")
+      .select("*")
+      .eq("order_id", id);
+
+    res.json({ data: { ...order, items: items || [] } });
+  } catch (err) {
+    console.error("Error fetching order:", err);
+    res.status(500).json({ error: "Failed to fetch order" });
+  }
 });
 
 // PATCH /api/orders/:id/status - Update order status (Admin)
-router.patch("/:id/status", async (_req, res) => {
-  res.json({ message: "PATCH /api/orders/:id/status - TODO" });
+router.patch("/:id/status", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+    if (!validStatuses.includes(status)) {
+      res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(", ")}` });
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("orders")
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({ data, message: `Order status updated to ${status}` });
+  } catch (err) {
+    console.error("Error updating order status:", err);
+    res.status(500).json({ error: "Failed to update order status" });
+  }
 });
 
 export default router;
