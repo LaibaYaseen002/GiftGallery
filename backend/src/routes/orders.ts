@@ -3,6 +3,7 @@ import { supabase } from "../services/supabase";
 import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 import { getAuth, clerkClient } from "@clerk/express";
 import { CreateOrderRequest } from "../types";
+import { sendOrderConfirmationEmail } from "../services/resend";
 
 const router = Router();
 
@@ -127,6 +128,23 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       res.status(500).json({ error: "Order created but failed to save items" });
       return;
     }
+
+    // Send confirmation email (non-blocking — don't fail the order if email fails)
+    sendOrderConfirmationEmail({
+      to: userEmail,
+      orderId: order.id,
+      customerName: shipping_name,
+      items: orderItems,
+      subtotal,
+      discountCode: discount_code?.toUpperCase() || null,
+      discountAmount,
+      totalAmount,
+      shippingName: shipping_name,
+      shippingAddress: shipping_address,
+      shippingCity: shipping_city,
+      shippingPhone: shipping_phone,
+      giftMessage: gift_message || null,
+    }).catch((err) => console.error("Email send failed:", err));
 
     res.status(201).json({
       data: { ...order, items: itemsWithOrderId },
