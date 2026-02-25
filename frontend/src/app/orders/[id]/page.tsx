@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import { Order } from "@/types";
 import { ordersApi } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
+import OrderTimeline from "@/components/orders/OrderTimeline";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 function OrderDetailContent() {
@@ -157,6 +158,9 @@ function OrderDetailContent() {
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Order Timeline */}
+          <OrderTimeline status={order.status} updatedAt={order.updated_at} />
+
           {/* Shipping Info */}
           <div className="card p-6">
             <h2 className="text-lg font-bold text-dark mb-3">
