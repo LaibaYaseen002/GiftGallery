@@ -11,7 +11,7 @@ if (!resendApiKey) {
   );
 }
 
-export const resend = new Resend(resendApiKey || "");
+export const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 // Default sender — use Resend's test address or your verified domain
 const FROM_EMAIL = process.env.FROM_EMAIL || "Gift Gallery <onboarding@resend.dev>";
@@ -145,7 +145,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
 </html>`;
 
   try {
-    const result = await resend.emails.send({
+    const result = await resend!.emails.send({
       from: FROM_EMAIL,
       to: data.to,
       subject: `Order Confirmed — #${data.orderId.slice(0, 8)} | Gift Gallery`,
