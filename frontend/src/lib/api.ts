@@ -47,9 +47,9 @@ export const productsApi = {
     return fetchApi<{ data: Product[] }>(`/products${qs ? `?${qs}` : ""}`);
   },
   getById: (id: string) => fetchApi<{ data: Product }>(`/products/${id}`),
-  create: (data: Partial<Product>, token: string) =>
+  create: (data: Record<string, unknown>, token: string) =>
     fetchApi<{ data: Product; message: string }>("/products", { method: "POST", body: JSON.stringify(data), token }),
-  update: (id: string, data: Partial<Product>, token: string) =>
+  update: (id: string, data: Record<string, unknown>, token: string) =>
     fetchApi<{ data: Product; message: string }>(`/products/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
   delete: (id: string, token: string) =>
     fetchApi<{ message: string }>(`/products/${id}`, { method: "DELETE", token }),
@@ -80,6 +80,9 @@ export const ordersApi = {
       body: JSON.stringify({ status }),
       token,
     }),
+  // Admin
+  getAllAdmin: (token: string) =>
+    fetchApi<{ data: Order[] }>("/orders/admin/all", { token }),
 };
 
 // ==================== Reviews ====================
@@ -174,7 +177,9 @@ export const feedbackApi = {
 
 // ==================== Analytics ====================
 
+import { AnalyticsData } from "@/types";
+
 export const analyticsApi = {
   getDashboard: (token: string) =>
-    fetchApi<{ data: unknown }>("/admin/analytics", { token }),
+    fetchApi<{ data: AnalyticsData }>("/admin/analytics", { token }),
 };

@@ -137,6 +137,16 @@ export interface AnalyticsData {
   total_revenue: number;
   total_products: number;
   total_customers: number;
-  recent_orders: Order[];
+  pending_orders: number;
+  delivered_orders: number;
+  pending_returns: number;
+  recent_orders: {
+    id: string;
+    user_email: string;
+    total_amount: number;
+    status: string;
+    created_at: string;
+    shipping_name: string;
+  }[];
   top_products: { product_name: string; total_sold: number }[];
 }

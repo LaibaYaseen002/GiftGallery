@@ -210,6 +210,26 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
   }
 });
 
+// GET /api/orders/admin/all - Get all orders (Admin)
+router.get("/admin/all", requireAdmin, async (_req: Request, res: Response) => {
+  try {
+    const { data: orders, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({ data: orders || [] });
+  } catch (err) {
+    console.error("Error fetching admin orders:", err);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+});
+
 // PATCH /api/orders/:id/status - Update order status (Admin)
 router.patch("/:id/status", requireAdmin, async (req: Request, res: Response) => {
   try {
