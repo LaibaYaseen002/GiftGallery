@@ -261,9 +261,24 @@ export interface CustomerDetail {
   reviews: Review[];
 }
 
-// ==================== Notifications ====================
+// ==================== Emails ====================
 
-import { Notification } from "@/types";
+import { SentEmail, Notification } from "@/types";
+
+export const emailsApi = {
+  send: (data: { to_email: string; to_name?: string; subject: string; message: string }, token: string) =>
+    fetchApi<{ message: string }>("/email/admin/send", { method: "POST", body: JSON.stringify(data), token }),
+  replyFeedback: (feedbackId: string, message: string, token: string) =>
+    fetchApi<{ message: string }>(`/email/admin/reply-feedback/${feedbackId}`, {
+      method: "POST",
+      body: JSON.stringify({ message }),
+      token,
+    }),
+  getHistory: (token: string, limit = 50) =>
+    fetchApi<{ data: SentEmail[] }>(`/email/admin/history?limit=${limit}`, { token }),
+};
+
+// ==================== Notifications ====================
 
 export const notificationsApi = {
   getAll: (token: string, limit = 50) =>

@@ -232,3 +232,21 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(is_read);
 CREATE INDEX IF NOT EXISTS idx_notifications_created ON notifications(created_at DESC);
+
+-- =============================================
+-- Sent Emails table
+-- =============================================
+CREATE TABLE IF NOT EXISTS sent_emails (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  to_email varchar(200) NOT NULL,
+  to_name varchar(200),
+  subject varchar(300) NOT NULL,
+  message text NOT NULL,
+  type varchar(50) DEFAULT 'custom',
+  reference_id uuid,
+  sent_by varchar(200) NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_sent_emails_created ON sent_emails(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_sent_emails_type ON sent_emails(type);

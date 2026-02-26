@@ -159,3 +159,119 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     return null;
   }
 }
+
+// ==================== Custom Admin Email ====================
+
+interface CustomEmailData {
+  to: string;
+  toName?: string;
+  subject: string;
+  message: string;
+}
+
+export async function sendCustomEmail(data: CustomEmailData) {
+  if (!resendApiKey) {
+    console.log("Skipping email — RESEND_API_KEY not configured");
+    return null;
+  }
+
+  const greeting = data.toName ? `Hi ${data.toName},` : "Hello,";
+  const messageHtml = data.message.replace(/\n/g, "<br>");
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #FFF8F0; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: linear-gradient(135deg, #B76E79, #9A4C5A); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+      <h1 style="color: white; margin: 0; font-size: 28px;">🎁 Gift Gallery</h1>
+    </div>
+    <div style="background: white; padding: 30px; border: 1px solid #F0E0D6; border-top: none; border-radius: 0 0 12px 12px;">
+      <p style="color: #2D2D2D; font-size: 16px;">${greeting}</p>
+      <div style="color: #6B6B6B; line-height: 1.8; margin: 15px 0;">${messageHtml}</div>
+      <div style="text-align: center; margin-top: 25px;">
+        <p style="color: #B76E79; font-weight: bold;">Gift Gallery Team 🎁</p>
+      </div>
+    </div>
+    <div style="text-align: center; padding: 20px; color: #6B6B6B; font-size: 12px;">
+      <p>&copy; 2025 Gift Gallery. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  try {
+    const result = await resend!.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `${data.subject} | Gift Gallery`,
+      html,
+    });
+    console.log("Custom email sent:", result);
+    return result;
+  } catch (error) {
+    console.error("Failed to send custom email:", error);
+    return null;
+  }
+}
+
+// ==================== Feedback Reply Email ====================
+
+interface FeedbackReplyData {
+  to: string;
+  customerName: string;
+  originalSubject: string;
+  replyMessage: string;
+}
+
+export async function sendFeedbackReplyEmail(data: FeedbackReplyData) {
+  if (!resendApiKey) {
+    console.log("Skipping email — RESEND_API_KEY not configured");
+    return null;
+  }
+
+  const replyHtml = data.replyMessage.replace(/\n/g, "<br>");
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #FFF8F0; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: linear-gradient(135deg, #B76E79, #9A4C5A); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+      <h1 style="color: white; margin: 0; font-size: 28px;">🎁 Gift Gallery</h1>
+      <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0;">Feedback Response</p>
+    </div>
+    <div style="background: white; padding: 30px; border: 1px solid #F0E0D6; border-top: none; border-radius: 0 0 12px 12px;">
+      <p style="color: #2D2D2D; font-size: 16px;">Hi ${data.customerName},</p>
+      <p style="color: #6B6B6B;">Thank you for your feedback. Here is our response regarding "<strong>${data.originalSubject}</strong>":</p>
+      <div style="background: #FAF5F0; border-left: 4px solid #B76E79; padding: 15px; margin: 20px 0; border-radius: 4px;">
+        <div style="color: #2D2D2D; line-height: 1.8;">${replyHtml}</div>
+      </div>
+      <p style="color: #6B6B6B; font-size: 14px;">If you have further questions, don't hesitate to reach out!</p>
+      <div style="text-align: center; margin-top: 25px;">
+        <p style="color: #B76E79; font-weight: bold;">Gift Gallery Team 🎁</p>
+      </div>
+    </div>
+    <div style="text-align: center; padding: 20px; color: #6B6B6B; font-size: 12px;">
+      <p>&copy; 2025 Gift Gallery. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  try {
+    const result = await resend!.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `Re: ${data.originalSubject} | Gift Gallery`,
+      html,
+    });
+    console.log("Feedback reply email sent:", result);
+    return result;
+  } catch (error) {
+    console.error("Failed to send feedback reply email:", error);
+    return null;
+  }
+}

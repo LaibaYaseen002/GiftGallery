@@ -192,3 +192,15 @@ export interface Notification {
   is_read: boolean;
   created_at: string;
 }
+
+export interface SentEmail {
+  id: string;
+  to_email: string;
+  to_name: string | null;
+  subject: string;
+  message: string;
+  type: string;
+  reference_id: string | null;
+  sent_by: string;
+  created_at: string;
+}

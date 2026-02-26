@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
-import { requireAuth } from "../middleware/auth";
-import { sendOrderConfirmationEmail } from "../services/resend";
+import { requireAuth, requireAdmin } from "../middleware/auth";
+import { getAuth } from "@clerk/express";
+import { sendOrderConfirmationEmail, sendCustomEmail, sendFeedbackReplyEmail } from "../services/resend";
 import { supabase } from "../services/supabase";
 
 const router = Router();
@@ -62,6 +63,129 @@ router.post("/order-confirmation", requireAuth, async (req: Request, res: Respon
   } catch (err) {
     console.error("Error sending confirmation email:", err);
     res.status(500).json({ error: "Failed to send email" });
+  }
+});
+
+// POST /api/email/admin/send - Send custom email (Admin)
+router.post("/admin/send", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const auth = getAuth(req);
+    const { to_email, to_name, subject, message } = req.body;
+
+    if (!to_email || !subject || !message) {
+      res.status(400).json({ error: "Email, subject, and message are required" });
+      return;
+    }
+
+    const result = await sendCustomEmail({
+      to: to_email,
+      toName: to_name || undefined,
+      subject,
+      message,
+    });
+
+    if (!result) {
+      res.status(500).json({ error: "Failed to send email. Check RESEND_API_KEY configuration." });
+      return;
+    }
+
+    // Log sent email
+    await supabase.from("sent_emails").insert({
+      to_email,
+      to_name: to_name || null,
+      subject,
+      message,
+      type: "custom",
+      sent_by: auth.userId || "admin",
+    });
+
+    res.json({ message: "Email sent successfully" });
+  } catch (err) {
+    console.error("Error sending custom email:", err);
+    res.status(500).json({ error: "Failed to send email" });
+  }
+});
+
+// POST /api/email/admin/reply-feedback/:id - Reply to feedback (Admin)
+router.post("/admin/reply-feedback/:id", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const auth = getAuth(req);
+    const { id } = req.params;
+    const { message } = req.body;
+
+    if (!message) {
+      res.status(400).json({ error: "Reply message is required" });
+      return;
+    }
+
+    // Fetch feedback
+    const { data: feedback, error: feedbackError } = await supabase
+      .from("feedback")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (feedbackError || !feedback) {
+      res.status(404).json({ error: "Feedback not found" });
+      return;
+    }
+
+    const result = await sendFeedbackReplyEmail({
+      to: feedback.email,
+      customerName: feedback.name,
+      originalSubject: feedback.subject,
+      replyMessage: message,
+    });
+
+    if (!result) {
+      res.status(500).json({ error: "Failed to send reply. Check RESEND_API_KEY configuration." });
+      return;
+    }
+
+    // Mark feedback as read
+    await supabase
+      .from("feedback")
+      .update({ is_read: true })
+      .eq("id", id);
+
+    // Log sent email
+    await supabase.from("sent_emails").insert({
+      to_email: feedback.email,
+      to_name: feedback.name,
+      subject: `Re: ${feedback.subject}`,
+      message,
+      type: "feedback_reply",
+      reference_id: id,
+      sent_by: auth.userId || "admin",
+    });
+
+    res.json({ message: "Reply sent successfully" });
+  } catch (err) {
+    console.error("Error replying to feedback:", err);
+    res.status(500).json({ error: "Failed to send reply" });
+  }
+});
+
+// GET /api/email/admin/history - Get sent email history (Admin)
+router.get("/admin/history", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 50;
+
+    const { data, error } = await supabase
+      .from("sent_emails")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({ data: data || [] });
+  } catch (err) {
+    console.error("Error fetching email history:", err);
+    res.status(500).json({ error: "Failed to fetch email history" });
   }
 });
 

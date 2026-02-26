@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { Feedback } from "@/types";
-import { feedbackApi } from "@/lib/api";
+import { feedbackApi, emailsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function AdminFeedbackPage() {
@@ -11,6 +11,10 @@ export default function AdminFeedbackPage() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "unread" | "read">("all");
+  const [replyTo, setReplyTo] = useState<Feedback | null>(null);
+  const [replyMessage, setReplyMessage] = useState("");
+  const [replySending, setReplySending] = useState(false);
+  const [replySuccess, setReplySuccess] = useState("");
 
   const fetchFeedback = async () => {
     try {
@@ -37,6 +41,27 @@ export default function AdminFeedbackPage() {
       await fetchFeedback();
     } catch (err) {
       console.error("Failed to mark feedback as read:", err);
+    }
+  };
+
+  const handleReply = async () => {
+    if (!replyTo || !replyMessage.trim()) return;
+    setReplySending(true);
+    try {
+      const token = await getToken();
+      if (!token) return;
+      await emailsApi.replyFeedback(replyTo.id, replyMessage, token);
+      setReplySuccess("Reply sent successfully!");
+      setReplyMessage("");
+      setTimeout(() => {
+        setReplyTo(null);
+        setReplySuccess("");
+        fetchFeedback();
+      }, 1500);
+    } catch (err) {
+      console.error("Failed to send reply:", err);
+    } finally {
+      setReplySending(false);
     }
   };
 
@@ -150,17 +175,76 @@ export default function AdminFeedbackPage() {
                   </p>
                 </div>
 
-                {!fb.is_read && (
+                <div className="flex gap-2 flex-shrink-0">
                   <button
-                    onClick={() => handleMarkRead(fb.id)}
-                    className="px-3 py-1.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors flex-shrink-0"
+                    onClick={() => {
+                      setReplyTo(fb);
+                      setReplyMessage("");
+                      setReplySuccess("");
+                    }}
+                    className="px-3 py-1.5 text-sm font-medium text-accent border border-accent rounded-lg hover:bg-accent hover:text-white transition-colors"
                   >
-                    Mark Read
+                    Reply
                   </button>
-                )}
+                  {!fb.is_read && (
+                    <button
+                      onClick={() => handleMarkRead(fb.id)}
+                      className="px-3 py-1.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
+                    >
+                      Mark Read
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Reply Modal */}
+      {replyTo && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
+            <h2 className="text-lg font-semibold text-dark mb-1">Reply to Feedback</h2>
+            <p className="text-sm text-medium mb-4">
+              Replying to <span className="font-medium text-dark">{replyTo.name}</span> ({replyTo.email}) about &quot;{replyTo.subject}&quot;
+            </p>
+
+            <div className="bg-gray-50 rounded-lg p-3 mb-4 text-sm text-medium">
+              <p className="font-medium text-dark text-xs mb-1">Original message:</p>
+              <p className="line-clamp-3">{replyTo.message}</p>
+            </div>
+
+            {replySuccess && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-lg mb-4 text-sm">
+                {replySuccess}
+              </div>
+            )}
+
+            <textarea
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+              rows={5}
+              className="input-field resize-y mb-4"
+              placeholder="Write your reply..."
+            />
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setReplyTo(null)}
+                className="btn-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReply}
+                disabled={replySending || !replyMessage.trim()}
+                className="btn-primary disabled:opacity-50"
+              >
+                {replySending ? "Sending..." : "Send Reply"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
