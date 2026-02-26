@@ -5,10 +5,12 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Order } from "@/types";
-import { ordersApi } from "@/lib/api";
+import { Order, ReturnRequest } from "@/types";
+import { ordersApi, returnsApi } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import OrderTimeline from "@/components/orders/OrderTimeline";
+import ReturnRequestForm from "@/components/returns/ReturnRequestForm";
+import ReturnStatusBadge from "@/components/returns/ReturnStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 function OrderDetailContent() {
@@ -20,6 +22,18 @@ function OrderDetailContent() {
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [returnRequest, setReturnRequest] = useState<ReturnRequest | null>(null);
+  const [showReturnForm, setShowReturnForm] = useState(false);
+
+  const fetchReturnRequest = async (token: string) => {
+    try {
+      const res = await returnsApi.getAll(token);
+      const match = res.data.find((r) => r.order_id === id);
+      setReturnRequest(match || null);
+    } catch {
+      // No return request exists — that's fine
+    }
+  };
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -28,6 +42,7 @@ function OrderDetailContent() {
         if (!token) return;
         const res = await ordersApi.getById(id, token);
         setOrder(res.data as Order);
+        await fetchReturnRequest(token);
       } catch (err) {
         console.error("Failed to fetch order:", err);
       } finally {
@@ -197,6 +212,67 @@ function OrderDetailContent() {
               </p>
             </div>
           )}
+
+          {/* Return Request Section */}
+          {returnRequest ? (
+            <div className="card p-6">
+              <h2 className="text-lg font-bold text-dark mb-3">
+                Return Request
+              </h2>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-medium">Status:</span>
+                  <ReturnStatusBadge status={returnRequest.status} />
+                </div>
+                <div>
+                  <p className="text-sm text-medium">Reason:</p>
+                  <p className="text-sm text-dark mt-1">{returnRequest.reason}</p>
+                </div>
+                {returnRequest.admin_notes && (
+                  <div>
+                    <p className="text-sm text-medium">Admin Response:</p>
+                    <p className="text-sm text-dark mt-1">{returnRequest.admin_notes}</p>
+                  </div>
+                )}
+                <p className="text-xs text-medium">
+                  Submitted{" "}
+                  {new Date(returnRequest.created_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
+            </div>
+          ) : ["delivered", "confirmed", "shipped"].includes(order.status) ? (
+            <div className="card p-6">
+              <h2 className="text-lg font-bold text-dark mb-3">
+                Request a Return
+              </h2>
+              {showReturnForm ? (
+                <ReturnRequestForm
+                  orderId={order.id}
+                  onSuccess={async () => {
+                    setShowReturnForm(false);
+                    const token = await getToken();
+                    if (token) await fetchReturnRequest(token);
+                  }}
+                />
+              ) : (
+                <div>
+                  <p className="text-sm text-medium mb-3">
+                    Not satisfied with your order? You can request a return.
+                  </p>
+                  <button
+                    onClick={() => setShowReturnForm(true)}
+                    className="btn-secondary w-full"
+                  >
+                    Request Return
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : null}
 
           {/* Actions */}
           <div className="space-y-3">

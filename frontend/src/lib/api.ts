@@ -138,16 +138,22 @@ export const discountsApi = {
 
 // ==================== Returns ====================
 
+import { ReturnRequest } from "@/types";
+
 export const returnsApi = {
-  create: (data: unknown, token: string) =>
-    fetchApi("/returns", { method: "POST", body: JSON.stringify(data), token }),
+  create: (data: { order_id: string; reason: string }, token: string) =>
+    fetchApi<{ data: ReturnRequest; message: string }>("/returns", {
+      method: "POST",
+      body: JSON.stringify(data),
+      token,
+    }),
   getAll: (token: string) =>
-    fetchApi<{ data: unknown[] }>("/returns", { token }),
+    fetchApi<{ data: ReturnRequest[] }>("/returns", { token }),
   // Admin
   getAllAdmin: (token: string) =>
-    fetchApi<{ data: unknown[] }>("/returns/admin", { token }),
-  updateStatus: (id: string, data: unknown, token: string) =>
-    fetchApi(`/returns/admin/${id}`, {
+    fetchApi<{ data: ReturnRequest[] }>("/returns/admin", { token }),
+  updateStatus: (id: string, data: { status: string; admin_notes?: string }, token: string) =>
+    fetchApi<{ data: ReturnRequest; message: string }>(`/returns/admin/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
       token,
