@@ -72,7 +72,7 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="container-custom py-8">
+    <div>
       <h1 className="page-title">Order Management</h1>
 
       {/* Filter Tabs */}

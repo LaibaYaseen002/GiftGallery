@@ -555,4 +555,301 @@ FRONTEND_URL=http://localhost:3000
 
 ---
 
-**Ready to start building. Feature #1 (Project Setup) will be first.**
+**Phase 1 complete (Features 1-15). Phase 2: Admin Panel Enhancement begins below.**
+
+---
+
+### 15. Phase 2: Admin Panel Enhancement Plan
+
+The initial 15 features focused on the **customer-facing** side of the store. Phase 2 builds a **complete admin management system** so the website owner can manage every aspect of the business from a dedicated admin panel.
+
+#### Current Admin Gaps
+- No admin-specific layout or sidebar (admin pages look like regular pages)
+- No client-side protection (any logged-in user can see admin UI, API blocks them but UX is poor)
+- No category management (categories can't be added/edited/deleted)
+- No customer/user management (can't see who signed up, their activity)
+- No review moderation (can't remove inappropriate reviews)
+- No admin notifications (owner doesn't know when new orders/returns arrive)
+- No order detail view for admin (can only change status, not see full info)
+- Basic analytics only (no charts, no date filters, no breakdowns)
+
+---
+
+#### Feature 16: Admin Layout & Route Protection
+**Branch:** `feature-admin-layout`
+
+**What it does:** Creates a dedicated admin panel layout with sidebar navigation, admin role verification on the frontend, and a professional admin experience separate from the customer-facing store.
+
+**Backend:**
+- No new routes needed (uses existing Clerk role check)
+
+**Frontend:**
+- `frontend/src/app/admin/layout.tsx` — Admin layout wrapper with:
+  - Sidebar navigation (Dashboard, Orders, Products, Categories, Customers, Reviews, Returns, Discounts, Feedback, Settings)
+  - Active link highlighting
+  - Collapsible sidebar on mobile (hamburger toggle)
+  - Admin header bar with admin name, role badge, and "View Store" link back to main site
+- `frontend/src/components/admin/AdminGuard.tsx` — Client-side role check component:
+  - Checks `user?.publicMetadata?.role === "admin"` on mount
+  - Shows loading spinner while checking
+  - Redirects non-admin users to home page (`/`) with a toast/message
+  - Wraps the admin layout so ALL admin pages are protected
+- `frontend/src/components/admin/AdminSidebar.tsx` — Sidebar component with:
+  - Navigation links with icons (SVG)
+  - Unread count badges on Orders (pending), Returns (pending), Feedback (unread)
+  - Collapsible on mobile
+- Update `frontend/src/components/layout/Navbar.tsx`:
+  - Hide main Navbar on `/admin/*` routes (admin has its own header)
+
+**Pages affected:**
+- All existing `/admin/*` pages will inherit the new layout
+- No functional changes to existing admin pages, just wrapped in new layout
+
+---
+
+#### Feature 17: Category Management
+**Branch:** `feature-admin-categories`
+
+**What it does:** Allows admin to create, edit, and delete product categories from the admin panel.
+
+**Database:**
+- No new tables (uses existing `categories` table)
+
+**Backend — New routes in `routes/categories.ts`:**
+| Method | Route | Description | Auth |
+|--------|-------|-------------|------|
+| POST | `/api/categories` | Create new category | Admin |
+| PUT | `/api/categories/:id` | Update category (name, slug, image) | Admin |
+| DELETE | `/api/categories/:id` | Delete category (only if no products linked) | Admin |
+
+**Frontend:**
+- `frontend/src/app/admin/categories/page.tsx` — Category management page:
+  - List all categories with image, name, slug, product count
+  - "Add Category" button opens modal with form (name, slug auto-generated, image URL)
+  - Edit button on each category opens form modal
+  - Delete button with confirmation (blocked if category has products)
+- `frontend/src/components/admin/CategoryForm.tsx` — Create/edit category form:
+  - Name input (slug auto-generated from name)
+  - Image URL input with live preview
+  - Validation
+
+**API client updates:**
+- `categoriesApi.create(data)`, `categoriesApi.update(id, data)`, `categoriesApi.delete(id)`
+
+---
+
+#### Feature 18: Enhanced Order Management
+**Branch:** `feature-admin-orders-enhanced`
+
+**What it does:** Gives admin full visibility into each order with complete details, order timeline, admin notes, and status change history.
+
+**Database — Migration:**
+- Add `admin_notes` column to `orders` table (text, nullable)
+- Add `status_history` table:
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | uuid | PK, default uuid |
+| order_id | uuid | FK -> orders.id |
+| old_status | varchar(50) | NOT NULL |
+| new_status | varchar(50) | NOT NULL |
+| changed_by | varchar(200) | NOT NULL (admin Clerk ID) |
+| note | text | NULLABLE |
+| created_at | timestamptz | default now() |
+
+**Backend — Updated routes in `routes/orders.ts`:**
+| Method | Route | Description | Auth |
+|--------|-------|-------------|------|
+| GET | `/api/orders/admin/:id` | Get full order detail (items, customer, history) | Admin |
+| PATCH | `/api/orders/:id/status` | Update status + log history + optional note | Admin |
+| PATCH | `/api/orders/:id/notes` | Add/update admin notes | Admin |
+
+- On status change: insert into `status_history` table (no email to customer)
+
+**Frontend:**
+- `frontend/src/app/admin/orders/[id]/page.tsx` — Admin order detail page:
+  - Customer info section (name, email, phone, address)
+  - Order items list with images, quantities, prices
+  - Gift message display (if any)
+  - Discount code & amount applied
+  - Order status with dropdown to update
+  - Status change history timeline (who changed what, when)
+  - Admin notes textarea (internal notes, not visible to customer)
+- Update `frontend/src/app/admin/orders/page.tsx`:
+  - Each order row is now clickable → navigates to order detail
+  - Add order total, item count columns
+  - Add date range filter
+
+---
+
+#### Feature 19: Customer Management
+**Branch:** `feature-admin-customers`
+
+**What it does:** Allows admin to view all registered customers, their order history, spending stats, and activity.
+
+**Backend — New route file `routes/customers.ts`:**
+| Method | Route | Description | Auth |
+|--------|-------|-------------|------|
+| GET | `/api/admin/customers` | Get all customers (aggregated from orders + Clerk) | Admin |
+| GET | `/api/admin/customers/:userId` | Get customer detail (orders, spending, returns) | Admin |
+
+**Implementation approach:**
+- Query unique `user_id` values from `orders` table
+- For each, aggregate: total orders, total spent, last order date
+- Fetch user details (name, email, avatar) from Clerk API using `clerkClient.users.getUser()`
+- Support search by name/email, sort by spending/orders/date
+
+**Frontend:**
+- `frontend/src/app/admin/customers/page.tsx` — Customer list:
+  - Table with: avatar, name, email, total orders, total spent, member since, last order
+  - Search by name or email
+  - Sort by columns
+  - Click row → customer detail page
+- `frontend/src/app/admin/customers/[userId]/page.tsx` — Customer detail:
+  - Profile card (name, email, avatar, member since from Clerk)
+  - Stats: total orders, total spent, average order value
+  - Full order history table
+  - Return requests by this customer
+  - Reviews by this customer
+
+---
+
+#### Feature 20: Review Moderation
+**Branch:** `feature-admin-reviews`
+
+**What it does:** Allows admin to view all reviews across all products, monitor ratings, and delete inappropriate or spam reviews.
+
+**Backend — Updated routes in `routes/reviews.ts`:**
+| Method | Route | Description | Auth |
+|--------|-------|-------------|------|
+| GET | `/api/reviews/admin` | Get all reviews (with product info, sortable) | Admin |
+| DELETE | `/api/reviews/admin/:id` | Delete any review (moderation) | Admin |
+
+- Admin GET returns reviews joined with product name and image
+- Support filtering by rating (1-5), sorting by date/rating
+- Return stats: total reviews, average rating, rating distribution
+
+**Frontend:**
+- `frontend/src/app/admin/reviews/page.tsx` — Review moderation page:
+  - Stats bar: total reviews, average rating, rating distribution (5-star: X%, 4-star: X%, etc.)
+  - Filter tabs: All, 5-star, 4-star, 3-star, 2-star, 1-star
+  - Review list with: product image/name, reviewer name, rating stars, comment, date
+  - Delete button with confirmation modal on each review
+  - Link to product page for context
+- Update admin sidebar to include "Reviews" link
+
+---
+
+#### Feature 21: Enhanced Analytics Dashboard
+**Branch:** `feature-admin-analytics`
+
+**What it does:** Upgrades the admin dashboard with visual charts, date range filtering, category breakdowns, and a recent activity feed showing real-time business events.
+
+**Backend — Updated `routes/analytics.ts`:**
+| Method | Route | Description | Auth |
+|--------|-------|-------------|------|
+| GET | `/api/admin/analytics` | Enhanced stats with date range support | Admin |
+| GET | `/api/admin/analytics/chart` | Revenue & orders data for chart (last 7/30 days) | Admin |
+| GET | `/api/admin/analytics/categories` | Sales breakdown by category | Admin |
+| GET | `/api/admin/analytics/activity` | Recent activity feed (last 20 events) | Admin |
+
+**Chart data endpoint:**
+- Query params: `?period=7d` or `?period=30d`
+- Returns: array of `{ date, revenue, orders }` grouped by day
+- Used for bar chart on dashboard
+
+**Category breakdown endpoint:**
+- Returns: `{ category_name, total_orders, total_revenue, product_count }` for each category
+
+**Activity feed endpoint:**
+- Combines recent events from multiple tables:
+  - New orders (from `orders` table, last 20)
+  - New return requests (from `return_requests`)
+  - New feedback (from `feedback`)
+  - New reviews (from `reviews`)
+- Each event has: type, message, timestamp
+- Sorted by timestamp descending
+
+**Frontend — Updated `frontend/src/app/admin/page.tsx`:**
+- **Stats row:** Total revenue, orders, customers, products (existing, enhanced with % change)
+- **Revenue chart:** Simple CSS-based bar chart (no chart library needed):
+  - Horizontal bars showing daily revenue for last 7 or 30 days
+  - Toggle between 7-day and 30-day views
+- **Category breakdown:** Table showing revenue per category with visual bars
+- **Recent activity feed:** Scrollable list of recent business events:
+  - "New order #ABC from John — Rs. 2,500" (with timestamp)
+  - "New return request for order #DEF"
+  - "New feedback from user@email.com"
+  - "New 5-star review on Gold Pearl Necklace"
+  - Each event has icon, color-coded by type
+- **Quick actions:** Cards linking to Orders (pending count), Returns (pending), Feedback (unread)
+
+**Components:**
+- `frontend/src/components/admin/RevenueChart.tsx` — CSS bar chart component
+- `frontend/src/components/admin/CategoryBreakdown.tsx` — Category sales table
+- `frontend/src/components/admin/ActivityFeed.tsx` — Recent events list
+
+---
+
+#### Feature 22: Admin Notifications
+**Branch:** `feature-admin-notifications`
+
+**What it does:** Adds a notification system for the admin so the website owner gets alerted about important events — new orders, return requests, feedback, and low-activity warnings.
+
+**Database — New table:**
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | uuid | PK, default uuid |
+| type | varchar(50) | NOT NULL (new_order, new_return, new_feedback, new_review, status_change) |
+| title | varchar(200) | NOT NULL |
+| message | text | NOT NULL |
+| reference_id | uuid | NULLABLE (order_id, return_id, etc.) |
+| is_read | boolean | default false |
+| created_at | timestamptz | default now() |
+
+**Backend — New route file `routes/notifications.ts`:**
+| Method | Route | Description | Auth |
+|--------|-------|-------------|------|
+| GET | `/api/admin/notifications` | Get all notifications (paginated) | Admin |
+| GET | `/api/admin/notifications/unread-count` | Get unread count | Admin |
+| PATCH | `/api/admin/notifications/:id/read` | Mark single as read | Admin |
+| PATCH | `/api/admin/notifications/read-all` | Mark all as read | Admin |
+
+**Auto-create notifications when:**
+- New order is placed → insert notification (in `routes/orders.ts` POST handler)
+- New return request → insert notification (in `routes/returns.ts` POST handler)
+- New feedback submitted → insert notification (in `routes/feedback.ts` POST handler)
+- New review submitted → insert notification (in `routes/reviews.ts` POST handler)
+
+**Frontend:**
+- `frontend/src/components/admin/NotificationBell.tsx` — Bell icon in admin header:
+  - Shows unread count badge
+  - Click opens dropdown with latest 10 notifications
+  - Each notification: icon (by type), title, time ago, click to navigate to relevant page
+  - "Mark all as read" button
+  - "View all" link to full notifications page
+- `frontend/src/app/admin/notifications/page.tsx` — Full notifications page:
+  - All notifications with filters (all, unread, by type)
+  - Mark as read on click
+  - Bulk mark as read
+
+---
+
+### 16. Phase 2 Summary
+
+| # | Branch | Feature | New Pages | New API Routes |
+|---|--------|---------|-----------|----------------|
+| 16 | `feature-admin-layout` | Admin Layout & Route Protection | layout.tsx, AdminGuard, AdminSidebar | — |
+| 17 | `feature-admin-categories` | Category Management | /admin/categories | POST/PUT/DELETE /api/categories |
+| 18 | `feature-admin-orders-enhanced` | Enhanced Order Management | /admin/orders/[id] | GET /api/orders/admin/:id, PATCH notes |
+| 19 | `feature-admin-customers` | Customer Management | /admin/customers, /admin/customers/[id] | GET /api/admin/customers |
+| 20 | `feature-admin-reviews` | Review Moderation | /admin/reviews | GET/DELETE /api/reviews/admin |
+| 21 | `feature-admin-analytics` | Enhanced Analytics Dashboard | Updated /admin + chart components | GET chart/categories/activity |
+| 22 | `feature-admin-notifications` | Admin Notifications | /admin/notifications + NotificationBell | CRUD /api/admin/notifications |
+
+**Total new:** 7 features, ~8 new pages, ~15 new API routes, 1 new DB table, 1 DB migration
+
+---
+
+**Phase 2 implementation begins with Feature #16 (Admin Layout & Route Protection).**

@@ -63,7 +63,7 @@ export default function AdminReturnsPage() {
   }
 
   return (
-    <div className="container-custom py-8">
+    <div>
       <h1 className="page-title">Return Requests</h1>
 
       {/* Filter Tabs */}

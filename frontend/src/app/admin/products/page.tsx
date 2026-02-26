@@ -80,7 +80,7 @@ export default function AdminProductsPage() {
   }
 
   return (
-    <div className="container-custom py-8">
+    <div>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <h1 className="page-title mb-0">Products ({products.length})</h1>

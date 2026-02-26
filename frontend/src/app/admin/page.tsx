@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
 
   if (!analytics) {
     return (
-      <div className="container-custom py-20 text-center">
+      <div className="py-20 text-center">
         <h1 className="text-3xl font-bold mb-4">Failed to Load Dashboard</h1>
         <p className="text-medium">Could not load analytics data. Please try again.</p>
       </div>
@@ -44,7 +44,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="container-custom py-8">
+    <div>
       <h1 className="page-title">Admin Dashboard</h1>
 
       {/* Stats Cards */}

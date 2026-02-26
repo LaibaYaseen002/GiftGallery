@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import LayoutShell from "@/components/layout/LayoutShell";
 import { CartProvider } from "@/context/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -34,11 +33,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${inter.className} antialiased`}>
           <CartProvider>
-            <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
+            <LayoutShell>{children}</LayoutShell>
           </CartProvider>
         </body>
       </html>

@@ -103,7 +103,7 @@ export default function AdminDiscountsPage() {
   }
 
   return (
-    <div className="container-custom py-8">
+    <div>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <h1 className="page-title mb-0">Discount Codes</h1>

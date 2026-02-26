@@ -25,7 +25,7 @@ export default function AddNewProductPage() {
   };
 
   return (
-    <div className="container-custom py-8">
+    <div>
       <Link
         href="/admin/products"
         className="text-sm text-medium hover:text-primary mb-4 inline-block"
