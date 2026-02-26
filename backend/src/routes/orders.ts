@@ -4,6 +4,7 @@ import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 import { getAuth, clerkClient } from "@clerk/express";
 import { CreateOrderRequest } from "../types";
 import { sendOrderConfirmationEmail } from "../services/resend";
+import { createNotification } from "../services/notifications";
 
 const router = Router();
 
@@ -145,6 +146,14 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       shippingPhone: shipping_phone,
       giftMessage: gift_message || null,
     }).catch((err) => console.error("Email send failed:", err));
+
+    // Create admin notification
+    createNotification({
+      type: "new_order",
+      title: "New Order Received",
+      message: `New order from ${shipping_name} — $${totalAmount.toFixed(2)}`,
+      reference_id: order.id,
+    });
 
     res.status(201).json({
       data: { ...order, items: itemsWithOrderId },

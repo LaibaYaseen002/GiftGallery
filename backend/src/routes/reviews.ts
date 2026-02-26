@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { supabase } from "../services/supabase";
 import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 import { getAuth, clerkClient } from "@clerk/express";
+import { createNotification } from "../services/notifications";
 
 const router = Router();
 
@@ -92,6 +93,14 @@ router.post("/product/:productId", requireAuth, async (req: Request, res: Respon
       res.status(500).json({ error: error.message });
       return;
     }
+
+    // Create admin notification
+    createNotification({
+      type: "new_review",
+      title: "New Review",
+      message: `${userName} left a ${Math.round(rating)}-star review`,
+      reference_id: data.id,
+    });
 
     res.status(201).json({ data, message: "Review submitted successfully" });
   } catch (err) {

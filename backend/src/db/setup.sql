@@ -185,3 +185,50 @@ CREATE TABLE IF NOT EXISTS wishlist (
 );
 
 CREATE INDEX IF NOT EXISTS idx_wishlist_user ON wishlist(user_id);
+
+-- =============================================
+-- Return Requests table
+-- =============================================
+CREATE TABLE IF NOT EXISTS return_requests (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id uuid REFERENCES orders(id) ON DELETE CASCADE,
+  user_id varchar(200) NOT NULL,
+  reason text NOT NULL,
+  status varchar(20) DEFAULT 'pending',
+  admin_notes text,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_return_requests_user ON return_requests(user_id);
+CREATE INDEX IF NOT EXISTS idx_return_requests_order ON return_requests(order_id);
+
+-- =============================================
+-- Feedback table
+-- =============================================
+CREATE TABLE IF NOT EXISTS feedback (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id varchar(200),
+  name varchar(200) NOT NULL,
+  email varchar(200) NOT NULL,
+  subject varchar(300) NOT NULL,
+  message text NOT NULL,
+  is_read boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
+
+-- =============================================
+-- Notifications table
+-- =============================================
+CREATE TABLE IF NOT EXISTS notifications (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  type varchar(50) NOT NULL,
+  title varchar(200) NOT NULL,
+  message text NOT NULL,
+  reference_id uuid,
+  is_read boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(is_read);
+CREATE INDEX IF NOT EXISTS idx_notifications_created ON notifications(created_at DESC);

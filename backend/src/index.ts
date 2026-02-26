@@ -13,6 +13,7 @@ import returnRoutes from "./routes/returns";
 import feedbackRoutes from "./routes/feedback";
 import analyticsRoutes from "./routes/analytics";
 import customerRoutes from "./routes/customers";
+import notificationRoutes from "./routes/notifications";
 import emailRoutes from "./routes/email";
 
 dotenv.config();
@@ -46,6 +47,7 @@ app.use("/api/returns", returnRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/admin/analytics", analyticsRoutes);
 app.use("/api/admin/customers", customerRoutes);
+app.use("/api/admin/notifications", notificationRoutes);
 app.use("/api/email", emailRoutes);
 
 app.listen(PORT, () => {

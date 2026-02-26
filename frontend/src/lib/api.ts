@@ -261,6 +261,23 @@ export interface CustomerDetail {
   reviews: Review[];
 }
 
+// ==================== Notifications ====================
+
+import { Notification } from "@/types";
+
+export const notificationsApi = {
+  getAll: (token: string, limit = 50) =>
+    fetchApi<{ data: Notification[] }>(`/admin/notifications?limit=${limit}`, { token }),
+  getUnreadCount: (token: string) =>
+    fetchApi<{ data: { count: number } }>("/admin/notifications/unread-count", { token }),
+  markAllRead: (token: string) =>
+    fetchApi<{ message: string }>("/admin/notifications/read-all", { method: "PATCH", token }),
+  markRead: (id: string, token: string) =>
+    fetchApi<{ data: Notification; message: string }>(`/admin/notifications/${id}/read`, { method: "PATCH", token }),
+};
+
+// ==================== Customers ====================
+
 export const customersApi = {
   getAll: (token: string) =>
     fetchApi<{ data: CustomerSummary[] }>("/admin/customers", { token }),

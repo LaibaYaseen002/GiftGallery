@@ -3,6 +3,7 @@ import { supabase } from "../services/supabase";
 import { requireAdmin } from "../middleware/auth";
 import { getUserId } from "../middleware/auth";
 import { CreateFeedbackRequest } from "../types";
+import { createNotification } from "../services/notifications";
 
 const router = Router();
 
@@ -36,6 +37,14 @@ router.post("/", async (req: Request, res: Response) => {
       res.status(500).json({ error: error.message });
       return;
     }
+
+    // Create admin notification
+    createNotification({
+      type: "new_feedback",
+      title: "New Feedback",
+      message: `Feedback from ${name}: "${subject}"`,
+      reference_id: data.id,
+    });
 
     res.status(201).json({
       data,

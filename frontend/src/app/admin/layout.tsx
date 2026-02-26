@@ -4,6 +4,7 @@ import { useState } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import AdminGuard from "@/components/admin/AdminGuard";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import NotificationBell from "@/components/admin/NotificationBell";
 
 export default function AdminLayout({
   children,
@@ -42,8 +43,9 @@ export default function AdminLayout({
               </h1>
             </div>
 
-            {/* Right: Admin info + UserButton */}
+            {/* Right: Notifications + Admin info + UserButton */}
             <div className="flex items-center gap-3">
+              <NotificationBell />
               <div className="hidden sm:block text-right">
                 <p className="text-sm font-medium text-dark">
                   {user?.firstName || user?.emailAddresses?.[0]?.emailAddress || "Admin"}

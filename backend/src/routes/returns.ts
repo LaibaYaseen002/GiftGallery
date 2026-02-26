@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { supabase } from "../services/supabase";
 import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 import { CreateReturnRequest } from "../types";
+import { createNotification } from "../services/notifications";
 
 const router = Router();
 
@@ -66,6 +67,14 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       res.status(500).json({ error: error.message });
       return;
     }
+
+    // Create admin notification
+    createNotification({
+      type: "new_return",
+      title: "New Return Request",
+      message: `Return request for order #${order_id.slice(0, 8)}`,
+      reference_id: returnRequest.id,
+    });
 
     res.status(201).json({
       data: returnRequest,
