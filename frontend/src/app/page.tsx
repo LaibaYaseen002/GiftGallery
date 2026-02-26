@@ -57,7 +57,7 @@ export default function Home() {
           <p className="text-medium text-center mb-10">
             Find the perfect gift from our curated collections
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {categories.length > 0
               ? categories.map((cat) => (
                   <Link
@@ -72,7 +72,7 @@ export default function Home() {
                           alt={cat.name}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                         />
                       ) : (
                         <div className="w-full h-full bg-primary/10 flex items-center justify-center">
@@ -80,13 +80,13 @@ export default function Home() {
                         </div>
                       )}
                     </div>
-                    <p className="font-medium text-dark group-hover:text-primary transition-colors">
+                    <p className="font-medium text-dark group-hover:text-primary transition-colors text-sm">
                       {cat.name}
                     </p>
                   </Link>
                 ))
               : // Skeleton placeholders while loading
-                [1, 2, 3, 4, 5, 6].map((i) => (
+                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
                   <div key={i} className="card p-4 text-center">
                     <div className="w-full h-28 bg-border rounded-lg mb-3 animate-pulse" />
                     <div className="h-4 bg-border rounded w-3/4 mx-auto animate-pulse" />
