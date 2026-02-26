@@ -61,6 +61,13 @@ export const categoriesApi = {
   getAll: () => fetchApi<{ data: Category[] }>("/categories"),
   getProducts: (slug: string) =>
     fetchApi<{ data: Product[]; category: Category }>(`/categories/${slug}/products`),
+  // Admin
+  create: (data: { name: string; slug: string; image_url?: string }, token: string) =>
+    fetchApi<{ data: Category; message: string }>("/categories", { method: "POST", body: JSON.stringify(data), token }),
+  update: (id: string, data: { name?: string; slug?: string; image_url?: string }, token: string) =>
+    fetchApi<{ data: Category; message: string }>(`/categories/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
+  delete: (id: string, token: string) =>
+    fetchApi<{ message: string }>(`/categories/${id}`, { method: "DELETE", token }),
 };
 
 // ==================== Orders ====================
