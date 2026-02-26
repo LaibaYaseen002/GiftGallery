@@ -98,6 +98,16 @@ export interface ReturnRequest {
 
 export type ReturnStatus = "pending" | "approved" | "rejected" | "refunded";
 
+export interface StatusHistory {
+  id: string;
+  order_id: string;
+  old_status: string | null;
+  new_status: string;
+  changed_by: string;
+  note: string | null;
+  created_at: string;
+}
+
 export interface Feedback {
   id: string;
   user_id: string | null;

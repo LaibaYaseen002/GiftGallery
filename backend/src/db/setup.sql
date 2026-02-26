@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS orders (
   shipping_city varchar(100) NOT NULL,
   shipping_phone varchar(20) NOT NULL,
   gift_message text,
+  admin_notes text,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
@@ -116,6 +117,21 @@ CREATE TABLE IF NOT EXISTS order_items (
 );
 
 CREATE INDEX IF NOT EXISTS idx_order_items_order ON order_items(order_id);
+
+-- =============================================
+-- Status History table
+-- =============================================
+CREATE TABLE IF NOT EXISTS status_history (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id uuid REFERENCES orders(id) ON DELETE CASCADE,
+  old_status varchar(20),
+  new_status varchar(20) NOT NULL,
+  changed_by varchar(200) NOT NULL,
+  note text,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_status_history_order ON status_history(order_id);
 
 -- =============================================
 -- Discount Codes table

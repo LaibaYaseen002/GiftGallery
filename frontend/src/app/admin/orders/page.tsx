@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 import { Order, OrderStatus } from "@/types";
 import { ordersApi } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
@@ -119,7 +120,11 @@ export default function AdminOrdersPage() {
       ) : (
         <div className="space-y-3">
           {filteredOrders.map((order) => (
-            <div key={order.id} className="card p-5">
+            <Link
+              key={order.id}
+              href={`/admin/orders/${order.id}`}
+              className="card p-5 block hover:shadow-md transition-shadow cursor-pointer"
+            >
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 {/* Order Info */}
                 <div className="flex-1">
@@ -156,12 +161,16 @@ export default function AdminOrdersPage() {
                 </div>
 
                 {/* Status Update */}
-                <div className="flex items-center gap-2">
+                <div
+                  className="flex items-center gap-2"
+                  onClick={(e) => e.preventDefault()}
+                >
                   <select
                     value={order.status}
-                    onChange={(e) =>
-                      handleStatusUpdate(order.id, e.target.value)
-                    }
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      handleStatusUpdate(order.id, e.target.value);
+                    }}
                     disabled={updatingId === order.id}
                     className="input-field text-sm py-2 w-36"
                   >
@@ -186,7 +195,7 @@ export default function AdminOrdersPage() {
                   Contains gift message
                 </div>
               )}
-            </div>
+            </Link>
           ))}
         </div>
       )}

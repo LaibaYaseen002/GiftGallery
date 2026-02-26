@@ -179,6 +179,69 @@ router.get("/", requireAuth, async (req: Request, res: Response) => {
   }
 });
 
+// GET /api/orders/admin/all - Get all orders (Admin)
+// NOTE: Admin routes must be defined BEFORE /:id to avoid wildcard matching
+router.get("/admin/all", requireAdmin, async (_req: Request, res: Response) => {
+  try {
+    const { data: orders, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({ data: orders || [] });
+  } catch (err) {
+    console.error("Error fetching admin orders:", err);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+});
+
+// GET /api/orders/admin/:id - Get full order detail (Admin)
+router.get("/admin/:id", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const { data: order, error } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error || !order) {
+      res.status(404).json({ error: "Order not found" });
+      return;
+    }
+
+    // Fetch order items
+    const { data: items } = await supabase
+      .from("order_items")
+      .select("*")
+      .eq("order_id", id);
+
+    // Fetch status history
+    const { data: history } = await supabase
+      .from("status_history")
+      .select("*")
+      .eq("order_id", id)
+      .order("created_at", { ascending: false });
+
+    res.json({
+      data: {
+        ...order,
+        items: items || [],
+        status_history: history || [],
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching admin order detail:", err);
+    res.status(500).json({ error: "Failed to fetch order detail" });
+  }
+});
+
 // GET /api/orders/:id - Get order detail (User)
 router.get("/:id", requireAuth, async (req: Request, res: Response) => {
   try {
@@ -210,37 +273,27 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/orders/admin/all - Get all orders (Admin)
-router.get("/admin/all", requireAdmin, async (_req: Request, res: Response) => {
-  try {
-    const { data: orders, error } = await supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      res.status(500).json({ error: error.message });
-      return;
-    }
-
-    res.json({ data: orders || [] });
-  } catch (err) {
-    console.error("Error fetching admin orders:", err);
-    res.status(500).json({ error: "Failed to fetch orders" });
-  }
-});
-
 // PATCH /api/orders/:id/status - Update order status (Admin)
 router.patch("/:id/status", requireAdmin, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+    const auth = getAuth(req);
 
     const validStatuses = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
     if (!validStatuses.includes(status)) {
       res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(", ")}` });
       return;
     }
+
+    // Get current order status
+    const { data: currentOrder } = await supabase
+      .from("orders")
+      .select("status")
+      .eq("id", id)
+      .single();
+
+    const oldStatus = currentOrder?.status || null;
 
     const { data, error } = await supabase
       .from("orders")
@@ -254,10 +307,43 @@ router.patch("/:id/status", requireAdmin, async (req: Request, res: Response) =>
       return;
     }
 
+    // Log status change in history
+    await supabase.from("status_history").insert({
+      order_id: id,
+      old_status: oldStatus,
+      new_status: status,
+      changed_by: auth.userId || "admin",
+    });
+
     res.json({ data, message: `Order status updated to ${status}` });
   } catch (err) {
     console.error("Error updating order status:", err);
     res.status(500).json({ error: "Failed to update order status" });
+  }
+});
+
+// PATCH /api/orders/:id/notes - Update admin notes (Admin)
+router.patch("/:id/notes", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { admin_notes } = req.body;
+
+    const { data, error } = await supabase
+      .from("orders")
+      .update({ admin_notes, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({ data, message: "Admin notes updated" });
+  } catch (err) {
+    console.error("Error updating admin notes:", err);
+    res.status(500).json({ error: "Failed to update admin notes" });
   }
 });
 

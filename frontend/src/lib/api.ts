@@ -90,6 +90,14 @@ export const ordersApi = {
   // Admin
   getAllAdmin: (token: string) =>
     fetchApi<{ data: Order[] }>("/orders/admin/all", { token }),
+  getAdminDetail: (id: string, token: string) =>
+    fetchApi<{ data: Order }>(`/orders/admin/${id}`, { token }),
+  updateNotes: (id: string, admin_notes: string, token: string) =>
+    fetchApi<{ data: Order; message: string }>(`/orders/${id}/notes`, {
+      method: "PATCH",
+      body: JSON.stringify({ admin_notes }),
+      token,
+    }),
 };
 
 // ==================== Reviews ====================
