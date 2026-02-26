@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/context/CartContext";
@@ -7,8 +8,11 @@ import { useCart } from "@/context/CartContext";
 export default function Navbar() {
   const { totalItems } = useCart();
   const { user } = useUser();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const isAdmin = user?.publicMetadata?.role === "admin";
+
+  const closeMobile = () => setMobileOpen(false);
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
@@ -20,7 +24,7 @@ export default function Navbar() {
             <span className="text-xl font-bold text-primary">Gift Gallery</span>
           </Link>
 
-          {/* Nav Links */}
+          {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="/products"
@@ -64,7 +68,7 @@ export default function Navbar() {
             </SignedIn>
           </div>
 
-          {/* Right Side: Wishlist, Cart, Auth */}
+          {/* Right Side: Wishlist, Cart, Auth, Hamburger */}
           <div className="flex items-center gap-4">
             {/* Wishlist */}
             <SignedIn>
@@ -133,37 +137,122 @@ export default function Navbar() {
                 }}
               />
             </SignedIn>
+
+            {/* Mobile Hamburger */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden text-medium hover:text-primary transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Nav */}
-      <div className="md:hidden border-t border-border">
-        <div className="container-custom py-2 flex items-center gap-4 overflow-x-auto text-sm">
-          <Link href="/products" className="text-medium hover:text-primary whitespace-nowrap">
-            Products
-          </Link>
-          <Link href="/faq" className="text-medium hover:text-primary whitespace-nowrap">
-            FAQ
-          </Link>
-          <Link href="/contact" className="text-medium hover:text-primary whitespace-nowrap">
-            Contact
-          </Link>
-          <SignedIn>
-            <Link href="/orders" className="text-medium hover:text-primary whitespace-nowrap">
-              Orders
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-border bg-white">
+          <div className="container-custom py-4 space-y-3">
+            <Link
+              href="/products"
+              onClick={closeMobile}
+              className="block text-medium hover:text-primary transition-colors py-2"
+            >
+              Products
             </Link>
-            <Link href="/profile" className="text-medium hover:text-primary whitespace-nowrap">
-              Profile
+            <Link
+              href="/faq"
+              onClick={closeMobile}
+              className="block text-medium hover:text-primary transition-colors py-2"
+            >
+              FAQ & Help
             </Link>
-            {isAdmin && (
-              <Link href="/admin" className="text-primary font-medium whitespace-nowrap">
-                Admin
-              </Link>
-            )}
-          </SignedIn>
+            <Link
+              href="/contact"
+              onClick={closeMobile}
+              className="block text-medium hover:text-primary transition-colors py-2"
+            >
+              Contact Us
+            </Link>
+            <SignedIn>
+              <div className="border-t border-border pt-3 space-y-3">
+                <Link
+                  href="/orders"
+                  onClick={closeMobile}
+                  className="block text-medium hover:text-primary transition-colors py-2"
+                >
+                  My Orders
+                </Link>
+                <Link
+                  href="/wishlist"
+                  onClick={closeMobile}
+                  className="block text-medium hover:text-primary transition-colors py-2"
+                >
+                  Wishlist
+                </Link>
+                <Link
+                  href="/profile"
+                  onClick={closeMobile}
+                  className="block text-medium hover:text-primary transition-colors py-2"
+                >
+                  Profile
+                </Link>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    onClick={closeMobile}
+                    className="block text-primary font-medium hover:text-primary-dark transition-colors py-2"
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
+              </div>
+            </SignedIn>
+            <SignedOut>
+              <div className="border-t border-border pt-3">
+                <Link
+                  href="/sign-in"
+                  onClick={closeMobile}
+                  className="btn-primary block text-center"
+                >
+                  Sign In
+                </Link>
+              </div>
+            </SignedOut>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }

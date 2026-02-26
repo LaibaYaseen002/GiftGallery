@@ -72,7 +72,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li>Email: support@giftgallery.com</li>
               <li>Phone: +92 300 1234567</li>
-              <li>Rahim Yar Khan, Pakistan</li>
+              <li>Lahore, Pakistan</li>
             </ul>
           </div>
         </div>
