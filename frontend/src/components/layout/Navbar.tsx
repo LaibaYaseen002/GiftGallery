@@ -47,6 +47,12 @@ export default function Navbar() {
               >
                 My Orders
               </Link>
+              <Link
+                href="/profile"
+                className="text-medium hover:text-primary transition-colors"
+              >
+                Profile
+              </Link>
               {isAdmin && (
                 <Link
                   href="/admin"
@@ -146,6 +152,9 @@ export default function Navbar() {
           <SignedIn>
             <Link href="/orders" className="text-medium hover:text-primary whitespace-nowrap">
               Orders
+            </Link>
+            <Link href="/profile" className="text-medium hover:text-primary whitespace-nowrap">
+              Profile
             </Link>
             {isAdmin && (
               <Link href="/admin" className="text-primary font-medium whitespace-nowrap">
