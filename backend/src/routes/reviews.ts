@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { supabase } from "../services/supabase";
-import { requireAuth, getUserId } from "../middleware/auth";
+import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 import { getAuth, clerkClient } from "@clerk/express";
 
 const router = Router();
@@ -97,6 +97,78 @@ router.post("/product/:productId", requireAuth, async (req: Request, res: Respon
   } catch (err) {
     console.error("Error creating review:", err);
     res.status(500).json({ error: "Failed to submit review" });
+  }
+});
+
+// GET /api/reviews/admin - Get all reviews with product info (Admin)
+router.get("/admin", requireAdmin, async (_req: Request, res: Response) => {
+  try {
+    const { data: reviews, error } = await supabase
+      .from("reviews")
+      .select("*, products:product_id(name, image_url)")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const allReviews = (reviews || []).map((r: any) => ({
+      id: r.id,
+      product_id: r.product_id,
+      user_id: r.user_id,
+      user_name: r.user_name,
+      rating: r.rating as number,
+      comment: r.comment,
+      created_at: r.created_at,
+      product_name: r.products?.name || "Unknown Product",
+      product_image: r.products?.image_url || null,
+    }));
+
+    // Calculate stats
+    const ratings = allReviews.map((r) => r.rating);
+    const totalReviews = ratings.length;
+    const averageRating =
+      totalReviews > 0
+        ? ratings.reduce((sum, r) => sum + r, 0) / totalReviews
+        : 0;
+
+    const distribution = [1, 2, 3, 4, 5].map((star) => ({
+      rating: star,
+      count: ratings.filter((r) => r === star).length,
+    }));
+
+    res.json({
+      data: allReviews,
+      stats: {
+        total_reviews: totalReviews,
+        average_rating: Math.round(averageRating * 10) / 10,
+        distribution,
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching admin reviews:", err);
+    res.status(500).json({ error: "Failed to fetch reviews" });
+  }
+});
+
+// DELETE /api/reviews/admin/:id - Delete any review (Admin moderation)
+router.delete("/admin/:id", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const { error } = await supabase.from("reviews").delete().eq("id", id);
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({ message: "Review deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting review (admin):", err);
+    res.status(500).json({ error: "Failed to delete review" });
   }
 });
 

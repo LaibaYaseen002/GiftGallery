@@ -104,6 +104,17 @@ export const ordersApi = {
 
 import { Review } from "@/types";
 
+export interface AdminReview extends Review {
+  product_name: string;
+  product_image: string | null;
+}
+
+export interface ReviewStats {
+  total_reviews: number;
+  average_rating: number;
+  distribution: { rating: number; count: number }[];
+}
+
 export const reviewsApi = {
   getByProduct: (productId: string) =>
     fetchApi<{ data: Review[]; average_rating: number; review_count: number }>(`/reviews/product/${productId}`),
@@ -115,6 +126,11 @@ export const reviewsApi = {
     }),
   delete: (id: string, token: string) =>
     fetchApi<{ message: string }>(`/reviews/${id}`, { method: "DELETE", token }),
+  // Admin
+  getAllAdmin: (token: string) =>
+    fetchApi<{ data: AdminReview[]; stats: ReviewStats }>("/reviews/admin", { token }),
+  deleteAdmin: (id: string, token: string) =>
+    fetchApi<{ message: string }>(`/reviews/admin/${id}`, { method: "DELETE", token }),
 };
 
 // ==================== Wishlist ====================
