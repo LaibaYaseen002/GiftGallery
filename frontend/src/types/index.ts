@@ -152,6 +152,7 @@ export interface AnalyticsData {
   pending_orders: number;
   delivered_orders: number;
   pending_returns: number;
+  unread_feedback: number;
   recent_orders: {
     id: string;
     user_email: string;
@@ -161,4 +162,23 @@ export interface AnalyticsData {
     shipping_name: string;
   }[];
   top_products: { product_name: string; total_sold: number }[];
+}
+
+export interface ChartDataPoint {
+  date: string;
+  revenue: number;
+  orders: number;
+}
+
+export interface CategoryBreakdownItem {
+  name: string;
+  total_orders: number;
+  total_revenue: number;
+  product_count: number;
+}
+
+export interface ActivityEvent {
+  type: "order" | "return" | "feedback" | "review";
+  message: string;
+  timestamp: string;
 }

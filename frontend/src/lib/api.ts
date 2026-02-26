@@ -216,11 +216,17 @@ export const feedbackApi = {
 
 // ==================== Analytics ====================
 
-import { AnalyticsData } from "@/types";
+import { AnalyticsData, ChartDataPoint, CategoryBreakdownItem, ActivityEvent } from "@/types";
 
 export const analyticsApi = {
   getDashboard: (token: string) =>
     fetchApi<{ data: AnalyticsData }>("/admin/analytics", { token }),
+  getChart: (token: string, period: "7d" | "30d" = "7d") =>
+    fetchApi<{ data: ChartDataPoint[] }>(`/admin/analytics/chart?period=${period}`, { token }),
+  getCategories: (token: string) =>
+    fetchApi<{ data: CategoryBreakdownItem[] }>("/admin/analytics/categories", { token }),
+  getActivity: (token: string) =>
+    fetchApi<{ data: ActivityEvent[] }>("/admin/analytics/activity", { token }),
 };
 
 // ==================== Customers ====================
