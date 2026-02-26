@@ -165,14 +165,22 @@ export const returnsApi = {
 
 // ==================== Feedback ====================
 
+import { Feedback } from "@/types";
+
 export const feedbackApi = {
-  create: (data: unknown) =>
-    fetchApi("/feedback", { method: "POST", body: JSON.stringify(data) }),
+  create: (data: { name: string; email: string; subject: string; message: string }) =>
+    fetchApi<{ data: Feedback; message: string }>("/feedback", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
   // Admin
   getAll: (token: string) =>
-    fetchApi<{ data: unknown[] }>("/feedback/admin", { token }),
+    fetchApi<{ data: Feedback[] }>("/feedback/admin", { token }),
   markRead: (id: string, token: string) =>
-    fetchApi(`/feedback/admin/${id}`, { method: "PATCH", token }),
+    fetchApi<{ data: Feedback; message: string }>(`/feedback/admin/${id}`, {
+      method: "PATCH",
+      token,
+    }),
 };
 
 // ==================== Analytics ====================
