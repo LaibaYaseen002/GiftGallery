@@ -206,3 +206,42 @@ export const analyticsApi = {
   getDashboard: (token: string) =>
     fetchApi<{ data: AnalyticsData }>("/admin/analytics", { token }),
 };
+
+// ==================== Customers ====================
+
+export interface CustomerSummary {
+  user_id: string;
+  name: string;
+  email: string;
+  image_url: string | null;
+  total_orders: number;
+  total_spent: number;
+  first_order: string;
+  last_order: string;
+  member_since: string;
+}
+
+export interface CustomerDetail {
+  user_id: string;
+  name: string;
+  email: string;
+  image_url: string | null;
+  member_since: string;
+  stats: {
+    total_orders: number;
+    total_spent: number;
+    avg_order_value: number;
+    total_returns: number;
+    total_reviews: number;
+  };
+  orders: Order[];
+  returns: ReturnRequest[];
+  reviews: Review[];
+}
+
+export const customersApi = {
+  getAll: (token: string) =>
+    fetchApi<{ data: CustomerSummary[] }>("/admin/customers", { token }),
+  getById: (userId: string, token: string) =>
+    fetchApi<{ data: CustomerDetail }>(`/admin/customers/${userId}`, { token }),
+};
