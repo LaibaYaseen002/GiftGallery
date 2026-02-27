@@ -76,15 +76,38 @@ router.post("/admin", requireAdmin, async (req: Request, res: Response) => {
   try {
     const { code, discount_percent, expires_at, max_uses } = req.body;
 
-    if (!code || !discount_percent) {
+    if (!code || discount_percent === undefined || discount_percent === null) {
       res.status(400).json({ error: "Code and discount_percent are required" });
       return;
+    }
+
+    if (typeof code !== "string" || code.trim().length === 0 || code.trim().length > 50) {
+      res.status(400).json({ error: "Discount code must be between 1 and 50 characters" });
+      return;
+    }
+
+    if (typeof discount_percent !== "number" || discount_percent < 1 || discount_percent > 100) {
+      res.status(400).json({ error: "Discount percent must be between 1 and 100" });
+      return;
+    }
+
+    if (max_uses !== undefined && max_uses !== null && (!Number.isInteger(max_uses) || max_uses < 1)) {
+      res.status(400).json({ error: "Max uses must be a positive integer" });
+      return;
+    }
+
+    if (expires_at) {
+      const expiryDate = new Date(expires_at);
+      if (isNaN(expiryDate.getTime())) {
+        res.status(400).json({ error: "Invalid expiry date format" });
+        return;
+      }
     }
 
     const { data, error } = await supabase
       .from("discount_codes")
       .insert({
-        code: code.toUpperCase(),
+        code: code.trim().toUpperCase(),
         discount_percent,
         expires_at: expires_at || null,
         max_uses: max_uses || null,
@@ -114,8 +137,23 @@ router.put("/admin/:id", requireAdmin, async (req: Request, res: Response) => {
     const { id } = req.params;
     const { code, discount_percent, is_active, expires_at, max_uses } = req.body;
 
+    if (discount_percent !== undefined && (typeof discount_percent !== "number" || discount_percent < 1 || discount_percent > 100)) {
+      res.status(400).json({ error: "Discount percent must be between 1 and 100" });
+      return;
+    }
+
+    if (max_uses !== undefined && max_uses !== null && (!Number.isInteger(max_uses) || max_uses < 1)) {
+      res.status(400).json({ error: "Max uses must be a positive integer" });
+      return;
+    }
+
+    if (code !== undefined && (typeof code !== "string" || code.trim().length === 0 || code.trim().length > 50)) {
+      res.status(400).json({ error: "Discount code must be between 1 and 50 characters" });
+      return;
+    }
+
     const updates: Record<string, unknown> = {};
-    if (code !== undefined) updates.code = code.toUpperCase();
+    if (code !== undefined) updates.code = code.trim().toUpperCase();
     if (discount_percent !== undefined) updates.discount_percent = discount_percent;
     if (is_active !== undefined) updates.is_active = is_active;
     if (expires_at !== undefined) updates.expires_at = expires_at;

@@ -30,11 +30,14 @@ router.get("/", async (req: Request, res: Response) => {
       }
     }
 
-    // Search by name or description
+    // Search by name or description (sanitized)
     if (search && typeof search === "string") {
-      query = query.or(
-        `name.ilike.%${search}%,description.ilike.%${search}%`
-      );
+      const sanitizedSearch = search.trim().slice(0, 100);
+      if (sanitizedSearch.length > 0) {
+        query = query.or(
+          `name.ilike.%${sanitizedSearch}%,description.ilike.%${sanitizedSearch}%`
+        );
+      }
     }
 
     const { data, error } = await query;

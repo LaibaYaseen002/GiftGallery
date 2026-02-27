@@ -17,6 +17,27 @@ router.post("/", async (req: Request, res: Response) => {
       return;
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      res.status(400).json({ error: "Invalid email address format" });
+      return;
+    }
+
+    // Validate field lengths
+    if (name.trim().length > 200) {
+      res.status(400).json({ error: "Name is too long (max 200 characters)" });
+      return;
+    }
+    if (subject.trim().length > 300) {
+      res.status(400).json({ error: "Subject is too long (max 300 characters)" });
+      return;
+    }
+    if (message.trim().length > 5000) {
+      res.status(400).json({ error: "Message is too long (max 5000 characters)" });
+      return;
+    }
+
     // Get user_id if authenticated (optional)
     const userId = getUserId(req);
 

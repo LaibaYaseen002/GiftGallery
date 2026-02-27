@@ -3,7 +3,7 @@ import { supabase } from "../services/supabase";
 import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 import { getAuth, clerkClient } from "@clerk/express";
 import { CreateOrderRequest } from "../types";
-import { sendOrderConfirmationEmail } from "../services/resend";
+import { sendOrderConfirmationEmail, sendOrderStatusEmail } from "../services/resend";
 import { createNotification } from "../services/notifications";
 
 const router = Router();
@@ -32,8 +32,37 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       return;
     }
 
+    // Validate item quantities
+    for (const item of items) {
+      if (!item.product_id || typeof item.product_id !== "string") {
+        res.status(400).json({ error: "Each item must have a valid product_id" });
+        return;
+      }
+      if (!Number.isInteger(item.quantity) || item.quantity < 1) {
+        res.status(400).json({ error: "Each item quantity must be a positive integer" });
+        return;
+      }
+    }
+
     if (!shipping_name || !shipping_address || !shipping_city || !shipping_phone) {
       res.status(400).json({ error: "All shipping fields are required" });
+      return;
+    }
+
+    // Validate shipping fields
+    if (shipping_name.trim().length > 200) {
+      res.status(400).json({ error: "Shipping name is too long (max 200 characters)" });
+      return;
+    }
+
+    const phoneRegex = /^[\d\s\-+()]{7,20}$/;
+    if (!phoneRegex.test(shipping_phone)) {
+      res.status(400).json({ error: "Invalid phone number format" });
+      return;
+    }
+
+    if (gift_message && gift_message.length > 500) {
+      res.status(400).json({ error: "Gift message is too long (max 500 characters)" });
       return;
     }
 
@@ -41,11 +70,20 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
     const productIds = items.map((item) => item.product_id);
     const { data: products, error: prodError } = await supabase
       .from("products")
-      .select("id, name, price")
+      .select("id, name, price, in_stock")
       .in("id", productIds);
 
     if (prodError || !products) {
       res.status(500).json({ error: "Failed to fetch product details" });
+      return;
+    }
+
+    // Check all products are in stock
+    const outOfStock = products.filter((p) => !p.in_stock);
+    if (outOfStock.length > 0) {
+      res.status(400).json({
+        error: `The following items are out of stock: ${outOfStock.map((p) => p.name).join(", ")}`,
+      });
       return;
     }
 
@@ -295,14 +333,19 @@ router.patch("/:id/status", requireAdmin, async (req: Request, res: Response) =>
       return;
     }
 
-    // Get current order status
+    // Get current order status and user info
     const { data: currentOrder } = await supabase
       .from("orders")
-      .select("status")
+      .select("status, user_email, shipping_name")
       .eq("id", id)
       .single();
 
-    const oldStatus = currentOrder?.status || null;
+    if (!currentOrder) {
+      res.status(404).json({ error: "Order not found" });
+      return;
+    }
+
+    const oldStatus = currentOrder.status || null;
 
     const { data, error } = await supabase
       .from("orders")
@@ -323,6 +366,17 @@ router.patch("/:id/status", requireAdmin, async (req: Request, res: Response) =>
       new_status: status,
       changed_by: auth.userId || "admin",
     });
+
+    // Send status update email to customer (non-blocking)
+    if (currentOrder.user_email) {
+      sendOrderStatusEmail({
+        to: currentOrder.user_email,
+        customerName: currentOrder.shipping_name,
+        orderId: id as string,
+        oldStatus: oldStatus || "pending",
+        newStatus: status as string,
+      }).catch((err) => console.error("Status email send failed:", err));
+    }
 
     res.json({ data, message: `Order status updated to ${status}` });
   } catch (err) {

@@ -7,12 +7,9 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  console.warn(
-    "Warning: SUPABASE_URL or SUPABASE_SERVICE_KEY not set. Database features will not work."
+  throw new Error(
+    "FATAL: SUPABASE_URL and SUPABASE_SERVICE_KEY must be set in environment variables. Server cannot start without database credentials."
   );
 }
 
-export const supabase = createClient(
-  supabaseUrl || "",
-  supabaseServiceKey || ""
-);
+export const supabase = createClient(supabaseUrl, supabaseServiceKey);

@@ -77,6 +77,22 @@ router.post("/admin/send", requireAdmin, async (req: Request, res: Response) => 
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(to_email)) {
+      res.status(400).json({ error: "Invalid email address format" });
+      return;
+    }
+
+    if (subject.trim().length > 300) {
+      res.status(400).json({ error: "Subject is too long (max 300 characters)" });
+      return;
+    }
+
+    if (message.trim().length > 10000) {
+      res.status(400).json({ error: "Message is too long (max 10000 characters)" });
+      return;
+    }
+
     const result = await sendCustomEmail({
       to: to_email,
       toName: to_name || undefined,
