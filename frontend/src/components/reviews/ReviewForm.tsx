@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth, SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import { reviewsApi } from "@/lib/api";
+import { useToast } from "@/components/ui/Toast";
 import StarRating from "./StarRating";
 
 interface ReviewFormProps {
@@ -16,11 +17,11 @@ export default function ReviewForm({
   onReviewSubmitted,
 }: ReviewFormProps) {
   const { getToken } = useAuth();
+  const { showToast } = useToast();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,11 +37,10 @@ export default function ReviewForm({
       const token = await getToken();
       if (!token) return;
       await reviewsApi.create(productId, { rating, comment }, token);
-      setSuccess(true);
       setRating(0);
       setComment("");
       onReviewSubmitted();
-      setTimeout(() => setSuccess(false), 3000);
+      showToast("Review submitted successfully!", "success");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit review");
     } finally {
@@ -62,51 +62,43 @@ export default function ReviewForm({
       </SignedOut>
 
       <SignedIn>
-        {success ? (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <p className="text-green-800 font-medium">
-              Review submitted successfully!
-            </p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-dark mb-2">
+              Your Rating
+            </label>
+            <StarRating
+              rating={rating}
+              size="lg"
+              interactive
+              onChange={setRating}
+            />
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-dark mb-2">
-                Your Rating
-              </label>
-              <StarRating
-                rating={rating}
-                size="lg"
-                interactive
-                onChange={setRating}
-              />
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium text-dark mb-1">
-                Your Review (Optional)
-              </label>
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                className="input-field resize-none"
-                rows={3}
-                placeholder="Share your experience with this product..."
-                maxLength={1000}
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-dark mb-1">
+              Your Review (Optional)
+            </label>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="input-field resize-none"
+              rows={3}
+              placeholder="Share your experience with this product..."
+              maxLength={1000}
+            />
+          </div>
 
-            {error && <p className="text-error text-sm">{error}</p>}
+          {error && <p className="text-error text-sm">{error}</p>}
 
-            <button
-              type="submit"
-              disabled={submitting || rating === 0}
-              className="btn-primary"
-            >
-              {submitting ? "Submitting..." : "Submit Review"}
-            </button>
-          </form>
-        )}
+          <button
+            type="submit"
+            disabled={submitting || rating === 0}
+            className="btn-primary"
+          >
+            {submitting ? "Submitting..." : "Submit Review"}
+          </button>
+        </form>
       </SignedIn>
     </div>
   );

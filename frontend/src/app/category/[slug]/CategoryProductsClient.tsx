@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Product, Category } from "@/types";
 import { categoriesApi } from "@/lib/api";
 import ProductCard from "@/components/products/ProductCard";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { ProductCardSkeletonGrid } from "@/components/ui/Skeleton";
 
 export default function CategoryProductsClient({ slug }: { slug: string }) {
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,7 +30,11 @@ export default function CategoryProductsClient({ slug }: { slug: string }) {
   }, [slug]);
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return (
+      <div className="container-custom py-8">
+        <ProductCardSkeletonGrid count={8} />
+      </div>
+    );
   }
 
   if (!category) {

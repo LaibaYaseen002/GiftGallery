@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { useCart } from "@/context/CartContext";
+import { useToast } from "@/components/ui/Toast";
+import ProductImage from "@/components/ui/ProductImage";
 import WishlistButton from "@/components/wishlist/WishlistButton";
 
 interface ProductCardProps {
@@ -12,12 +13,13 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
+  const { showToast } = useToast();
 
   return (
     <div className="card overflow-hidden group">
       <Link href={`/products/${product.id}`}>
         <div className="relative w-full h-56 overflow-hidden">
-          <Image
+          <ProductImage
             src={product.image_url}
             alt={product.name}
             fill
@@ -58,7 +60,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             ${product.price.toFixed(2)}
           </span>
           <button
-            onClick={() => addItem(product)}
+            onClick={() => { addItem(product); showToast("Added to cart!", "success"); }}
             disabled={!product.in_stock}
             className="btn-primary text-sm py-2 px-4 disabled:opacity-50"
           >

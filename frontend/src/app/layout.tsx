@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import LayoutShell from "@/components/layout/LayoutShell";
 import { CartProvider } from "@/context/CartContext";
+import { ToastProvider } from "@/components/ui/Toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +34,9 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${inter.className} antialiased`}>
           <CartProvider>
-            <LayoutShell>{children}</LayoutShell>
+            <ToastProvider>
+              <LayoutShell>{children}</LayoutShell>
+            </ToastProvider>
           </CartProvider>
         </body>
       </html>

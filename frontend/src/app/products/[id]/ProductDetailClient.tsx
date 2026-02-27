@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Product, Review } from "@/types";
 import { productsApi, reviewsApi } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useToast } from "@/components/ui/Toast";
+import ProductImage from "@/components/ui/ProductImage";
+import { ProductDetailSkeleton } from "@/components/ui/Skeleton";
 import StarRating from "@/components/reviews/StarRating";
 import ReviewForm from "@/components/reviews/ReviewForm";
 import ReviewList from "@/components/reviews/ReviewList";
@@ -14,11 +15,11 @@ import WishlistButton from "@/components/wishlist/WishlistButton";
 
 export default function ProductDetailClient({ id }: { id: string }) {
   const { addItem } = useCart();
+  const { showToast } = useToast();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
 
   // Reviews state
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -62,12 +63,11 @@ export default function ProductDetailClient({ id }: { id: string }) {
   const handleAddToCart = () => {
     if (!product) return;
     addItem(product, quantity);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    showToast("Added to cart!", "success");
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <ProductDetailSkeleton />;
   }
 
   if (!product) {
@@ -113,7 +113,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Product Image */}
         <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border">
-          <Image
+          <ProductImage
             src={product.image_url}
             alt={product.name}
             fill
@@ -203,7 +203,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
                 onClick={handleAddToCart}
                 className="btn-primary flex-1 text-lg py-3"
               >
-                {added ? "Added!" : "Add to Cart"}
+                Add to Cart
               </button>
             </div>
           )}

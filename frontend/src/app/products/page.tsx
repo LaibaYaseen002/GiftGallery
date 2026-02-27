@@ -4,9 +4,11 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Product, Category, PaginationInfo } from "@/types";
 import { productsApi, categoriesApi } from "@/lib/api";
+import { useDebounce } from "@/hooks/useDebounce";
 import ProductCard from "@/components/products/ProductCard";
 import Pagination from "@/components/ui/Pagination";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { ProductCardSkeletonGrid } from "@/components/ui/Skeleton";
 
 function ProductsContent() {
   const searchParams = useSearchParams();
@@ -19,6 +21,7 @@ function ProductsContent() {
   );
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
+  const debouncedSearch = useDebounce(search, 400);
 
   useEffect(() => {
     categoriesApi.getAll().then((res) => {
@@ -29,12 +32,12 @@ function ProductsContent() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setPage(1);
-  }, [search, selectedCategory]);
+  }, [debouncedSearch, selectedCategory]);
 
   useEffect(() => {
     setLoading(true);
     const params: { search?: string; category?: string; page?: number } = { page };
-    if (search) params.search = search;
+    if (debouncedSearch) params.search = debouncedSearch;
     if (selectedCategory) params.category = selectedCategory;
 
     productsApi
@@ -49,7 +52,7 @@ function ProductsContent() {
         setPagination(null);
       })
       .finally(() => setLoading(false));
-  }, [search, selectedCategory, page]);
+  }, [debouncedSearch, selectedCategory, page]);
 
   return (
     <div className="container-custom py-8">
@@ -87,7 +90,7 @@ function ProductsContent() {
 
       {/* Products Grid */}
       {loading ? (
-        <LoadingSpinner size="lg" className="py-20" />
+        <ProductCardSkeletonGrid count={8} />
       ) : products.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-2xl mb-2">No products found</p>
