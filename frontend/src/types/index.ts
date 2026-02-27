@@ -136,6 +136,15 @@ export interface CartItem {
   quantity: number;
 }
 
+// ==================== Pagination Types ====================
+
+export interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 // ==================== API Response Types ====================
 
 export interface ApiResponse<T> {

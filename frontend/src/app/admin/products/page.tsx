@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/types";
 import { productsApi } from "@/lib/api";
-import ProductForm from "@/components/admin/ProductForm";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
@@ -14,14 +13,12 @@ export default function AdminProductsPage() {
   const { getToken } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   const fetchProducts = async () => {
     try {
-      const res = await productsApi.getAll();
+      const res = await productsApi.getAll({ limit: 200 });
       setProducts(res.data || []);
     } catch (err) {
       console.error("Failed to fetch products:", err);
@@ -34,23 +31,6 @@ export default function AdminProductsPage() {
     fetchProducts();
   }, []);
 
-  const handleUpdate = async (data: {
-    name: string;
-    description: string;
-    price: string;
-    image_url: string;
-    category_id: string;
-    in_stock: boolean;
-  }) => {
-    if (!editingProduct) return;
-    const token = await getToken();
-    if (!token) return;
-    await productsApi.update(editingProduct.id, data, token);
-    setShowEditModal(false);
-    setEditingProduct(null);
-    await fetchProducts();
-  };
-
   const handleDelete = async (id: string) => {
     try {
       const token = await getToken();
@@ -61,11 +41,6 @@ export default function AdminProductsPage() {
     } catch (err) {
       console.error("Failed to delete product:", err);
     }
-  };
-
-  const openEdit = (product: Product) => {
-    setEditingProduct(product);
-    setShowEditModal(true);
   };
 
   const filteredProducts = search
@@ -158,12 +133,12 @@ export default function AdminProductsPage() {
 
                 {/* Actions */}
                 <div className="flex gap-2 flex-shrink-0">
-                  <button
-                    onClick={() => openEdit(product)}
+                  <Link
+                    href={`/admin/products/${product.id}/edit`}
                     className="px-3 py-1.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
                   >
                     Edit
-                  </button>
+                  </Link>
                   <button
                     onClick={() => setDeleteId(product.id)}
                     className="px-3 py-1.5 text-sm font-medium text-error border border-error rounded-lg hover:bg-error hover:text-white transition-colors"
@@ -176,25 +151,6 @@ export default function AdminProductsPage() {
           ))}
         </div>
       )}
-
-      {/* Edit Modal */}
-      <Modal
-        isOpen={showEditModal}
-        onClose={() => {
-          setShowEditModal(false);
-          setEditingProduct(null);
-        }}
-        title="Edit Product"
-      >
-        <ProductForm
-          product={editingProduct}
-          onSubmit={handleUpdate}
-          onCancel={() => {
-            setShowEditModal(false);
-            setEditingProduct(null);
-          }}
-        />
-      </Modal>
 
       {/* Delete Confirmation Modal */}
       <Modal

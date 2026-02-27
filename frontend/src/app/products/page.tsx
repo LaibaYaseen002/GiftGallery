@@ -2,9 +2,10 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Product, Category } from "@/types";
+import { Product, Category, PaginationInfo } from "@/types";
 import { productsApi, categoriesApi } from "@/lib/api";
 import ProductCard from "@/components/products/ProductCard";
+import Pagination from "@/components/ui/Pagination";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 function ProductsContent() {
@@ -16,6 +17,8 @@ function ProductsContent() {
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams.get("category") || ""
   );
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
 
   useEffect(() => {
     categoriesApi.getAll().then((res) => {
@@ -23,9 +26,14 @@ function ProductsContent() {
     });
   }, []);
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [search, selectedCategory]);
+
   useEffect(() => {
     setLoading(true);
-    const params: { search?: string; category?: string } = {};
+    const params: { search?: string; category?: string; page?: number } = { page };
     if (search) params.search = search;
     if (selectedCategory) params.category = selectedCategory;
 
@@ -33,13 +41,15 @@ function ProductsContent() {
       .getAll(params)
       .then((res) => {
         setProducts((res.data as Product[]) || []);
+        setPagination(res.pagination || null);
       })
       .catch((err) => {
         console.error("Failed to fetch products:", err);
         setProducts([]);
+        setPagination(null);
       })
       .finally(() => setLoading(false));
-  }, [search, selectedCategory]);
+  }, [search, selectedCategory, page]);
 
   return (
     <div className="container-custom py-8">
@@ -90,13 +100,22 @@ function ProductsContent() {
       ) : (
         <>
           <p className="text-medium mb-4">
-            {products.length} product{products.length !== 1 ? "s" : ""} found
+            {pagination
+              ? `${pagination.total} product${pagination.total !== 1 ? "s" : ""} found`
+              : `${products.length} product${products.length !== 1 ? "s" : ""} found`}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
+          {pagination && (
+            <Pagination
+              currentPage={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={setPage}
+            />
+          )}
         </>
       )}
     </div>

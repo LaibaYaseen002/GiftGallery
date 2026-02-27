@@ -36,15 +36,17 @@ async function fetchApi<T>(
 
 // ==================== Products ====================
 
-import { Product, Category } from "@/types";
+import { Product, Category, PaginationInfo } from "@/types";
 
 export const productsApi = {
-  getAll: (params?: { search?: string; category?: string }) => {
+  getAll: (params?: { search?: string; category?: string; page?: number; limit?: number }) => {
     const query = new URLSearchParams();
     if (params?.search) query.set("search", params.search);
     if (params?.category) query.set("category", params.category);
+    if (params?.page) query.set("page", String(params.page));
+    if (params?.limit) query.set("limit", String(params.limit));
     const qs = query.toString();
-    return fetchApi<{ data: Product[] }>(`/products${qs ? `?${qs}` : ""}`);
+    return fetchApi<{ data: Product[]; pagination: PaginationInfo }>(`/products${qs ? `?${qs}` : ""}`);
   },
   getById: (id: string) => fetchApi<{ data: Product }>(`/products/${id}`),
   create: (data: Record<string, unknown>, token: string) =>

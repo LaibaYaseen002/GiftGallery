@@ -4,14 +4,20 @@ import { requireAdmin } from "../middleware/auth";
 
 const router = Router();
 
-// GET /api/products - Get all products (with optional search & category filter)
+// GET /api/products - Get all products (with optional search, category filter & pagination)
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const { search, category } = req.query;
+    const { search, category, page: pageParam, limit: limitParam } = req.query;
+
+    // Pagination defaults
+    const page = Math.max(1, parseInt(pageParam as string) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(limitParam as string) || 12));
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
 
     let query = supabase
       .from("products")
-      .select("*, categories(id, name, slug)")
+      .select("*, categories(id, name, slug)", { count: "exact" })
       .order("created_at", { ascending: false });
 
     // Filter by category slug
@@ -25,7 +31,7 @@ router.get("/", async (req: Request, res: Response) => {
       if (cat) {
         query = query.eq("category_id", cat.id);
       } else {
-        res.json({ data: [] });
+        res.json({ data: [], pagination: { page: 1, limit, total: 0, totalPages: 0 } });
         return;
       }
     }
@@ -40,7 +46,10 @@ router.get("/", async (req: Request, res: Response) => {
       }
     }
 
-    const { data, error } = await query;
+    // Apply pagination
+    query = query.range(from, to);
+
+    const { data, error, count } = await query;
 
     if (error) {
       res.status(500).json({ error: error.message });
@@ -54,7 +63,17 @@ router.get("/", async (req: Request, res: Response) => {
       categories: undefined,
     }));
 
-    res.json({ data: products });
+    const total = count || 0;
+
+    res.json({
+      data: products,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (err) {
     console.error("Error fetching products:", err);
     res.status(500).json({ error: "Failed to fetch products" });
