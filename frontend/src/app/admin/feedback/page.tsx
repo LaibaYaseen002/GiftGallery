@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { Feedback } from "@/types";
 import { feedbackApi, emailsApi } from "@/lib/api";
@@ -16,7 +16,7 @@ export default function AdminFeedbackPage() {
   const [replySending, setReplySending] = useState(false);
   const [replySuccess, setReplySuccess] = useState("");
 
-  const fetchFeedback = async () => {
+  const fetchFeedback = useCallback(async () => {
     try {
       const token = await getToken();
       if (!token) return;
@@ -27,11 +27,11 @@ export default function AdminFeedbackPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getToken]);
 
   useEffect(() => {
     fetchFeedback();
-  }, [getToken]);
+  }, [fetchFeedback]);
 
   const handleMarkRead = async (id: string) => {
     try {

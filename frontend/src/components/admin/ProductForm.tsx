@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Product, Category } from "@/types";
 import { categoriesApi } from "@/lib/api";
 
@@ -163,11 +164,14 @@ export default function ProductForm({
           className="input-field"
         />
         {imageUrl && (
-          <div className="mt-2 rounded-lg overflow-hidden border border-border w-24 h-24">
-            <img
+          <div className="mt-2 rounded-lg overflow-hidden border border-border w-24 h-24 relative">
+            <Image
               src={imageUrl}
               alt="Preview"
-              className="w-full h-full object-cover"
+              fill
+              sizes="96px"
+              className="object-cover"
+              unoptimized
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";
               }}

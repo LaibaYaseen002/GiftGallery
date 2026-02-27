@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import { Order } from "@/types";
 import { ordersApi } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
@@ -65,12 +66,14 @@ export default function ProfilePage() {
         <div className="lg:col-span-1">
           <div className="card p-6 text-center">
             {/* Avatar */}
-            <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-4 border-primary/20">
+            <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-4 border-primary/20 relative">
               {user.imageUrl ? (
-                <img
+                <Image
                   src={user.imageUrl}
                   alt={user.fullName || "Avatar"}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="96px"
+                  className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full bg-primary/10 flex items-center justify-center">

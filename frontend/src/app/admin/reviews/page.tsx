@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import { reviewsApi, AdminReview, ReviewStats } from "@/lib/api";
@@ -18,7 +18,7 @@ export default function AdminReviewsPage() {
   const [deleting, setDeleting] = useState<AdminReview | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       const token = await getToken();
       if (!token) return;
@@ -30,11 +30,11 @@ export default function AdminReviewsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getToken]);
 
   useEffect(() => {
     fetchReviews();
-  }, [getToken]);
+  }, [fetchReviews]);
 
   const handleDelete = async () => {
     if (!deleting) return;

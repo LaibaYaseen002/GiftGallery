@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { DiscountCode } from "@/types";
 import { discountsApi } from "@/lib/api";
@@ -18,7 +18,7 @@ export default function AdminDiscountsPage() {
   );
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const fetchDiscounts = async () => {
+  const fetchDiscounts = useCallback(async () => {
     try {
       const token = await getToken();
       if (!token) return;
@@ -29,11 +29,11 @@ export default function AdminDiscountsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getToken]);
 
   useEffect(() => {
     fetchDiscounts();
-  }, [getToken]);
+  }, [fetchDiscounts]);
 
   const handleCreate = async (data: {
     code: string;

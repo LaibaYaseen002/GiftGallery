@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { emailsApi } from "@/lib/api";
 import { SentEmail } from "@/types";
@@ -20,11 +20,7 @@ export default function EmailsPage() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    if (tab === "history") fetchHistory();
-  }, [tab]);
-
-  async function fetchHistory() {
+  const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
       const token = await getToken();
@@ -36,7 +32,11 @@ export default function EmailsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [getToken]);
+
+  useEffect(() => {
+    if (tab === "history") fetchHistory();
+  }, [tab, fetchHistory]);
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();

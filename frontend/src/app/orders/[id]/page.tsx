@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
@@ -25,15 +25,15 @@ function OrderDetailContent() {
   const [returnRequest, setReturnRequest] = useState<ReturnRequest | null>(null);
   const [showReturnForm, setShowReturnForm] = useState(false);
 
-  const fetchReturnRequest = async (token: string) => {
+  const fetchReturnRequest = useCallback(async (token: string) => {
     try {
       const res = await returnsApi.getAll(token);
-      const match = res.data.find((r) => r.order_id === id);
+      const match = res.data.find((r: ReturnRequest) => r.order_id === id);
       setReturnRequest(match || null);
     } catch {
       // No return request exists — that's fine
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -50,7 +50,7 @@ function OrderDetailContent() {
       }
     };
     fetchOrder();
-  }, [id, getToken]);
+  }, [id, getToken, fetchReturnRequest]);
 
   if (loading) {
     return <LoadingSpinner size="lg" className="py-32" />;

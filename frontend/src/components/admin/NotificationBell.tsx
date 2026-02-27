@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { notificationsApi } from "@/lib/api";
 import { Notification } from "@/types";
@@ -14,12 +14,23 @@ export default function NotificationBell() {
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+      const res = await notificationsApi.getUnreadCount(token);
+      setUnreadCount(res.data.count);
+    } catch {
+      // silently fail
+    }
+  }, [getToken]);
+
   // Fetch unread count on mount + interval
   useEffect(() => {
     fetchUnreadCount();
     const interval = setInterval(fetchUnreadCount, 30000); // every 30s
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchUnreadCount]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -31,17 +42,6 @@ export default function NotificationBell() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  async function fetchUnreadCount() {
-    try {
-      const token = await getToken();
-      if (!token) return;
-      const res = await notificationsApi.getUnreadCount(token);
-      setUnreadCount(res.data.count);
-    } catch {
-      // silently fail
-    }
-  }
 
   async function fetchNotifications() {
     setLoading(true);

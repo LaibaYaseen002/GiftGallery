@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Order, OrderStatus } from "@/types";
@@ -23,7 +23,7 @@ export default function AdminOrdersPage() {
   const [filter, setFilter] = useState<"all" | OrderStatus>("all");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const token = await getToken();
       if (!token) return;
@@ -34,11 +34,11 @@ export default function AdminOrdersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getToken]);
 
   useEffect(() => {
     fetchOrders();
-  }, [getToken]);
+  }, [fetchOrders]);
 
   const handleStatusUpdate = async (orderId: string, newStatus: string) => {
     setUpdatingId(orderId);

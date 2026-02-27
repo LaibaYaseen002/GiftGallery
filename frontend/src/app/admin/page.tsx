@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { AnalyticsData, ChartDataPoint, CategoryBreakdownItem, ActivityEvent } from "@/types";
@@ -21,7 +21,7 @@ export default function AdminDashboardPage() {
   const [chartPeriod, setChartPeriod] = useState<"7d" | "30d">("7d");
   const [loading, setLoading] = useState(true);
 
-  const fetchAll = async (period: "7d" | "30d" = chartPeriod) => {
+  const fetchAll = useCallback(async (period: "7d" | "30d" = chartPeriod) => {
     try {
       const token = await getToken();
       if (!token) return;
@@ -42,11 +42,12 @@ export default function AdminDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getToken]);
 
   useEffect(() => {
     fetchAll();
-  }, [getToken]);
+  }, [fetchAll]);
 
   const handlePeriodChange = (period: "7d" | "30d") => {
     setChartPeriod(period);

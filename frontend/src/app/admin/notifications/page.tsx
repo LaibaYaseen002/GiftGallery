@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { notificationsApi } from "@/lib/api";
 import { Notification } from "@/types";
@@ -11,11 +11,7 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
-
-  async function fetchNotifications() {
+  const fetchNotifications = useCallback(async () => {
     try {
       const token = await getToken();
       if (!token) return;
@@ -26,7 +22,11 @@ export default function NotificationsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [getToken]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   async function handleMarkAllRead() {
     try {

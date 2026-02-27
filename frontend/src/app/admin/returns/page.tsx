@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { ReturnRequest, ReturnStatus } from "@/types";
 import { returnsApi } from "@/lib/api";
@@ -13,7 +13,7 @@ export default function AdminReturnsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | ReturnStatus>("all");
 
-  const fetchReturns = async () => {
+  const fetchReturns = useCallback(async () => {
     try {
       const token = await getToken();
       if (!token) return;
@@ -24,11 +24,11 @@ export default function AdminReturnsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getToken]);
 
   useEffect(() => {
     fetchReturns();
-  }, [getToken]);
+  }, [fetchReturns]);
 
   const handleUpdateStatus = async (
     id: string,

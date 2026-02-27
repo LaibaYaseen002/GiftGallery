@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import { Product } from "@/types";
 import { productsApi } from "@/lib/api";
 import ProductForm from "@/components/admin/ProductForm";
@@ -123,11 +124,13 @@ export default function AdminProductsPage() {
             <div key={product.id} className="card p-4">
               <div className="flex items-center gap-4">
                 {/* Image */}
-                <div className="w-16 h-16 rounded-lg overflow-hidden border border-border flex-shrink-0">
-                  <img
+                <div className="w-16 h-16 rounded-lg overflow-hidden border border-border flex-shrink-0 relative">
+                  <Image
                     src={product.image_url}
                     alt={product.name}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="64px"
+                    className="object-cover"
                   />
                 </div>
 
