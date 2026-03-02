@@ -174,7 +174,7 @@ function OrderDetailContent() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Order Timeline */}
-          <OrderTimeline status={order.status} updatedAt={order.updated_at} />
+          <OrderTimeline status={order.status} updatedAt={order.updated_at} statusHistory={order.status_history} />
 
           {/* Shipping Info */}
           <div className="card p-6">
@@ -207,9 +207,21 @@ function OrderDetailContent() {
               <h2 className="text-lg font-bold text-dark mb-3">
                 Gift Message
               </h2>
-              <p className="text-medium text-sm italic">
-                &ldquo;{order.gift_message}&rdquo;
-              </p>
+              <div className="bg-secondary border-l-4 border-accent rounded-lg p-4">
+                <p
+                  className={`text-lg text-dark italic ${
+                    order.gift_font === "handwritten"
+                      ? "font-[family-name:var(--font-dancing)]"
+                      : order.gift_font === "elegant"
+                      ? "font-[family-name:var(--font-great-vibes)]"
+                      : order.gift_font === "playful"
+                      ? "font-[family-name:var(--font-pacifico)]"
+                      : "font-sans"
+                  }`}
+                >
+                  &ldquo;{order.gift_message}&rdquo;
+                </p>
+              </div>
             </div>
           )}
 

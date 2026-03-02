@@ -3,6 +3,7 @@ import { supabase } from "../services/supabase";
 import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 import { CreateReturnRequest } from "../types";
 import { createNotification } from "../services/notifications";
+import { sendReturnStatusEmail } from "../services/resend";
 
 const router = Router();
 
@@ -183,6 +184,25 @@ router.patch("/admin/:id", requireAdmin, async (req: Request, res: Response) => 
       return;
     }
 
+    // Fetch the return request to get order_id
+    const { data: returnReq } = await supabase
+      .from("return_requests")
+      .select("order_id")
+      .eq("id", id)
+      .single();
+
+    if (!returnReq) {
+      res.status(404).json({ error: "Return request not found" });
+      return;
+    }
+
+    // Fetch associated order for customer email/name
+    const { data: order } = await supabase
+      .from("orders")
+      .select("user_email, shipping_name")
+      .eq("id", returnReq.order_id)
+      .single();
+
     const updateData: Record<string, unknown> = {
       status,
       updated_at: new Date().toISOString(),
@@ -207,6 +227,17 @@ router.patch("/admin/:id", requireAdmin, async (req: Request, res: Response) => 
     if (!data) {
       res.status(404).json({ error: "Return request not found" });
       return;
+    }
+
+    // Send return status email to customer (non-blocking)
+    if (order?.user_email && status !== "pending") {
+      sendReturnStatusEmail({
+        to: order.user_email,
+        customerName: order.shipping_name,
+        orderId: returnReq.order_id,
+        returnStatus: status,
+        adminNotes: admin_notes,
+      }).catch((err) => console.error("Return status email send failed:", err));
     }
 
     res.json({ data, message: `Return request ${status}` });

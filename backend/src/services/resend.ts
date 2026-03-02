@@ -30,6 +30,7 @@ interface OrderEmailData {
   shippingCity: string;
   shippingPhone: string;
   giftMessage?: string | null;
+  giftFont?: string | null;
 }
 
 export async function sendOrderConfirmationEmail(data: OrderEmailData) {
@@ -56,10 +57,18 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
       </tr>`
     : "";
 
+  const fontFamilyMap: Record<string, string> = {
+    classic: "'Segoe UI', Arial, sans-serif",
+    handwritten: "'Dancing Script', cursive",
+    elegant: "'Great Vibes', cursive",
+    playful: "'Pacifico', cursive",
+  };
+  const giftFontFamily = fontFamilyMap[data.giftFont || "classic"] || fontFamilyMap.classic;
+
   const giftMessageHtml = data.giftMessage
     ? `<div style="background: #FFF8F0; border-left: 4px solid #D4A853; padding: 15px; margin: 20px 0; border-radius: 4px;">
         <p style="margin: 0 0 5px; font-weight: bold; color: #2D2D2D;">Gift Message:</p>
-        <p style="margin: 0; color: #6B6B6B; font-style: italic;">"${data.giftMessage}"</p>
+        <p style="margin: 0; color: #6B6B6B; font-style: italic; font-family: ${giftFontFamily}; font-size: 18px;">"${data.giftMessage}"</p>
       </div>`
     : "";
 
@@ -249,6 +258,99 @@ export async function sendOrderStatusEmail(data: StatusUpdateEmailData) {
     return result;
   } catch (error) {
     console.error("Failed to send order status email:", error);
+    return null;
+  }
+}
+
+// ==================== Return Status Update Email ====================
+
+interface ReturnStatusEmailData {
+  to: string;
+  customerName: string;
+  orderId: string;
+  returnStatus: string;
+  adminNotes?: string;
+}
+
+const returnStatusMessages: Record<string, { emoji: string; title: string; message: string }> = {
+  approved: {
+    emoji: "✅",
+    title: "Return Approved",
+    message: "Your return request has been approved. Please follow the return instructions provided by our team.",
+  },
+  rejected: {
+    emoji: "❌",
+    title: "Return Rejected",
+    message: "Unfortunately, your return request has been rejected. Please contact us if you have any questions.",
+  },
+  refunded: {
+    emoji: "💰",
+    title: "Refund Processed",
+    message: "Your refund has been processed. The amount will be reflected in your account shortly.",
+  },
+};
+
+export async function sendReturnStatusEmail(data: ReturnStatusEmailData) {
+  if (!resendApiKey) {
+    console.log("Skipping email — RESEND_API_KEY not configured");
+    return null;
+  }
+
+  const statusInfo = returnStatusMessages[data.returnStatus];
+  if (!statusInfo) return null; // Skip for "pending" or unknown statuses
+
+  const adminNotesHtml = data.adminNotes
+    ? `<div style="background: #FAF5F0; border-left: 4px solid #D4A853; padding: 15px; margin: 20px 0; border-radius: 4px;">
+        <p style="margin: 0 0 5px; font-weight: bold; color: #2D2D2D;">Admin Notes:</p>
+        <p style="margin: 0; color: #6B6B6B;">${data.adminNotes}</p>
+      </div>`
+    : "";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #FFF8F0; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: linear-gradient(135deg, #B76E79, #9A4C5A); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+      <h1 style="color: white; margin: 0; font-size: 28px;">🎁 Gift Gallery</h1>
+      <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0;">Return Update</p>
+    </div>
+    <div style="background: white; padding: 30px; border: 1px solid #F0E0D6; border-top: none; border-radius: 0 0 12px 12px;">
+      <p style="color: #2D2D2D; font-size: 16px;">Hi ${data.customerName},</p>
+      <div style="text-align: center; margin: 25px 0;">
+        <span style="font-size: 48px;">${statusInfo.emoji}</span>
+        <h2 style="color: #B76E79; margin: 10px 0;">${statusInfo.title}</h2>
+      </div>
+      <div style="background: #FAF5F0; padding: 15px; border-radius: 8px; margin: 15px 0;">
+        <p style="margin: 0; color: #6B6B6B; font-size: 14px;">Order ID</p>
+        <p style="margin: 4px 0 0; color: #2D2D2D; font-weight: bold; font-size: 16px;">#${data.orderId.slice(0, 8)}</p>
+      </div>
+      <p style="color: #6B6B6B; line-height: 1.8;">${statusInfo.message}</p>
+      ${adminNotesHtml}
+      <p style="color: #6B6B6B; font-size: 14px; margin-top: 20px;">If you have any questions, feel free to contact us.</p>
+      <div style="text-align: center; margin-top: 25px;">
+        <p style="color: #B76E79; font-weight: bold;">Gift Gallery Team 🎁</p>
+      </div>
+    </div>
+    <div style="text-align: center; padding: 20px; color: #6B6B6B; font-size: 12px;">
+      <p>&copy; 2025 Gift Gallery. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  try {
+    const result = await resend!.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `${statusInfo.title} — Order #${data.orderId.slice(0, 8)} | Gift Gallery`,
+      html,
+    });
+    console.log("Return status email sent:", result);
+    return result;
+  } catch (error) {
+    console.error("Failed to send return status email:", error);
     return null;
   }
 }

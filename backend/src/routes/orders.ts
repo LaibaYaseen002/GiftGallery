@@ -24,6 +24,7 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       shipping_city,
       shipping_phone,
       gift_message,
+      gift_font,
       discount_code,
     } = req.body as CreateOrderRequest;
 
@@ -63,6 +64,12 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
 
     if (gift_message && gift_message.length > 500) {
       res.status(400).json({ error: "Gift message is too long (max 500 characters)" });
+      return;
+    }
+
+    const validFonts = ["classic", "handwritten", "elegant", "playful"];
+    if (gift_font && !validFonts.includes(gift_font)) {
+      res.status(400).json({ error: `Invalid gift font. Must be one of: ${validFonts.join(", ")}` });
       return;
     }
 
@@ -144,6 +151,7 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
         shipping_city,
         shipping_phone,
         gift_message: gift_message || null,
+        gift_font: gift_message ? (gift_font || "classic") : null,
       })
       .select()
       .single();
@@ -183,6 +191,7 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       shippingCity: shipping_city,
       shippingPhone: shipping_phone,
       giftMessage: gift_message || null,
+      giftFont: gift_message ? (gift_font || "classic") : null,
     }).catch((err) => console.error("Email send failed:", err));
 
     // Create admin notification
@@ -313,7 +322,14 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
       .select("*")
       .eq("order_id", id);
 
-    res.json({ data: { ...order, items: items || [] } });
+    // Fetch status history
+    const { data: history } = await supabase
+      .from("status_history")
+      .select("*")
+      .eq("order_id", id)
+      .order("created_at", { ascending: true });
+
+    res.json({ data: { ...order, items: items || [], status_history: history || [] } });
   } catch (err) {
     console.error("Error fetching order:", err);
     res.status(500).json({ error: "Failed to fetch order" });

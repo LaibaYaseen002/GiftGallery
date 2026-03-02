@@ -1,10 +1,11 @@
 "use client";
 
-import { OrderStatus } from "@/types";
+import { OrderStatus, StatusHistory } from "@/types";
 
 interface OrderTimelineProps {
   status: OrderStatus;
   updatedAt: string;
+  statusHistory?: StatusHistory[];
 }
 
 const steps: { key: OrderStatus; label: string; icon: string }[] = [
@@ -55,8 +56,20 @@ function StepIcon({ type, active }: { type: string; active: boolean }) {
   }
 }
 
-export default function OrderTimeline({ status, updatedAt }: OrderTimelineProps) {
+export default function OrderTimeline({ status, updatedAt, statusHistory }: OrderTimelineProps) {
   const currentIndex = statusIndex[status];
+
+  // Build a map from status -> timestamp using real history data
+  const historyTimestamps: Partial<Record<OrderStatus, string>> = {};
+  if (statusHistory && statusHistory.length > 0) {
+    for (const entry of statusHistory) {
+      const s = entry.new_status as OrderStatus;
+      // Use the first occurrence (earliest) for each status
+      if (!historyTimestamps[s]) {
+        historyTimestamps[s] = entry.created_at;
+      }
+    }
+  }
 
   // Cancelled order — show special state
   if (status === "cancelled") {
@@ -125,16 +138,22 @@ export default function OrderTimeline({ status, updatedAt }: OrderTimelineProps)
                 >
                   {step.label}
                 </p>
-                {isCurrent && (
-                  <p className="text-xs text-primary mt-0.5">
-                    {new Date(updatedAt).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                )}
+                {isCompleted && (() => {
+                  // Use real history timestamp if available, fallback to updatedAt for current step
+                  const ts = historyTimestamps[step.key]
+                    || (isCurrent ? updatedAt : null);
+                  if (!ts) return null;
+                  return (
+                    <p className={`text-xs mt-0.5 ${isCurrent ? "text-primary" : "text-medium"}`}>
+                      {new Date(ts).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  );
+                })()}
               </div>
             </div>
           );
