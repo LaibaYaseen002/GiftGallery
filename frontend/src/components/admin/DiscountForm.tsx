@@ -11,6 +11,7 @@ interface DiscountFormProps {
     is_active: boolean;
     expires_at: string | null;
     max_uses: number | null;
+    is_flash_sale: boolean;
   }) => Promise<void>;
   onCancel: () => void;
 }
@@ -25,6 +26,7 @@ export default function DiscountForm({
   const [isActive, setIsActive] = useState(true);
   const [expiresAt, setExpiresAt] = useState("");
   const [maxUses, setMaxUses] = useState("");
+  const [isFlashSale, setIsFlashSale] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -41,6 +43,7 @@ export default function DiscountForm({
           : ""
       );
       setMaxUses(discount.max_uses ? String(discount.max_uses) : "");
+      setIsFlashSale(discount.is_flash_sale || false);
     }
   }, [discount]);
 
@@ -59,6 +62,11 @@ export default function DiscountForm({
       return;
     }
 
+    if (isFlashSale && !expiresAt) {
+      setError("Flash sales require an expiry date");
+      return;
+    }
+
     setLoading(true);
     try {
       await onSubmit({
@@ -67,6 +75,7 @@ export default function DiscountForm({
         is_active: isActive,
         expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
         max_uses: maxUses ? parseInt(maxUses) : null,
+        is_flash_sale: isFlashSale,
       });
     } catch (err) {
       setError(
@@ -116,10 +125,29 @@ export default function DiscountForm({
         </div>
       </div>
 
+      {/* Flash Sale Toggle */}
+      <div className="flex items-center gap-3">
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={isFlashSale}
+            onChange={(e) => setIsFlashSale(e.target.checked)}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+        </label>
+        <span className="text-sm font-medium text-dark">
+          Flash Sale
+        </span>
+        {isFlashSale && (
+          <span className="text-xs text-accent font-medium">Shown on storefront with countdown</span>
+        )}
+      </div>
+
       {/* Expiry Date */}
       <div>
         <label htmlFor="expires" className="block text-sm font-medium text-dark mb-1">
-          Expiry Date <span className="text-medium font-normal">(optional)</span>
+          Expiry Date {isFlashSale ? <span className="text-error font-normal">(required for flash sales)</span> : <span className="text-medium font-normal">(optional)</span>}
         </label>
         <input
           id="expires"
@@ -127,6 +155,7 @@ export default function DiscountForm({
           value={expiresAt}
           onChange={(e) => setExpiresAt(e.target.value)}
           className="input-field"
+          required={isFlashSale}
         />
       </div>
 

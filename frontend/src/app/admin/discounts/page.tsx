@@ -8,6 +8,42 @@ import DiscountForm from "@/components/admin/DiscountForm";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
+function FlashSaleCountdown({ expiresAt }: { expiresAt: string }) {
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    const update = () => {
+      const diff = new Date(expiresAt).getTime() - Date.now();
+      if (diff <= 0) {
+        setTimeLeft("Expired");
+        return;
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      setTimeLeft(
+        `${d > 0 ? `${d}d ` : ""}${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
+      );
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [expiresAt]);
+
+  if (timeLeft === "Expired") return null;
+
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs font-mono text-primary">
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+      </span>
+      {timeLeft}
+    </span>
+  );
+}
+
 export default function AdminDiscountsPage() {
   const { getToken } = useAuth();
   const [discounts, setDiscounts] = useState<DiscountCode[]>([]);
@@ -41,6 +77,7 @@ export default function AdminDiscountsPage() {
     is_active: boolean;
     expires_at: string | null;
     max_uses: number | null;
+    is_flash_sale: boolean;
   }) => {
     const token = await getToken();
     if (!token) return;
@@ -55,6 +92,7 @@ export default function AdminDiscountsPage() {
     is_active: boolean;
     expires_at: string | null;
     max_uses: number | null;
+    is_flash_sale: boolean;
   }) => {
     if (!editingDiscount) return;
     const token = await getToken();
@@ -213,6 +251,11 @@ export default function AdminDiscountsPage() {
                           Active
                         </span>
                       )}
+                      {discount.is_flash_sale && (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent">
+                          Flash Sale
+                        </span>
+                      )}
                     </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-medium">
                       <span>
@@ -222,7 +265,7 @@ export default function AdminDiscountsPage() {
                           : " (unlimited)"}
                       </span>
                       {discount.expires_at && (
-                        <span>
+                        <span className="inline-flex items-center gap-2">
                           Expires:{" "}
                           {new Date(discount.expires_at).toLocaleDateString(
                             "en-US",
@@ -231,6 +274,9 @@ export default function AdminDiscountsPage() {
                               month: "short",
                               day: "numeric",
                             }
+                          )}
+                          {discount.is_flash_sale && discount.is_active && !expired && !maxedOut && (
+                            <FlashSaleCountdown expiresAt={discount.expires_at} />
                           )}
                         </span>
                       )}

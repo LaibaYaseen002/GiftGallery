@@ -36,6 +36,7 @@ export interface Order {
   shipping_city: string;
   shipping_phone: string;
   gift_message: string | null;
+  gift_font: string | null;
   created_at: string;
   updated_at: string;
   // Joined fields
@@ -80,6 +81,7 @@ export interface DiscountCode {
   expires_at: string | null;
   max_uses: number | null;
   current_uses: number;
+  is_flash_sale: boolean;
   created_at: string;
 }
 
@@ -128,6 +130,7 @@ export interface CreateOrderRequest {
   shipping_city: string;
   shipping_phone: string;
   gift_message?: string;
+  gift_font?: string;
   discount_code?: string;
 }
 

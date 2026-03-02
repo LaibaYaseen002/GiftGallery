@@ -155,6 +155,8 @@ export const wishlistApi = {
 // ==================== Discounts ====================
 
 export const discountsApi = {
+  getActiveSales: () =>
+    fetchApi<{ data: { code: string; discount_percent: number; expires_at: string }[] }>("/discounts/active-sales"),
   validate: (code: string, token: string) =>
     fetchApi<{ data: { code: string; discount_percent: number }; message: string }>("/discounts/validate", {
       method: "POST",

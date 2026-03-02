@@ -4,6 +4,44 @@ import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
 
+// GET /api/discounts/active-sales - Get active flash sales (Public, no auth)
+router.get("/active-sales", async (_req: Request, res: Response) => {
+  try {
+    const { data, error } = await supabase
+      .from("discount_codes")
+      .select("code, discount_percent, expires_at")
+      .eq("is_flash_sale", true)
+      .eq("is_active", true)
+      .gt("expires_at", new Date().toISOString());
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    // Filter out maxed-out codes (need full data for that)
+    const { data: fullData } = await supabase
+      .from("discount_codes")
+      .select("code, discount_percent, expires_at, max_uses, current_uses")
+      .eq("is_flash_sale", true)
+      .eq("is_active", true)
+      .gt("expires_at", new Date().toISOString());
+
+    const activeSales = (fullData || []).filter(
+      (d) => d.max_uses === null || d.current_uses < d.max_uses
+    ).map(({ code, discount_percent, expires_at }) => ({
+      code,
+      discount_percent,
+      expires_at,
+    }));
+
+    res.json({ data: activeSales });
+  } catch (err) {
+    console.error("Error fetching active sales:", err);
+    res.status(500).json({ error: "Failed to fetch active sales" });
+  }
+});
+
 // POST /api/discounts/validate - Validate & apply discount code (User)
 router.post("/validate", requireAuth, async (req: Request, res: Response) => {
   try {
@@ -74,7 +112,7 @@ router.get("/admin", requireAdmin, async (_req: Request, res: Response) => {
 // POST /api/discounts/admin - Create discount code (Admin)
 router.post("/admin", requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { code, discount_percent, expires_at, max_uses } = req.body;
+    const { code, discount_percent, expires_at, max_uses, is_flash_sale } = req.body;
 
     if (!code || discount_percent === undefined || discount_percent === null) {
       res.status(400).json({ error: "Code and discount_percent are required" });
@@ -111,6 +149,7 @@ router.post("/admin", requireAdmin, async (req: Request, res: Response) => {
         discount_percent,
         expires_at: expires_at || null,
         max_uses: max_uses || null,
+        is_flash_sale: !!is_flash_sale,
       })
       .select()
       .single();
@@ -135,7 +174,7 @@ router.post("/admin", requireAdmin, async (req: Request, res: Response) => {
 router.put("/admin/:id", requireAdmin, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { code, discount_percent, is_active, expires_at, max_uses } = req.body;
+    const { code, discount_percent, is_active, expires_at, max_uses, is_flash_sale } = req.body;
 
     if (discount_percent !== undefined && (typeof discount_percent !== "number" || discount_percent < 1 || discount_percent > 100)) {
       res.status(400).json({ error: "Discount percent must be between 1 and 100" });
@@ -158,6 +197,7 @@ router.put("/admin/:id", requireAdmin, async (req: Request, res: Response) => {
     if (is_active !== undefined) updates.is_active = is_active;
     if (expires_at !== undefined) updates.expires_at = expires_at;
     if (max_uses !== undefined) updates.max_uses = max_uses;
+    if (is_flash_sale !== undefined) updates.is_flash_sale = is_flash_sale;
 
     const { data, error } = await supabase
       .from("discount_codes")

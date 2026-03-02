@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
@@ -8,6 +8,15 @@ import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { ordersApi, discountsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+
+type GiftFont = "classic" | "handwritten" | "elegant" | "playful";
+
+const FONT_OPTIONS: { key: GiftFont; label: string; className: string }[] = [
+  { key: "classic", label: "Classic", className: "font-sans" },
+  { key: "handwritten", label: "Handwritten", className: "font-[family-name:var(--font-dancing)]" },
+  { key: "elegant", label: "Elegant", className: "font-[family-name:var(--font-great-vibes)]" },
+  { key: "playful", label: "Playful", className: "font-[family-name:var(--font-pacifico)]" },
+];
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -21,12 +30,20 @@ export default function CheckoutPage() {
     shipping_phone: "",
   });
   const [giftMessage, setGiftMessage] = useState("");
+  const [giftFont, setGiftFont] = useState<GiftFont>("classic");
+  const [flashSales, setFlashSales] = useState<{ code: string; discount_percent: number; expires_at: string }[]>([]);
   const [discountCode, setDiscountCode] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
   const [discountError, setDiscountError] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    discountsApi.getActiveSales()
+      .then((res) => setFlashSales(res.data || []))
+      .catch(() => {});
+  }, []);
 
   const discountAmount = (totalPrice * discountPercent) / 100;
   const finalTotal = totalPrice - discountAmount;
@@ -72,6 +89,7 @@ export default function CheckoutPage() {
         })),
         ...shipping,
         gift_message: giftMessage || undefined,
+        gift_font: giftMessage ? giftFont : undefined,
         discount_code: discountApplied ? discountCode : undefined,
       };
 
@@ -197,6 +215,41 @@ export default function CheckoutPage() {
               <p className="text-xs text-medium mt-1 text-right">
                 {giftMessage.length}/500
               </p>
+
+              {/* Font Style Selector */}
+              <div className="mt-4">
+                <p className="text-sm font-medium text-dark mb-2">Font Style</p>
+                <div className="flex flex-wrap gap-2">
+                  {FONT_OPTIONS.map((font) => (
+                    <button
+                      key={font.key}
+                      type="button"
+                      onClick={() => setGiftFont(font.key)}
+                      className={`px-4 py-2 rounded-full text-sm transition-colors ${font.className} ${
+                        giftFont === font.key
+                          ? "bg-primary text-white"
+                          : "bg-light text-dark border border-border hover:border-primary"
+                      }`}
+                    >
+                      {font.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live Preview */}
+              {giftMessage.trim() && (
+                <div className="mt-4 bg-secondary border-l-4 border-accent rounded-lg p-4">
+                  <p className="text-xs text-medium mb-2 uppercase tracking-wide">Preview</p>
+                  <p
+                    className={`text-lg text-dark italic ${
+                      FONT_OPTIONS.find((f) => f.key === giftFont)?.className || "font-sans"
+                    }`}
+                  >
+                    &ldquo;{giftMessage}&rdquo;
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Discount Code */}
@@ -204,6 +257,17 @@ export default function CheckoutPage() {
               <h2 className="text-xl font-bold text-dark mb-2">
                 Discount Code
               </h2>
+              {flashSales.length > 0 && !discountApplied && (
+                <div className="mb-3 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-lg p-3">
+                  <p className="text-sm font-medium text-primary">
+                    Flash Sale Active! Try code{" "}
+                    <span className="font-bold font-mono bg-white px-1.5 py-0.5 rounded">
+                      {flashSales[0].code}
+                    </span>
+                    {" "}for {flashSales[0].discount_percent}% off
+                  </p>
+                </div>
+              )}
               <div className="flex gap-3">
                 <input
                   type="text"

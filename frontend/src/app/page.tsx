@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Product, Category } from "@/types";
 import { productsApi, categoriesApi } from "@/lib/api";
 import ProductCard from "@/components/products/ProductCard";
+import FlashSaleBanner from "@/components/FlashSaleBanner";
 
 export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -49,6 +50,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Flash Sale Banner */}
+      <FlashSaleBanner />
 
       {/* Categories */}
       <section className="py-16">
