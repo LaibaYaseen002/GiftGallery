@@ -10,17 +10,22 @@ interface RevenueChartProps {
 
 export default function RevenueChart({ data, period, onPeriodChange }: RevenueChartProps) {
   const maxRevenue = Math.max(...data.map((d) => d.revenue), 1);
+  const totalRevenue = data.reduce((sum, d) => sum + d.revenue, 0);
+  const totalOrders = data.reduce((sum, d) => sum + d.orders, 0);
 
   return (
     <div className="card p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-dark">Revenue Overview</h2>
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+          <h2 className="text-lg font-bold text-dark">Revenue Overview</h2>
+        </div>
         <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
           <button
             onClick={() => onPeriodChange("7d")}
             className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
               period === "7d"
-                ? "bg-white text-primary shadow-sm"
+                ? "bg-primary text-white shadow-sm"
                 : "text-medium hover:text-dark"
             }`}
           >
@@ -30,7 +35,7 @@ export default function RevenueChart({ data, period, onPeriodChange }: RevenueCh
             onClick={() => onPeriodChange("30d")}
             className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
               period === "30d"
-                ? "bg-white text-primary shadow-sm"
+                ? "bg-primary text-white shadow-sm"
                 : "text-medium hover:text-dark"
             }`}
           >
@@ -39,35 +44,56 @@ export default function RevenueChart({ data, period, onPeriodChange }: RevenueCh
         </div>
       </div>
 
+      {/* Period summary */}
+      <div className="flex items-baseline gap-2 mb-4">
+        <span className="text-2xl font-bold text-dark">${totalRevenue.toFixed(2)}</span>
+        <span className="text-xs text-medium">{totalOrders} orders in {period === "7d" ? "7 days" : "30 days"}</span>
+      </div>
+
       {data.length === 0 ? (
         <p className="text-medium text-sm py-8 text-center">No data available.</p>
       ) : (
-        <div className="space-y-2">
-          {data.map((point) => {
-            const pct = (point.revenue / maxRevenue) * 100;
-            const dateLabel = new Date(point.date + "T00:00:00").toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            });
-            return (
-              <div key={point.date} className="flex items-center gap-3 text-sm">
-                <span className="w-16 text-xs text-medium text-right shrink-0">
-                  {dateLabel}
-                </span>
-                <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden relative">
+        <div>
+          {/* Vertical bar chart */}
+          <div className="flex items-end gap-1 h-48 border-b border-border pb-2">
+            {data.map((point) => {
+              const pct = (point.revenue / maxRevenue) * 100;
+              return (
+                <div
+                  key={point.date}
+                  className="flex-1 flex flex-col items-center justify-end h-full group relative"
+                >
+                  {/* Tooltip */}
+                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-dark text-white text-xs rounded-lg px-2.5 py-1.5 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <p className="font-semibold">${point.revenue.toFixed(0)}</p>
+                    <p className="text-white/70">{point.orders} orders</p>
+                  </div>
+                  {/* Bar */}
                   <div
-                    className="bg-primary/80 h-full rounded-full transition-all duration-300"
-                    style={{ width: `${Math.max(pct, 0)}%` }}
+                    className="w-full bg-gradient-to-t from-primary to-primary/60 rounded-t-md transition-all duration-300 hover:from-primary-dark hover:to-primary min-h-[4px]"
+                    style={{ height: `${Math.max(pct, 2)}%` }}
                   />
-                  {point.revenue > 0 && (
-                    <span className="absolute inset-y-0 right-2 flex items-center text-xs font-medium text-dark">
-                      ${point.revenue.toFixed(0)} ({point.orders})
-                    </span>
+                </div>
+              );
+            })}
+          </div>
+          {/* Date labels */}
+          <div className="flex gap-1 mt-1.5">
+            {data.map((point, i) => {
+              const showLabel = period === "7d" || i % 3 === 0 || i === data.length - 1;
+              const dateLabel = new Date(point.date + "T00:00:00").toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+              return (
+                <div key={point.date} className="flex-1 text-center">
+                  {showLabel && (
+                    <span className="text-[10px] text-medium">{dateLabel}</span>
                   )}
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

@@ -195,8 +195,25 @@ export default function AdminOrderDetailPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
                 Gift Message
+                {order.gift_font && order.gift_font !== "classic" && (
+                  <span className="text-xs font-normal text-medium capitalize">({order.gift_font})</span>
+                )}
               </h2>
-              <p className="text-medium italic">&ldquo;{order.gift_message}&rdquo;</p>
+              <div className="bg-secondary border-l-4 border-accent rounded-lg p-4">
+                <p
+                  className={`text-lg italic ${
+                    order.gift_font === "handwritten"
+                      ? "font-[family-name:var(--font-dancing)]"
+                      : order.gift_font === "elegant"
+                      ? "font-[family-name:var(--font-great-vibes)]"
+                      : order.gift_font === "playful"
+                      ? "font-[family-name:var(--font-pacifico)]"
+                      : "font-sans"
+                  }`}
+                >
+                  &ldquo;{order.gift_message}&rdquo;
+                </p>
+              </div>
             </div>
           )}
 

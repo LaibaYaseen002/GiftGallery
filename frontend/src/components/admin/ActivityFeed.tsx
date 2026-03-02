@@ -60,18 +60,27 @@ function timeAgo(timestamp: string): string {
 export default function ActivityFeed({ events }: ActivityFeedProps) {
   return (
     <div className="card p-6">
-      <h2 className="text-lg font-bold text-dark mb-4">Recent Activity</h2>
+      <div className="flex items-center gap-2 mb-4">
+        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+        <h2 className="text-lg font-bold text-dark">Recent Activity</h2>
+      </div>
 
       {events.length === 0 ? (
         <p className="text-medium text-sm py-4 text-center">No recent activity.</p>
       ) : (
-        <div className="space-y-3 max-h-96 overflow-y-auto">
+        <div className="max-h-96 overflow-y-auto">
           {events.map((event, i) => {
             const config = typeConfig[event.type] || typeConfig.order;
+            const isLast = i === events.length - 1;
             return (
-              <div key={`${event.type}-${i}`} className="flex items-start gap-3">
+              <div key={`${event.type}-${i}`} className={`flex items-start gap-3 relative ${isLast ? "" : "pb-6"}`}>
+                {/* Timeline connector line */}
+                {!isLast && (
+                  <div className="absolute left-4 top-10 bottom-0 w-0.5 bg-border" />
+                )}
+                {/* Icon with ring */}
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${config.color}`}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ring-4 ring-white relative z-10 ${config.color}`}
                 >
                   {config.icon}
                 </div>

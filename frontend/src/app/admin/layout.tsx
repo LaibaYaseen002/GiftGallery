@@ -16,7 +16,7 @@ export default function AdminLayout({
 
   return (
     <AdminGuard>
-      <div className="flex min-h-screen bg-gray-50">
+      <div className="flex min-h-screen bg-light">
         {/* Sidebar */}
         <AdminSidebar
           open={sidebarOpen}
@@ -26,7 +26,7 @@ export default function AdminLayout({
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Top Header Bar */}
-          <header className="bg-white border-b border-border h-16 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+          <header className="bg-white/80 backdrop-blur-sm border-b border-border h-16 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30 shadow-sm">
             {/* Left: Hamburger + Title */}
             <div className="flex items-center gap-3">
               <button
@@ -38,9 +38,12 @@ export default function AdminLayout({
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
               </button>
-              <h1 className="text-lg font-semibold text-dark hidden sm:block">
-                Gift Gallery Admin
-              </h1>
+              <div className="hidden sm:flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-primary" />
+                <h1 className="text-lg font-semibold text-dark">
+                  Gift Gallery Admin
+                </h1>
+              </div>
             </div>
 
             {/* Right: Notifications + Admin info + UserButton */}
@@ -50,7 +53,9 @@ export default function AdminLayout({
                 <p className="text-sm font-medium text-dark">
                   {user?.firstName || user?.emailAddresses?.[0]?.emailAddress || "Admin"}
                 </p>
-                <p className="text-xs text-primary font-medium">Administrator</p>
+                <span className="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full">
+                  Administrator
+                </span>
               </div>
               <UserButton
                 afterSignOutUrl="/"
