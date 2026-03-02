@@ -37,6 +37,8 @@ export interface Order {
   shipping_phone: string;
   gift_message: string | null;
   gift_font: string | null;
+  payment_intent_id: string | null;
+  payment_status: string;
   created_at: string;
   updated_at: string;
   // Joined fields

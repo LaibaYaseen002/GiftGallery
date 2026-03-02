@@ -5,6 +5,7 @@ import { getAuth, clerkClient } from "@clerk/express";
 import { CreateOrderRequest } from "../types";
 import { sendOrderConfirmationEmail, sendOrderStatusEmail } from "../services/resend";
 import { createNotification } from "../services/notifications";
+import { createPaymentIntent } from "../services/stripe";
 
 const router = Router();
 
@@ -176,6 +177,17 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       return;
     }
 
+    // Create Stripe PaymentIntent
+    const amountInCents = Math.round(totalAmount * 100);
+    const clientSecret = await createPaymentIntent(amountInCents, order.id);
+
+    // Store payment_intent_id on the order
+    const paymentIntentId = clientSecret.split("_secret_")[0];
+    await supabase
+      .from("orders")
+      .update({ payment_intent_id: paymentIntentId, payment_status: "pending" })
+      .eq("id", order.id);
+
     // Send confirmation email (non-blocking — don't fail the order if email fails)
     sendOrderConfirmationEmail({
       to: userEmail,
@@ -203,7 +215,7 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
     });
 
     res.status(201).json({
-      data: { ...order, items: itemsWithOrderId },
+      data: { ...order, items: itemsWithOrderId, clientSecret },
       message: "Order placed successfully!",
     });
   } catch (err) {

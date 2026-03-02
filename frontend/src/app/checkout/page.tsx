@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { useCart } from "@/context/CartContext";
 import { ordersApi, discountsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import StripePaymentForm from "@/components/checkout/StripePaymentForm";
 
 type GiftFont = "classic" | "handwritten" | "elegant" | "playful";
 
@@ -17,6 +20,10 @@ const FONT_OPTIONS: { key: GiftFont; label: string; className: string }[] = [
   { key: "elegant", label: "Elegant", className: "font-[family-name:var(--font-great-vibes)]" },
   { key: "playful", label: "Playful", className: "font-[family-name:var(--font-pacifico)]" },
 ];
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -38,6 +45,10 @@ export default function CheckoutPage() {
   const [discountApplied, setDiscountApplied] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState("");
+
+  // Phase 2 state
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     discountsApi.getActiveSales()
@@ -65,7 +76,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const handlePlaceOrder = async (e: React.FormEvent) => {
+  const handleContinueToPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -94,17 +105,22 @@ export default function CheckoutPage() {
       };
 
       const res = await ordersApi.create(orderData, token);
-      const order = res as { data: { id: string } };
-      clearCart();
-      router.push(`/orders/${order.data.id}?success=true`);
+      const order = res.data as unknown as { id: string; clientSecret: string };
+      setOrderId(order.id);
+      setClientSecret(order.clientSecret);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to place order");
+      setError(err instanceof Error ? err.message : "Failed to create order");
     } finally {
       setPlacing(false);
     }
   };
 
-  if (items.length === 0) {
+  const handlePaymentSuccess = () => {
+    clearCart();
+    router.push(`/orders/${orderId}?success=true`);
+  };
+
+  if (items.length === 0 && !clientSecret) {
     return (
       <div className="container-custom py-20 text-center">
         <h1 className="text-3xl font-bold mb-4">Your cart is empty</h1>
@@ -116,11 +132,67 @@ export default function CheckoutPage() {
     );
   }
 
+  // Phase 2: Payment form
+  if (clientSecret) {
+    return (
+      <div className="container-custom py-8">
+        <h1 className="page-title">Payment</h1>
+
+        <div className="max-w-lg mx-auto">
+          <div className="card p-6 mb-6">
+            <h2 className="text-xl font-bold text-dark mb-4">
+              Complete Your Payment
+            </h2>
+            <p className="text-medium text-sm mb-6">
+              Enter your card details below to complete your order. Use test card{" "}
+              <span className="font-mono bg-light px-1.5 py-0.5 rounded text-dark">
+                4242 4242 4242 4242
+              </span>{" "}
+              with any future expiry and any CVC.
+            </p>
+
+            <Elements
+              stripe={stripePromise}
+              options={{
+                clientSecret,
+                appearance: {
+                  theme: "stripe",
+                  variables: {
+                    colorPrimary: "#B76E79",
+                    colorBackground: "#FFF8F0",
+                    fontFamily: "inherit",
+                    borderRadius: "8px",
+                  },
+                },
+              }}
+            >
+              <StripePaymentForm
+                amount={finalTotal}
+                onSuccess={handlePaymentSuccess}
+              />
+            </Elements>
+          </div>
+
+          {/* Order total reminder */}
+          <div className="card p-4">
+            <div className="flex justify-between items-center">
+              <span className="text-medium">Order Total</span>
+              <span className="text-lg font-bold text-primary">
+                ${finalTotal.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Phase 1: Shipping + Gift + Discount form
   return (
     <div className="container-custom py-8">
       <h1 className="page-title">Checkout</h1>
 
-      <form onSubmit={handlePlaceOrder}>
+      <form onSubmit={handleContinueToPayment}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: Shipping + Gift + Discount */}
           <div className="lg:col-span-2 space-y-6">
@@ -312,18 +384,6 @@ export default function CheckoutPage() {
                 <p className="text-error text-sm mt-2">{discountError}</p>
               )}
             </div>
-
-            {/* Simulated Payment */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">Payment</h2>
-              <div className="bg-light rounded-lg p-4 border border-border">
-                <p className="text-medium text-sm">
-                  This is a simulated checkout for demonstration purposes. No
-                  real payment will be processed. Click &quot;Place Order&quot;
-                  to complete your order.
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* Right: Order Summary */}
@@ -399,10 +459,10 @@ export default function CheckoutPage() {
                 {placing ? (
                   <span className="flex items-center justify-center gap-2">
                     <LoadingSpinner size="sm" />
-                    Placing Order...
+                    Creating Order...
                   </span>
                 ) : (
-                  `Place Order — $${finalTotal.toFixed(2)}`
+                  "Continue to Payment"
                 )}
               </button>
             </div>
