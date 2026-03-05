@@ -146,7 +146,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-dark text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto lg:min-h-screen lg:sticky ${
+        className={`fixed top-0 left-0 z-50 h-full w-72 bg-dark text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto lg:min-h-screen lg:sticky ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -157,7 +157,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
           <Link href="/admin" className="flex items-center gap-2" onClick={onClose}>
             <span className="text-xl">🎁</span>
-            <span className="text-lg font-bold text-primary">Admin Panel</span>
+            <span className="text-lg font-bold text-primary">Gift Gallery</span>
           </Link>
           <button
             onClick={onClose}
