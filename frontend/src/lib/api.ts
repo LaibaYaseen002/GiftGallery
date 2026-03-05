@@ -36,7 +36,7 @@ async function fetchApi<T>(
 
 // ==================== Products ====================
 
-import { Product, Category, PaginationInfo } from "@/types";
+import { Product, Category, PaginationInfo, GiftWrappingOption, ProductBundle, GiftRegistry, GiftRegistryItem, GroupGift, GroupGiftContribution, Charity, CharityDonation, ShoppingSession, SessionMessage } from "@/types";
 
 export const productsApi = {
   getAll: (params?: { search?: string; category?: string; page?: number; limit?: number }) => {
@@ -302,4 +302,109 @@ export const customersApi = {
     fetchApi<{ data: CustomerSummary[] }>("/admin/customers", { token }),
   getById: (userId: string, token: string) =>
     fetchApi<{ data: CustomerDetail }>(`/admin/customers/${userId}`, { token }),
+};
+
+// ==================== Gift Wrapping ====================
+
+export const giftWrappingApi = {
+  getAll: (type?: string) =>
+    fetchApi<{ data: GiftWrappingOption[] }>(`/gift-wrapping${type ? `?type=${type}` : ""}`),
+  getById: (id: string) =>
+    fetchApi<{ data: GiftWrappingOption }>(`/gift-wrapping/${id}`),
+  // Admin
+  create: (data: Partial<GiftWrappingOption>, token: string) =>
+    fetchApi<{ data: GiftWrappingOption; message: string }>("/gift-wrapping/admin", { method: "POST", body: JSON.stringify(data), token }),
+  update: (id: string, data: Partial<GiftWrappingOption>, token: string) =>
+    fetchApi<{ data: GiftWrappingOption; message: string }>(`/gift-wrapping/admin/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
+  delete: (id: string, token: string) =>
+    fetchApi<{ message: string }>(`/gift-wrapping/admin/${id}`, { method: "DELETE", token }),
+};
+
+// ==================== Product Bundles ====================
+
+export const bundlesApi = {
+  getAll: (occasion?: string) =>
+    fetchApi<{ data: ProductBundle[] }>(`/bundles${occasion ? `?occasion=${occasion}` : ""}`),
+  getById: (id: string) =>
+    fetchApi<{ data: ProductBundle }>(`/bundles/${id}`),
+  // Admin
+  create: (data: { name: string; description?: string; image_url?: string; occasion?: string; discount_percent?: number; items: { product_id: string; quantity: number }[] }, token: string) =>
+    fetchApi<{ data: ProductBundle; message: string }>("/bundles/admin", { method: "POST", body: JSON.stringify(data), token }),
+  update: (id: string, data: Record<string, unknown>, token: string) =>
+    fetchApi<{ data: ProductBundle; message: string }>(`/bundles/admin/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
+  delete: (id: string, token: string) =>
+    fetchApi<{ message: string }>(`/bundles/admin/${id}`, { method: "DELETE", token }),
+};
+
+// ==================== Gift Registry ====================
+
+export const registryApi = {
+  getMy: (token: string) =>
+    fetchApi<{ data: GiftRegistry[] }>("/gift-registry/my", { token }),
+  getById: (id: string, token: string) =>
+    fetchApi<{ data: GiftRegistry }>(`/gift-registry/${id}`, { token }),
+  getShared: (shareCode: string) =>
+    fetchApi<{ data: GiftRegistry }>(`/gift-registry/shared/${shareCode}`),
+  create: (data: { event_name: string; event_date?: string; event_type: string; description?: string }, token: string) =>
+    fetchApi<{ data: GiftRegistry; message: string }>("/gift-registry", { method: "POST", body: JSON.stringify(data), token }),
+  addItem: (registryId: string, data: { product_id: string; quantity_requested?: number }, token: string) =>
+    fetchApi<{ data: GiftRegistryItem; message: string }>(`/gift-registry/${registryId}/items`, { method: "POST", body: JSON.stringify(data), token }),
+  removeItem: (registryId: string, itemId: string, token: string) =>
+    fetchApi<{ message: string }>(`/gift-registry/${registryId}/items/${itemId}`, { method: "DELETE", token }),
+  purchaseItem: (shareCode: string, itemId: string, token: string) =>
+    fetchApi<{ message: string }>(`/gift-registry/shared/${shareCode}/purchase/${itemId}`, { method: "POST", token }),
+  delete: (id: string, token: string) =>
+    fetchApi<{ message: string }>(`/gift-registry/${id}`, { method: "DELETE", token }),
+};
+
+// ==================== Group Gifting ====================
+
+export const groupGiftsApi = {
+  getMy: (token: string) =>
+    fetchApi<{ data: GroupGift[] }>("/group-gifts/my", { token }),
+  getById: (id: string, token: string) =>
+    fetchApi<{ data: GroupGift }>(`/group-gifts/${id}`, { token }),
+  getPublic: (id: string) =>
+    fetchApi<{ data: GroupGift }>(`/group-gifts/contribute/${id}`),
+  create: (data: { product_id: string; recipient_name: string; recipient_email?: string; message?: string; expires_at?: string }, token: string) =>
+    fetchApi<{ data: GroupGift; message: string }>("/group-gifts", { method: "POST", body: JSON.stringify(data), token }),
+  contribute: (id: string, data: { contributor_name: string; contributor_email: string; amount: number }, token: string) =>
+    fetchApi<{ data: GroupGiftContribution; message: string }>(`/group-gifts/${id}/contribute`, { method: "POST", body: JSON.stringify(data), token }),
+  cancel: (id: string, token: string) =>
+    fetchApi<{ message: string }>(`/group-gifts/${id}/cancel`, { method: "PATCH", token }),
+};
+
+// ==================== Charities ====================
+
+export const charitiesApi = {
+  getAll: () =>
+    fetchApi<{ data: Charity[] }>("/charities"),
+  getMyDonations: (token: string) =>
+    fetchApi<{ data: CharityDonation[] }>("/charities/donations/my", { token }),
+  // Admin
+  create: (data: Partial<Charity>, token: string) =>
+    fetchApi<{ data: Charity; message: string }>("/charities/admin", { method: "POST", body: JSON.stringify(data), token }),
+  update: (id: string, data: Partial<Charity>, token: string) =>
+    fetchApi<{ data: Charity; message: string }>(`/charities/admin/${id}`, { method: "PUT", body: JSON.stringify(data), token }),
+  delete: (id: string, token: string) =>
+    fetchApi<{ message: string }>(`/charities/admin/${id}`, { method: "DELETE", token }),
+};
+
+// ==================== Social Shopping ====================
+
+export const socialShoppingApi = {
+  createSession: (data: { title?: string }, token: string) =>
+    fetchApi<{ data: ShoppingSession; message: string }>("/social-shopping/sessions", { method: "POST", body: JSON.stringify(data), token }),
+  getMySessions: (token: string) =>
+    fetchApi<{ data: ShoppingSession[] }>("/social-shopping/sessions/my", { token }),
+  getSession: (code: string) =>
+    fetchApi<{ data: ShoppingSession }>(`/social-shopping/sessions/${code}`),
+  joinSession: (code: string, data: { display_name: string }, token: string) =>
+    fetchApi<{ message: string }>(`/social-shopping/sessions/${code}/join`, { method: "POST", body: JSON.stringify(data), token }),
+  getMessages: (code: string, token: string) =>
+    fetchApi<{ data: SessionMessage[] }>(`/social-shopping/sessions/${code}/messages`, { token }),
+  sendMessage: (code: string, data: { message: string; message_type?: string; product_id?: string }, token: string) =>
+    fetchApi<{ data: SessionMessage; message: string }>(`/social-shopping/sessions/${code}/messages`, { method: "POST", body: JSON.stringify(data), token }),
+  endSession: (code: string, token: string) =>
+    fetchApi<{ message: string }>(`/social-shopping/sessions/${code}/end`, { method: "PATCH", token }),
 };

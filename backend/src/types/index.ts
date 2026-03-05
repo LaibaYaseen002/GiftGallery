@@ -134,6 +134,21 @@ export interface CreateOrderRequest {
   gift_message?: string;
   gift_font?: string;
   discount_code?: string;
+  wrapping_id?: string;
+  packaging_id?: string;
+  charity_id?: string;
+  charity_percent?: number;
+  scheduled_delivery_date?: string;
+  delivery_note?: string;
+  recipients?: {
+    name: string;
+    address: string;
+    city: string;
+    phone: string;
+    email: string;
+    message: string;
+    itemIndices: number[];
+  }[];
 }
 
 export interface CreateReviewRequest {

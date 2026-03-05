@@ -27,6 +27,13 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       gift_message,
       gift_font,
       discount_code,
+      wrapping_id,
+      packaging_id,
+      charity_id,
+      charity_percent,
+      scheduled_delivery_date,
+      delivery_note,
+      recipients,
     } = req.body as CreateOrderRequest;
 
     if (!items || items.length === 0) {
@@ -135,7 +142,28 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
       }
     }
 
-    const totalAmount = subtotal - discountAmount;
+    // Calculate wrapping & packaging costs
+    let wrappingCost = 0;
+    if (wrapping_id) {
+      const { data: wrap } = await supabase.from("gift_wrapping_options").select("price").eq("id", wrapping_id).single();
+      if (wrap) wrappingCost = wrap.price;
+    }
+    let packagingCost = 0;
+    if (packaging_id) {
+      const { data: pkg } = await supabase.from("gift_wrapping_options").select("price").eq("id", packaging_id).single();
+      if (pkg) packagingCost = pkg.price;
+    }
+
+    const subtotalWithExtras = subtotal + wrappingCost + packagingCost;
+    const totalAfterDiscount = subtotalWithExtras - discountAmount;
+
+    // Calculate charity donation
+    let charityAmount = 0;
+    if (charity_id && charity_percent) {
+      charityAmount = (totalAfterDiscount * charity_percent) / 100;
+    }
+
+    const totalAmount = totalAfterDiscount + charityAmount;
 
     // Create order
     const { data: order, error: orderError } = await supabase
@@ -153,6 +181,12 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
         shipping_phone,
         gift_message: gift_message || null,
         gift_font: gift_message ? (gift_font || "classic") : null,
+        wrapping_id: wrapping_id || null,
+        wrapping_cost: wrappingCost,
+        charity_id: charity_id || null,
+        charity_amount: charityAmount,
+        scheduled_delivery_date: scheduled_delivery_date || null,
+        delivery_note: delivery_note || null,
       })
       .select()
       .single();
@@ -175,6 +209,43 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
     if (itemsError) {
       res.status(500).json({ error: "Order created but failed to save items" });
       return;
+    }
+
+    // Save charity donation record
+    if (charity_id && charityAmount > 0) {
+      await supabase.from("charity_donations").insert({
+        order_id: order.id,
+        charity_id,
+        user_id: userId,
+        amount: charityAmount,
+        percentage: charity_percent,
+      });
+    }
+
+    // Save multi-destination recipients
+    if (recipients && recipients.length > 0) {
+      for (const recipient of recipients) {
+        const { data: recipientRecord } = await supabase.from("order_recipients").insert({
+          order_id: order.id,
+          recipient_name: recipient.name,
+          recipient_address: recipient.address,
+          recipient_city: recipient.city,
+          recipient_phone: recipient.phone || null,
+          recipient_email: recipient.email || null,
+          personal_message: recipient.message || null,
+        }).select().single();
+
+        if (recipientRecord && recipient.itemIndices?.length > 0) {
+          const recipientItems = recipient.itemIndices.map((idx: number) => ({
+            order_recipient_id: recipientRecord.id,
+            product_id: orderItems[idx]?.product_id || items[idx]?.product_id,
+            product_name: orderItems[idx]?.product_name || "Unknown",
+            price: orderItems[idx]?.price || 0,
+            quantity: orderItems[idx]?.quantity || 1,
+          }));
+          await supabase.from("order_recipient_items").insert(recipientItems);
+        }
+      }
     }
 
     // Create Stripe PaymentIntent

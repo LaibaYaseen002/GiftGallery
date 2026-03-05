@@ -4,10 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/context/CartContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
   const { totalItems } = useCart();
   const { user } = useUser();
+  const { t } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isAdmin = user?.publicMetadata?.role === "admin";
@@ -39,6 +42,12 @@ export default function Navbar() {
               FAQ
             </Link>
             <Link
+              href="/bundles"
+              className="text-medium hover:text-primary transition-colors"
+            >
+              Bundles
+            </Link>
+            <Link
               href="/contact"
               className="text-medium hover:text-primary transition-colors"
             >
@@ -50,6 +59,24 @@ export default function Navbar() {
                 className="text-medium hover:text-primary transition-colors"
               >
                 My Orders
+              </Link>
+              <Link
+                href="/gift-registry"
+                className="text-medium hover:text-primary transition-colors"
+              >
+                Registry
+              </Link>
+              <Link
+                href="/group-gift"
+                className="text-medium hover:text-primary transition-colors"
+              >
+                Group Gift
+              </Link>
+              <Link
+                href="/shop-together"
+                className="text-medium hover:text-primary transition-colors"
+              >
+                Shop Together
               </Link>
               <Link
                 href="/profile"
@@ -68,8 +95,11 @@ export default function Navbar() {
             </SignedIn>
           </div>
 
-          {/* Right Side: Wishlist, Cart, Auth, Hamburger */}
+          {/* Right Side: Language, Wishlist, Cart, Auth, Hamburger */}
           <div className="flex items-center gap-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {/* Wishlist */}
             <SignedIn>
               <Link
@@ -199,6 +229,13 @@ export default function Navbar() {
               FAQ & Help
             </Link>
             <Link
+              href="/bundles"
+              onClick={closeMobile}
+              className="block text-medium hover:text-primary transition-colors py-2"
+            >
+              Gift Bundles
+            </Link>
+            <Link
               href="/contact"
               onClick={closeMobile}
               className="block text-medium hover:text-primary transition-colors py-2"
@@ -220,6 +257,27 @@ export default function Navbar() {
                   className="block text-medium hover:text-primary transition-colors py-2"
                 >
                   Wishlist
+                </Link>
+                <Link
+                  href="/gift-registry"
+                  onClick={closeMobile}
+                  className="block text-medium hover:text-primary transition-colors py-2"
+                >
+                  Gift Registry
+                </Link>
+                <Link
+                  href="/group-gift"
+                  onClick={closeMobile}
+                  className="block text-medium hover:text-primary transition-colors py-2"
+                >
+                  Group Gift
+                </Link>
+                <Link
+                  href="/shop-together"
+                  onClick={closeMobile}
+                  className="block text-medium hover:text-primary transition-colors py-2"
+                >
+                  Shop Together
                 </Link>
                 <Link
                   href="/profile"

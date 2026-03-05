@@ -15,6 +15,12 @@ import analyticsRoutes from "./routes/analytics";
 import customerRoutes from "./routes/customers";
 import notificationRoutes from "./routes/notifications";
 import emailRoutes from "./routes/email";
+import giftWrappingRoutes from "./routes/gift-wrapping";
+import bundleRoutes from "./routes/bundles";
+import giftRegistryRoutes from "./routes/gift-registry";
+import groupGiftRoutes from "./routes/group-gifts";
+import charityRoutes from "./routes/charities";
+import socialShoppingRoutes from "./routes/social-shopping";
 
 dotenv.config();
 
@@ -49,6 +55,12 @@ app.use("/api/admin/analytics", analyticsRoutes);
 app.use("/api/admin/customers", customerRoutes);
 app.use("/api/admin/notifications", notificationRoutes);
 app.use("/api/email", emailRoutes);
+app.use("/api/gift-wrapping", giftWrappingRoutes);
+app.use("/api/bundles", bundleRoutes);
+app.use("/api/gift-registry", giftRegistryRoutes);
+app.use("/api/group-gifts", groupGiftRoutes);
+app.use("/api/charities", charityRoutes);
+app.use("/api/social-shopping", socialShoppingRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

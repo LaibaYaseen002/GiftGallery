@@ -5,6 +5,7 @@ import "./globals.css";
 import LayoutShell from "@/components/layout/LayoutShell";
 import { CartProvider } from "@/context/CartContext";
 import { ToastProvider } from "@/components/ui/Toast";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"] });
 const dancingScript = Dancing_Script({ subsets: ["latin"], variable: "--font-dancing" });
@@ -36,11 +37,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.className} ${dancingScript.variable} ${greatVibes.variable} ${pacifico.variable} antialiased`}>
-          <CartProvider>
-            <ToastProvider>
-              <LayoutShell>{children}</LayoutShell>
-            </ToastProvider>
-          </CartProvider>
+          <LanguageProvider>
+            <CartProvider>
+              <ToastProvider>
+                <LayoutShell>{children}</LayoutShell>
+              </ToastProvider>
+            </CartProvider>
+          </LanguageProvider>
         </body>
       </html>
     </ClerkProvider>
