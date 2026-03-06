@@ -26,7 +26,19 @@ router.get("/", async (req: Request, res: Response) => {
       return;
     }
 
-    res.json({ data: data || [] });
+    // Compute total_value and bundle_price for each bundle
+    const enriched = (data || []).map((bundle: Record<string, unknown>) => {
+      const items = (bundle.bundle_items as { quantity: number; products: { price: number } | null }[]) || [];
+      const totalValue = items.reduce((sum, item) => {
+        const price = item.products?.price || 0;
+        return sum + price * item.quantity;
+      }, 0);
+      const discount = (bundle.discount_percent as number) || 0;
+      const bundlePrice = totalValue * (1 - discount / 100);
+      return { ...bundle, total_value: totalValue, bundle_price: bundlePrice, items };
+    });
+
+    res.json({ data: enriched });
   } catch (err) {
     console.error("Error fetching bundles:", err);
     res.status(500).json({ error: "Failed to fetch bundles" });
@@ -53,6 +65,102 @@ router.get("/:id", async (req: Request, res: Response) => {
   } catch (err) {
     console.error("Error fetching bundle:", err);
     res.status(500).json({ error: "Failed to fetch bundle" });
+  }
+});
+
+// POST /api/bundles/custom - Create custom bundle (User)
+router.post("/custom", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const userId = getUserId(req)!;
+    const { name, items } = req.body;
+
+    if (!name || typeof name !== "string" || name.trim().length === 0) {
+      res.status(400).json({ error: "Bundle name is required" });
+      return;
+    }
+
+    if (!items || !Array.isArray(items) || items.length < 2) {
+      res.status(400).json({ error: "A bundle must contain at least 2 items" });
+      return;
+    }
+
+    // Validate products exist and get prices
+    const productIds = items.map((i: { product_id: string }) => i.product_id);
+    const { data: products, error: prodError } = await supabase
+      .from("products")
+      .select("id, name, price, image_url")
+      .in("id", productIds);
+
+    if (prodError || !products || products.length !== productIds.length) {
+      res.status(400).json({ error: "One or more products not found" });
+      return;
+    }
+
+    // Calculate total value and bundle price (10% discount for custom bundles)
+    const discountPercent = 10;
+    let totalValue = 0;
+    for (const item of items) {
+      const product = products.find((p) => p.id === item.product_id);
+      if (product) {
+        totalValue += product.price * (item.quantity || 1);
+      }
+    }
+    const bundlePrice = totalValue * (1 - discountPercent / 100);
+
+    // Create the bundle
+    const { data: bundle, error: bundleError } = await supabase
+      .from("product_bundles")
+      .insert({
+        name: name.trim(),
+        description: `Custom bundle by user`,
+        occasion: "custom",
+        discount_percent: discountPercent,
+        is_active: true,
+        created_by: userId,
+      })
+      .select()
+      .single();
+
+    if (bundleError) {
+      res.status(500).json({ error: bundleError.message });
+      return;
+    }
+
+    // Insert bundle items
+    const bundleItems = items.map((item: { product_id: string; quantity: number }) => ({
+      bundle_id: bundle.id,
+      product_id: item.product_id,
+      quantity: item.quantity || 1,
+    }));
+
+    const { error: itemsError } = await supabase
+      .from("bundle_items")
+      .insert(bundleItems);
+
+    if (itemsError) {
+      await supabase.from("product_bundles").delete().eq("id", bundle.id);
+      res.status(500).json({ error: itemsError.message });
+      return;
+    }
+
+    // Fetch the complete bundle
+    const { data: fullBundle } = await supabase
+      .from("product_bundles")
+      .select("*, bundle_items(id, bundle_id, product_id, quantity, products(id, name, price, image_url))")
+      .eq("id", bundle.id)
+      .single();
+
+    // Attach computed prices
+    const result = {
+      ...fullBundle,
+      total_value: totalValue,
+      bundle_price: bundlePrice,
+    };
+
+    res.status(201).json({ data: result, message: "Custom bundle created!" });
+  } catch (err) {
+    console.error("Error creating custom bundle:", err);
+    res.status(500).json({ error: "Failed to create custom bundle" });
   }
 });
 

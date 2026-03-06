@@ -7,6 +7,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface StripePaymentFormProps {
   amount: number;
@@ -19,26 +20,40 @@ export default function StripePaymentForm({
 }: StripePaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
+  const { formatPrice } = useLanguage();
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
+  const [ready, setReady] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!stripe || !elements) return;
+    if (!stripe || !elements || !ready) return;
 
     setProcessing(true);
     setError("");
 
-    const { error: stripeError } = await stripe.confirmPayment({
-      elements,
-      redirect: "if_required",
-    });
+    try {
+      const { error: submitError } = await elements.submit();
+      if (submitError) {
+        setError(submitError.message || "Payment failed. Please try again.");
+        setProcessing(false);
+        return;
+      }
 
-    if (stripeError) {
-      setError(stripeError.message || "Payment failed. Please try again.");
+      const { error: stripeError } = await stripe.confirmPayment({
+        elements,
+        redirect: "if_required",
+      });
+
+      if (stripeError) {
+        setError(stripeError.message || "Payment failed. Please try again.");
+        setProcessing(false);
+      } else {
+        onSuccess();
+      }
+    } catch {
+      setError("Payment failed. Please try again.");
       setProcessing(false);
-    } else {
-      onSuccess();
     }
   };
 
@@ -48,13 +63,14 @@ export default function StripePaymentForm({
         options={{
           layout: "tabs",
         }}
+        onReady={() => setReady(true)}
       />
 
       {error && <p className="text-error text-sm">{error}</p>}
 
       <button
         type="submit"
-        disabled={!stripe || processing}
+        disabled={!stripe || !ready || processing}
         className="btn-primary w-full text-lg py-3"
       >
         {processing ? (
@@ -63,7 +79,7 @@ export default function StripePaymentForm({
             Processing...
           </span>
         ) : (
-          `Pay $${amount.toFixed(2)}`
+          formatPrice(amount)
         )}
       </button>
     </form>

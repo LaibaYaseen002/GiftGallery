@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ProductBundle } from "@/types";
 import { bundlesApi } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
+import { SignedIn } from "@clerk/nextjs";
 
 const OCCASIONS = ["All", "Birthday", "Wedding", "Anniversary", "Festival"] as const;
 
@@ -49,6 +51,7 @@ export default function BundlesPage() {
   const [addingBundleId, setAddingBundleId] = useState<string | null>(null);
   const [addedBundleId, setAddedBundleId] = useState<string | null>(null);
   const { addItem } = useCart();
+  const { t, formatPrice } = useLanguage();
 
   useEffect(() => {
     setLoading(true);
@@ -115,12 +118,23 @@ export default function BundlesPage() {
     <div className="container-custom py-8">
       {/* Page Header */}
       <div className="text-center mb-10">
-        <h1 className="page-title">Gift Bundles</h1>
+        <h1 className="page-title">{t("bundles.title")}</h1>
         <p className="text-gray-600 mt-2 max-w-2xl mx-auto text-lg">
           Curated gift sets for every occasion. Save more when you shop our
           thoughtfully assembled bundles, each wrapped with care and ready to
           delight.
         </p>
+        <SignedIn>
+          <Link
+            href="/bundles/create"
+            className="btn-primary inline-flex items-center gap-2 mt-6 px-6 py-3"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            {t("bundles.createCustom")}
+          </Link>
+        </SignedIn>
       </div>
 
       {/* Occasion Filter Tabs */}

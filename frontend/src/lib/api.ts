@@ -327,6 +327,9 @@ export const bundlesApi = {
     fetchApi<{ data: ProductBundle[] }>(`/bundles${occasion ? `?occasion=${occasion}` : ""}`),
   getById: (id: string) =>
     fetchApi<{ data: ProductBundle }>(`/bundles/${id}`),
+  // User custom bundle
+  createCustom: (data: { name: string; items: { product_id: string; quantity: number }[] }, token: string) =>
+    fetchApi<{ data: ProductBundle; message: string }>("/bundles/custom", { method: "POST", body: JSON.stringify(data), token }),
   // Admin
   create: (data: { name: string; description?: string; image_url?: string; occasion?: string; discount_percent?: number; items: { product_id: string; quantity: number }[] }, token: string) =>
     fetchApi<{ data: ProductBundle; message: string }>("/bundles/admin", { method: "POST", body: JSON.stringify(data), token }),
