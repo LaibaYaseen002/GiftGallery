@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="bg-dark text-white mt-auto">
       <div className="container-custom py-12">
@@ -78,7 +82,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Gift Gallery. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Gift Gallery. {t("footer.rights")}</p>
         </div>
       </div>
     </footer>
