@@ -12,10 +12,12 @@ import StarRating from "@/components/reviews/StarRating";
 import ReviewForm from "@/components/reviews/ReviewForm";
 import ReviewList from "@/components/reviews/ReviewList";
 import WishlistButton from "@/components/wishlist/WishlistButton";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ProductDetailClient({ id }: { id: string }) {
   const { addItem } = useCart();
   const { showToast } = useToast();
+  const { t, formatPrice } = useLanguage();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -124,7 +126,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
           {!product.in_stock && (
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
               <span className="bg-white text-dark px-4 py-2 rounded-full text-lg font-medium">
-                Out of Stock
+                {t("products.outOfStock")}
               </span>
             </div>
           )}
@@ -152,14 +154,13 @@ export default function ProductDetailClient({ id }: { id: string }) {
             <div className="flex items-center gap-2 mb-4">
               <StarRating rating={averageRating} size="sm" />
               <span className="text-sm text-medium">
-                {averageRating.toFixed(1)} ({reviewCount} review
-                {reviewCount !== 1 ? "s" : ""})
+                {averageRating.toFixed(1)} ({reviewCount} {t("products.reviews")})
               </span>
             </div>
           )}
 
           <p className="text-3xl font-bold text-primary mb-6">
-            ${product.price.toFixed(2)}
+            {formatPrice(product.price)}
           </p>
 
           <p className="text-medium leading-relaxed mb-8">
@@ -174,7 +175,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
               }`}
             />
             <span className={product.in_stock ? "text-success" : "text-error"}>
-              {product.in_stock ? "In Stock" : "Out of Stock"}
+              {product.in_stock ? t("products.inStock") : t("products.outOfStock")}
             </span>
           </div>
 
@@ -203,7 +204,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
                 onClick={handleAddToCart}
                 className="btn-primary flex-1 text-lg py-3"
               >
-                Add to Cart
+                {t("products.addToCart")}
               </button>
             </div>
           )}
@@ -225,7 +226,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
       {/* Reviews Section */}
       <div className="mt-16">
         <h2 className="section-title">
-          Customer Reviews
+          {t("reviews.title")}
           {reviewCount > 0 && (
             <span className="text-medium font-normal text-lg ml-2">
               ({reviewCount})

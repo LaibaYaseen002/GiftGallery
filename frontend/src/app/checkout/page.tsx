@@ -380,14 +380,14 @@ export default function CheckoutPage() {
                 onChange={(e) => setGiftMessage(e.target.value)}
                 className="input-field resize-none"
                 rows={3}
-                placeholder="Write a heartfelt message for the recipient..."
+                placeholder={t("checkout.giftMessagePlaceholder")}
                 maxLength={500}
               />
               <p className="text-xs text-medium mt-1 text-right">{giftMessage.length}/500</p>
 
               {/* Font Style Selector */}
               <div className="mt-4">
-                <p className="text-sm font-medium text-dark mb-2">Font Style</p>
+                <p className="text-sm font-medium text-dark mb-2">{t("checkout.fontStyle")}</p>
                 <div className="flex flex-wrap gap-2">
                   {FONT_OPTIONS.map((font) => (
                     <button key={font.key} type="button"
@@ -420,8 +420,8 @@ export default function CheckoutPage() {
 
             {/* 5. Charity Integration (3.2.23) */}
             <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">Donate to Charity</h2>
-              <p className="text-sm text-medium mb-4">Donate a percentage of your purchase to a charity.</p>
+              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.charity")}</h2>
+              <p className="text-sm text-medium mb-4">{t("checkout.selectCharity")}</p>
               <div className="space-y-3">
                 {charities.map((charity) => (
                   <label key={charity.id}
@@ -454,7 +454,7 @@ export default function CheckoutPage() {
               {selectedCharity && (
                 <div className="mt-4">
                   <label className="block text-sm font-medium text-dark mb-1">
-                    Donation: {charityPercent}% (${charityAmount.toFixed(2)})
+                    {t("checkout.donatePercent")}: {charityPercent}% ({formatPrice(charityAmount)})
                   </label>
                   <input type="range" min="1" max="25" value={charityPercent}
                     onChange={(e) => setCharityPercent(Number(e.target.value))}
@@ -468,8 +468,8 @@ export default function CheckoutPage() {
 
             {/* 6. Scheduled Delivery (3.2.25) */}
             <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">Schedule Delivery</h2>
-              <p className="text-sm text-medium mb-4">Want your gift delivered on a specific date?</p>
+              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.scheduledDelivery")}</h2>
+              <p className="text-sm text-medium mb-4">{t("checkout.selectDate")}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-dark mb-1">Delivery Date</label>
@@ -496,7 +496,7 @@ export default function CheckoutPage() {
             <div className="card p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-bold text-dark">Multiple Destinations</h2>
+                  <h2 className="text-xl font-bold text-dark">{t("checkout.multiDestination")}</h2>
                   <p className="text-sm text-medium">Send items to different addresses</p>
                 </div>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -568,7 +568,7 @@ export default function CheckoutPage() {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                    Add Recipient
+                    {t("checkout.addRecipient")}
                   </button>
                 </div>
               )}
@@ -576,7 +576,7 @@ export default function CheckoutPage() {
 
             {/* 8. Discount Code (3.2.27 with flash sale) */}
             <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">Discount Code</h2>
+              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.discount")}</h2>
               {flashSales.length > 0 && !discountApplied && (
                 <div className="mb-3 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-lg p-3">
                   <div className="flex items-center gap-2">
@@ -608,11 +608,11 @@ export default function CheckoutPage() {
                     ? () => { setDiscountCode(""); setDiscountApplied(false); setDiscountPercent(0); }
                     : handleApplyDiscount}
                   className={discountApplied ? "btn-secondary" : "btn-accent"}>
-                  {discountApplied ? "Remove" : "Apply"}
+                  {discountApplied ? t("checkout.remove") : t("checkout.apply")}
                 </button>
               </div>
               {discountApplied && (
-                <p className="text-success text-sm mt-2">{discountPercent}% discount applied! You save ${discountAmount.toFixed(2)}</p>
+                <p className="text-success text-sm mt-2">{discountPercent}% discount applied! You save {formatPrice(discountAmount)}</p>
               )}
               {discountError && (
                 <p className="text-error text-sm mt-2">{discountError}</p>
@@ -623,7 +623,7 @@ export default function CheckoutPage() {
           {/* Right: Order Summary */}
           <div>
             <div className="card p-6 sticky top-24">
-              <h2 className="text-xl font-bold text-dark mb-4">Order Summary</h2>
+              <h2 className="text-xl font-bold text-dark mb-4">{t("checkout.orderSummary")}</h2>
 
               {/* Items */}
               <div className="space-y-3 max-h-48 overflow-y-auto mb-4">
@@ -636,42 +636,42 @@ export default function CheckoutPage() {
                       <p className="text-sm font-medium text-dark line-clamp-1">{item.product.name}</p>
                       <p className="text-xs text-medium">Qty: {item.quantity}</p>
                     </div>
-                    <span className="text-sm font-medium">${(item.product.price * item.quantity).toFixed(2)}</span>
+                    <span className="text-sm font-medium">{formatPrice(item.product.price * item.quantity)}</span>
                   </div>
                 ))}
               </div>
 
               <div className="border-t border-border pt-4 space-y-2 text-sm">
                 <div className="flex justify-between text-medium">
-                  <span>Subtotal</span>
-                  <span>${totalPrice.toFixed(2)}</span>
+                  <span>{t("cart.subtotal")}</span>
+                  <span>{formatPrice(totalPrice)}</span>
                 </div>
                 {selectedWrapping && (
                   <div className="flex justify-between text-medium">
                     <span>Wrapping: {selectedWrapping.name}</span>
-                    <span>${wrappingCost.toFixed(2)}</span>
+                    <span>{formatPrice(wrappingCost)}</span>
                   </div>
                 )}
                 {selectedPackaging && (
                   <div className="flex justify-between text-medium">
                     <span>Packaging: {selectedPackaging.name}</span>
-                    <span>${packagingCost.toFixed(2)}</span>
+                    <span>{formatPrice(packagingCost)}</span>
                   </div>
                 )}
                 {discountApplied && (
                   <div className="flex justify-between text-success">
                     <span>Discount ({discountPercent}%)</span>
-                    <span>-${discountAmount.toFixed(2)}</span>
+                    <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-medium">
-                  <span>Shipping</span>
-                  <span className="text-success">Free</span>
+                  <span>{t("checkout.shipping")}</span>
+                  <span className="text-success">{t("checkout.shipping_free")}</span>
                 </div>
                 {selectedCharity && (
                   <div className="flex justify-between text-accent">
                     <span>Charity ({charityPercent}%)</span>
-                    <span>+${charityAmount.toFixed(2)}</span>
+                    <span>+{formatPrice(charityAmount)}</span>
                   </div>
                 )}
                 {scheduledDate && (
@@ -681,8 +681,8 @@ export default function CheckoutPage() {
                   </div>
                 )}
                 <div className="border-t border-border pt-2 flex justify-between">
-                  <span className="text-lg font-bold">Total</span>
-                  <span className="text-lg font-bold text-primary">${finalTotal.toFixed(2)}</span>
+                  <span className="text-lg font-bold">{t("checkout.total")}</span>
+                  <span className="text-lg font-bold text-primary">{formatPrice(finalTotal)}</span>
                 </div>
               </div>
 
@@ -694,7 +694,7 @@ export default function CheckoutPage() {
                   <span className="flex items-center justify-center gap-2">
                     <LoadingSpinner size="sm" />Creating Order...
                   </span>
-                ) : "Continue to Payment"}
+                ) : t("checkout.placeOrder")}
               </button>
             </div>
           </div>
