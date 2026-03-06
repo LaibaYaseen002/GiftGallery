@@ -5,12 +5,14 @@ import { useSearchParams } from "next/navigation";
 import { Product, Category, PaginationInfo } from "@/types";
 import { productsApi, categoriesApi } from "@/lib/api";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useLanguage } from "@/context/LanguageContext";
 import ProductCard from "@/components/products/ProductCard";
 import Pagination from "@/components/ui/Pagination";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { ProductCardSkeletonGrid } from "@/components/ui/Skeleton";
 
 function ProductsContent() {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -56,7 +58,7 @@ function ProductsContent() {
 
   return (
     <div className="container-custom py-8">
-      <h1 className="page-title">All Products</h1>
+      <h1 className="page-title">{t("products.title")}</h1>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -64,7 +66,7 @@ function ProductsContent() {
         <div className="flex-1">
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder={t("products.search")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input-field"
@@ -93,7 +95,7 @@ function ProductsContent() {
         <ProductCardSkeletonGrid count={8} />
       ) : products.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-2xl mb-2">No products found</p>
+          <p className="text-2xl mb-2">{t("products.noResults")}</p>
           <p className="text-medium">
             {search || selectedCategory
               ? "Try adjusting your search or filters."

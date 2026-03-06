@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/context/CartContext";
@@ -12,100 +12,141 @@ export default function Navbar() {
   const { user } = useUser();
   const { t } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
 
   const isAdmin = user?.publicMetadata?.role === "admin";
 
   const closeMobile = () => setMobileOpen(false);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setMoreOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
       <div className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             <span className="text-2xl">🎁</span>
             <span className="text-xl font-bold text-primary">Gift Gallery</span>
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-5">
             <Link
               href="/products"
-              className="text-medium hover:text-primary transition-colors"
+              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
             >
-              Products
-            </Link>
-            <Link
-              href="/faq"
-              className="text-medium hover:text-primary transition-colors"
-            >
-              FAQ
+              {t("nav.products")}
             </Link>
             <Link
               href="/bundles"
-              className="text-medium hover:text-primary transition-colors"
+              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
             >
-              Bundles
+              {t("nav.bundles")}
+            </Link>
+            <Link
+              href="/faq"
+              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
+            >
+              {t("nav.faq")}
             </Link>
             <Link
               href="/contact"
-              className="text-medium hover:text-primary transition-colors"
+              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
             >
-              Contact
+              {t("nav.contact")}
             </Link>
             <SignedIn>
               <Link
                 href="/orders"
-                className="text-medium hover:text-primary transition-colors"
+                className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
               >
-                My Orders
+                {t("nav.orders")}
               </Link>
-              <Link
-                href="/gift-registry"
-                className="text-medium hover:text-primary transition-colors"
-              >
-                Registry
-              </Link>
-              <Link
-                href="/group-gift"
-                className="text-medium hover:text-primary transition-colors"
-              >
-                Group Gift
-              </Link>
-              <Link
-                href="/shop-together"
-                className="text-medium hover:text-primary transition-colors"
-              >
-                Shop Together
-              </Link>
-              <Link
-                href="/profile"
-                className="text-medium hover:text-primary transition-colors"
-              >
-                Profile
-              </Link>
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  className="text-primary font-medium hover:text-primary-dark transition-colors"
+              {/* More dropdown for extra links */}
+              <div className="relative" ref={moreRef}>
+                <button
+                  onClick={() => setMoreOpen(!moreOpen)}
+                  className="flex items-center gap-1 text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
                 >
-                  Admin
-                </Link>
-              )}
+                  {t("nav.more")}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className={`w-3.5 h-3.5 transition-transform ${moreOpen ? "rotate-180" : ""}`}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </button>
+                {moreOpen && (
+                  <div className="absolute top-full mt-2 bg-white rounded-lg shadow-lg border border-border py-1 z-50 min-w-[180px] right-0">
+                    <Link
+                      href="/gift-registry"
+                      onClick={() => setMoreOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                    >
+                      {t("nav.registry")}
+                    </Link>
+                    <Link
+                      href="/group-gift"
+                      onClick={() => setMoreOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                    >
+                      {t("nav.groupGift")}
+                    </Link>
+                    <Link
+                      href="/shop-together"
+                      onClick={() => setMoreOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                    >
+                      {t("nav.shopTogether")}
+                    </Link>
+                    <Link
+                      href="/profile"
+                      onClick={() => setMoreOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                    >
+                      {t("nav.profile")}
+                    </Link>
+                    {isAdmin && (
+                      <>
+                        <div className="border-t border-border my-1" />
+                        <Link
+                          href="/admin"
+                          onClick={() => setMoreOpen(false)}
+                          className="block px-4 py-2.5 text-sm text-primary font-medium hover:bg-primary/5 transition-colors"
+                        >
+                          {t("nav.admin")}
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </SignedIn>
           </div>
 
           {/* Right Side: Language, Wishlist, Cart, Auth, Hamburger */}
-          <div className="flex items-center gap-4">
-            {/* Language Switcher */}
+          <div className="flex items-center gap-3">
             <LanguageSwitcher />
 
-            {/* Wishlist */}
             <SignedIn>
               <Link
                 href="/wishlist"
                 className="text-medium hover:text-primary transition-colors"
-                title="Wishlist"
+                title={t("nav.wishlist")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +154,7 @@ export default function Navbar() {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                 >
                   <path
                     strokeLinecap="round"
@@ -124,11 +165,10 @@ export default function Navbar() {
               </Link>
             </SignedIn>
 
-            {/* Cart */}
             <Link
               href="/cart"
               className="relative text-medium hover:text-primary transition-colors"
-              title="Cart"
+              title={t("nav.cart")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +176,7 @@ export default function Navbar() {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-5 h-5"
               >
                 <path
                   strokeLinecap="round"
@@ -151,10 +191,9 @@ export default function Navbar() {
               )}
             </Link>
 
-            {/* Auth */}
             <SignedOut>
               <Link href="/sign-in" className="btn-primary text-sm py-2 px-4">
-                Sign In
+                {t("nav.signIn")}
               </Link>
             </SignedOut>
             <SignedIn>
@@ -162,7 +201,7 @@ export default function Navbar() {
                 afterSignOutUrl="/"
                 appearance={{
                   elements: {
-                    avatarBox: "w-9 h-9",
+                    avatarBox: "w-8 h-8",
                   },
                 }}
               />
@@ -171,38 +210,16 @@ export default function Navbar() {
             {/* Mobile Hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-medium hover:text-primary transition-colors"
+              className="lg:hidden text-medium hover:text-primary transition-colors"
               aria-label="Toggle menu"
             >
               {mobileOpen ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
               )}
             </button>
@@ -212,99 +229,51 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-white">
-          <div className="container-custom py-4 space-y-3">
-            <Link
-              href="/products"
-              onClick={closeMobile}
-              className="block text-medium hover:text-primary transition-colors py-2"
-            >
-              Products
+        <div className="lg:hidden border-t border-border bg-white">
+          <div className="container-custom py-4 space-y-1">
+            <Link href="/products" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+              {t("nav.products")}
             </Link>
-            <Link
-              href="/faq"
-              onClick={closeMobile}
-              className="block text-medium hover:text-primary transition-colors py-2"
-            >
-              FAQ & Help
+            <Link href="/bundles" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+              {t("nav.bundles")}
             </Link>
-            <Link
-              href="/bundles"
-              onClick={closeMobile}
-              className="block text-medium hover:text-primary transition-colors py-2"
-            >
-              Gift Bundles
+            <Link href="/faq" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+              {t("nav.faq")}
             </Link>
-            <Link
-              href="/contact"
-              onClick={closeMobile}
-              className="block text-medium hover:text-primary transition-colors py-2"
-            >
-              Contact Us
+            <Link href="/contact" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+              {t("nav.contact")}
             </Link>
             <SignedIn>
-              <div className="border-t border-border pt-3 space-y-3">
-                <Link
-                  href="/orders"
-                  onClick={closeMobile}
-                  className="block text-medium hover:text-primary transition-colors py-2"
-                >
-                  My Orders
+              <div className="border-t border-border pt-3 mt-3 space-y-1">
+                <Link href="/orders" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                  {t("nav.orders")}
                 </Link>
-                <Link
-                  href="/wishlist"
-                  onClick={closeMobile}
-                  className="block text-medium hover:text-primary transition-colors py-2"
-                >
-                  Wishlist
+                <Link href="/wishlist" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                  {t("nav.wishlist")}
                 </Link>
-                <Link
-                  href="/gift-registry"
-                  onClick={closeMobile}
-                  className="block text-medium hover:text-primary transition-colors py-2"
-                >
-                  Gift Registry
+                <Link href="/gift-registry" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                  {t("nav.registry")}
                 </Link>
-                <Link
-                  href="/group-gift"
-                  onClick={closeMobile}
-                  className="block text-medium hover:text-primary transition-colors py-2"
-                >
-                  Group Gift
+                <Link href="/group-gift" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                  {t("nav.groupGift")}
                 </Link>
-                <Link
-                  href="/shop-together"
-                  onClick={closeMobile}
-                  className="block text-medium hover:text-primary transition-colors py-2"
-                >
-                  Shop Together
+                <Link href="/shop-together" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                  {t("nav.shopTogether")}
                 </Link>
-                <Link
-                  href="/profile"
-                  onClick={closeMobile}
-                  className="block text-medium hover:text-primary transition-colors py-2"
-                >
-                  Profile
+                <Link href="/profile" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                  {t("nav.profile")}
                 </Link>
                 {isAdmin && (
-                  <Link
-                    href="/admin"
-                    onClick={closeMobile}
-                    className="block text-primary font-medium hover:text-primary-dark transition-colors py-2"
-                  >
-                    Admin Dashboard
+                  <Link href="/admin" onClick={closeMobile} className="block text-primary font-medium hover:text-primary-dark transition-colors py-2.5">
+                    {t("nav.admin")}
                   </Link>
                 )}
               </div>
             </SignedIn>
             <SignedOut>
-              <div className="border-t border-border pt-3">
-                <Link
-                  href="/sign-in"
-                  onClick={closeMobile}
-                  className="btn-primary block text-center"
-                >
-                  Sign In
+              <div className="border-t border-border pt-3 mt-3">
+                <Link href="/sign-in" onClick={closeMobile} className="btn-primary block text-center">
+                  {t("nav.signIn")}
                 </Link>
               </div>
             </SignedOut>

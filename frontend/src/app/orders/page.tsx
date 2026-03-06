@@ -5,11 +5,13 @@ import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Order } from "@/types";
 import { ordersApi } from "@/lib/api";
+import { useLanguage } from "@/context/LanguageContext";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function MyOrdersPage() {
   const { getToken } = useAuth();
+  const { t, formatPrice } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +37,7 @@ export default function MyOrdersPage() {
 
   return (
     <div className="container-custom py-8">
-      <h1 className="page-title">My Orders</h1>
+      <h1 className="page-title">{t("orders.title")}</h1>
 
       {orders.length === 0 ? (
         <div className="text-center py-20">
@@ -53,7 +55,7 @@ export default function MyOrdersPage() {
               d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">No orders yet</h2>
+          <h2 className="text-2xl font-bold text-dark mb-2">{t("orders.noOrders")}</h2>
           <p className="text-medium mb-6">
             Start shopping to see your orders here.
           </p>
@@ -87,12 +89,11 @@ export default function MyOrdersPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-xl font-bold text-primary">
-                    ${Number(order.total_amount).toFixed(2)}
+                    {formatPrice(Number(order.total_amount))}
                   </p>
                   {order.discount_code && (
                     <p className="text-xs text-success">
-                      Discount: {order.discount_code} (-$
-                      {Number(order.discount_amount).toFixed(2)})
+                      Discount: {order.discount_code} (-{formatPrice(Number(order.discount_amount))})
                     </p>
                   )}
                 </div>

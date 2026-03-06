@@ -8,6 +8,7 @@ import Image from "next/image";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { ordersApi, discountsApi, giftWrappingApi, charitiesApi } from "@/lib/api";
 import { GiftWrappingOption, Charity } from "@/types";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -40,6 +41,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { getToken } = useAuth();
   const { items, totalPrice, clearCart } = useCart();
+  const { t, formatPrice } = useLanguage();
 
   // Shipping
   const [shipping, setShipping] = useState({
@@ -218,7 +220,7 @@ export default function CheckoutPage() {
   if (clientSecret) {
     return (
       <div className="container-custom py-8">
-        <h1 className="page-title">Payment</h1>
+        <h1 className="page-title">{t("checkout.payment")}</h1>
         <div className="max-w-lg mx-auto">
           <div className="card p-6 mb-6">
             <h2 className="text-xl font-bold text-dark mb-4">Complete Your Payment</h2>
@@ -247,8 +249,8 @@ export default function CheckoutPage() {
           </div>
           <div className="card p-4">
             <div className="flex justify-between items-center">
-              <span className="text-medium">Order Total</span>
-              <span className="text-lg font-bold text-primary">${finalTotal.toFixed(2)}</span>
+              <span className="text-medium">{t("checkout.total")}</span>
+              <span className="text-lg font-bold text-primary">{formatPrice(finalTotal)}</span>
             </div>
           </div>
         </div>
@@ -259,7 +261,7 @@ export default function CheckoutPage() {
   // Phase 1: Full checkout form
   return (
     <div className="container-custom py-8">
-      <h1 className="page-title">Checkout</h1>
+      <h1 className="page-title">{t("checkout.title")}</h1>
 
       <form onSubmit={handleContinueToPayment}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -268,28 +270,28 @@ export default function CheckoutPage() {
 
             {/* 1. Shipping Details */}
             <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-4">Shipping Details</h2>
+              <h2 className="text-xl font-bold text-dark mb-4">{t("checkout.shipping")}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.fullName")}</label>
                   <input type="text" value={shipping.shipping_name}
                     onChange={(e) => setShipping({ ...shipping, shipping_name: e.target.value })}
                     className="input-field" placeholder="Enter your full name" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">Phone Number</label>
+                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.phone")}</label>
                   <input type="tel" value={shipping.shipping_phone}
                     onChange={(e) => setShipping({ ...shipping, shipping_phone: e.target.value })}
                     className="input-field" placeholder="Enter phone number" required />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-dark mb-1">Address</label>
+                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.address")}</label>
                   <input type="text" value={shipping.shipping_address}
                     onChange={(e) => setShipping({ ...shipping, shipping_address: e.target.value })}
                     className="input-field" placeholder="Street address, apartment, suite" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">City</label>
+                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.city")}</label>
                   <input type="text" value={shipping.shipping_city}
                     onChange={(e) => setShipping({ ...shipping, shipping_city: e.target.value })}
                     className="input-field" placeholder="City name" required />
@@ -299,8 +301,8 @@ export default function CheckoutPage() {
 
             {/* 2. Gift Wrapping (3.2.15) */}
             <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">Gift Wrapping</h2>
-              <p className="text-sm text-medium mb-4">Choose a beautiful wrapping for your gift.</p>
+              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.giftWrapping")}</h2>
+              <p className="text-sm text-medium mb-4">{t("checkout.selectWrapping")}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <button type="button"
                   onClick={() => setSelectedWrapping(null)}
@@ -319,7 +321,7 @@ export default function CheckoutPage() {
                     }`}>
                     <div className="w-8 h-8 rounded-full mx-auto mb-1" style={{ backgroundColor: opt.color || "#ccc" }} />
                     <span className="font-medium block truncate">{opt.name}</span>
-                    <span className="block text-xs text-medium">${opt.price.toFixed(2)}</span>
+                    <span className="block text-xs text-medium">{formatPrice(opt.price)}</span>
                     {opt.is_eco_friendly && (
                       <span className="inline-block mt-1 text-[10px] bg-success/10 text-success px-1.5 py-0.5 rounded-full">Eco</span>
                     )}
@@ -336,8 +338,8 @@ export default function CheckoutPage() {
 
             {/* 3. Gift Packaging (3.2.19) */}
             <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">Gift Packaging</h2>
-              <p className="text-sm text-medium mb-4">Select premium packaging options.</p>
+              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.packaging")}</h2>
+              <p className="text-sm text-medium mb-4">{t("checkout.selectPackaging")}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <button type="button"
                   onClick={() => setSelectedPackaging(null)}
@@ -360,7 +362,7 @@ export default function CheckoutPage() {
                       </svg>
                     </div>
                     <span className="font-medium block truncate">{opt.name}</span>
-                    <span className="block text-xs text-medium">${opt.price.toFixed(2)}</span>
+                    <span className="block text-xs text-medium">{formatPrice(opt.price)}</span>
                     {opt.is_eco_friendly && (
                       <span className="inline-block mt-1 text-[10px] bg-success/10 text-success px-1.5 py-0.5 rounded-full">Eco</span>
                     )}
@@ -371,7 +373,7 @@ export default function CheckoutPage() {
 
             {/* 4. Gift Message (3.2.18) */}
             <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">Gift Message (Optional)</h2>
+              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.giftMessage")}</h2>
               <p className="text-sm text-medium mb-3">Add a personal message to include with your gift.</p>
               <textarea
                 value={giftMessage}

@@ -27,6 +27,11 @@ type TranslationKeys = {
   "nav.contact": string;
   "nav.signIn": string;
   "nav.signUp": string;
+  "nav.bundles": string;
+  "nav.registry": string;
+  "nav.groupGift": string;
+  "nav.shopTogether": string;
+  "nav.more": string;
 
   // Home page
   "home.hero.title": string;
@@ -190,6 +195,11 @@ const en: TranslationKeys = {
   "nav.contact": "Contact",
   "nav.signIn": "Sign In",
   "nav.signUp": "Sign Up",
+  "nav.bundles": "Bundles",
+  "nav.registry": "Registry",
+  "nav.groupGift": "Group Gift",
+  "nav.shopTogether": "Shop Together",
+  "nav.more": "More",
 
   "home.hero.title": "Welcome to Gift Gallery",
   "home.hero.subtitle": "Discover the perfect gifts for every occasion. From jewelry to watches, perfumes to accessories \u2014 find something special for everyone.",
@@ -343,6 +353,11 @@ const ur: TranslationKeys = {
   "nav.contact": "\u0631\u0627\u0628\u0637\u06C1 \u06A9\u0631\u06CC\u06BA",
   "nav.signIn": "\u0633\u0627\u0626\u0646 \u0627\u0646",
   "nav.signUp": "\u0633\u0627\u0626\u0646 \u0627\u067E",
+  "nav.bundles": "\u0628\u0646\u0688\u0644",
+  "nav.registry": "\u0631\u062C\u0633\u0679\u0631\u06CC",
+  "nav.groupGift": "\u06AF\u0631\u0648\u067E \u062A\u062D\u0641\u06C1",
+  "nav.shopTogether": "\u0633\u0627\u062A\u06BE \u062E\u0631\u06CC\u062F\u06CC\u06BA",
+  "nav.more": "\u0645\u0632\u06CC\u062F",
 
   "home.hero.title": "\u06AF\u0641\u0679 \u06AF\u06CC\u0644\u0631\u06CC \u0645\u06CC\u06BA \u062E\u0648\u0634 \u0622\u0645\u062F\u06CC\u062F",
   "home.hero.subtitle": "\u06C1\u0631 \u0645\u0648\u0642\u0639 \u06A9\u06D2 \u0644\u06CC\u06D2 \u0628\u06C1\u062A\u0631\u06CC\u0646 \u062A\u062D\u0627\u0626\u0641 \u062F\u0631\u06CC\u0627\u0641\u062A \u06A9\u0631\u06CC\u06BA\u06D4 \u0632\u06CC\u0648\u0631\u0627\u062A \u0633\u06D2 \u06AF\u06BE\u0691\u06CC\u0627\u06BA\u060C \u0639\u0637\u0631 \u0633\u06D2 \u0644\u0648\u0627\u0632\u0645\u0627\u062A \u062A\u06A9\u06D4",
@@ -496,6 +511,11 @@ const ar: TranslationKeys = {
   "nav.contact": "\u0627\u062A\u0635\u0644 \u0628\u0646\u0627",
   "nav.signIn": "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644",
   "nav.signUp": "\u0625\u0646\u0634\u0627\u0621 \u062D\u0633\u0627\u0628",
+  "nav.bundles": "\u062D\u0632\u0645 \u0627\u0644\u0647\u062F\u0627\u064A\u0627",
+  "nav.registry": "\u0633\u062C\u0644 \u0627\u0644\u0647\u062F\u0627\u064A\u0627",
+  "nav.groupGift": "\u0647\u062F\u064A\u0629 \u062C\u0645\u0627\u0639\u064A\u0629",
+  "nav.shopTogether": "\u062A\u0633\u0648\u0642 \u0645\u0639\u0627",
+  "nav.more": "\u0627\u0644\u0645\u0632\u064A\u062F",
 
   "home.hero.title": "\u0645\u0631\u062D\u0628\u0627 \u0628\u0643\u0645 \u0641\u064A \u0645\u0639\u0631\u0636 \u0627\u0644\u0647\u062F\u0627\u064A\u0627",
   "home.hero.subtitle": "\u0627\u0643\u062A\u0634\u0641 \u0627\u0644\u0647\u062F\u0627\u064A\u0627 \u0627\u0644\u0645\u062B\u0627\u0644\u064A\u0629 \u0644\u0643\u0644 \u0645\u0646\u0627\u0633\u0628\u0629. \u0645\u0646 \u0627\u0644\u0645\u062C\u0648\u0647\u0631\u0627\u062A \u0625\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0627\u062A \u0648\u0627\u0644\u0639\u0637\u0648\u0631 \u0648\u0627\u0644\u0625\u0643\u0633\u0633\u0648\u0627\u0631\u0627\u062A.",
@@ -649,6 +669,11 @@ const fr: TranslationKeys = {
   "nav.contact": "Contact",
   "nav.signIn": "Connexion",
   "nav.signUp": "Inscription",
+  "nav.bundles": "Packs",
+  "nav.registry": "Registre",
+  "nav.groupGift": "Cadeau de Groupe",
+  "nav.shopTogether": "Acheter Ensemble",
+  "nav.more": "Plus",
 
   "home.hero.title": "Bienvenue \u00E0 Gift Gallery",
   "home.hero.subtitle": "D\u00E9couvrez les cadeaux parfaits pour chaque occasion. Des bijoux aux montres, des parfums aux accessoires.",

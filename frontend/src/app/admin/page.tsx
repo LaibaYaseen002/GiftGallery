@@ -50,11 +50,16 @@ export default function AdminDashboardPage() {
   const [activity, setActivity] = useState<ActivityEvent[]>([]);
   const [chartPeriod, setChartPeriod] = useState<"7d" | "30d">("7d");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchAll = useCallback(async (period: "7d" | "30d" = chartPeriod) => {
     try {
       const token = await getToken();
-      if (!token) return;
+      if (!token) {
+        setError("No auth token available. Please sign in again.");
+        setLoading(false);
+        return;
+      }
 
       const [dashRes, chartRes, catRes, actRes] = await Promise.all([
         analyticsApi.getDashboard(token),
@@ -69,6 +74,7 @@ export default function AdminDashboardPage() {
       setActivity(actRes.data || []);
     } catch (err) {
       console.error("Failed to fetch analytics:", err);
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -102,7 +108,15 @@ export default function AdminDashboardPage() {
     return (
       <div className="py-20 text-center">
         <h1 className="text-3xl font-bold mb-4">Failed to Load Dashboard</h1>
-        <p className="text-medium">Could not load analytics data. Please try again.</p>
+        <p className="text-medium mb-4">Could not load analytics data. Please try again.</p>
+        {error && (
+          <p className="text-error text-sm bg-error/10 inline-block px-4 py-2 rounded-lg">{error}</p>
+        )}
+        <div className="mt-4">
+          <button onClick={() => { setLoading(true); setError(null); fetchAll(); }} className="btn-primary">
+            Retry
+          </button>
+        </div>
       </div>
     );
   }

@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 import CartItem from "@/components/cart/CartItem";
 import CartSummary from "@/components/cart/CartSummary";
 
 export default function ShoppingCartPage() {
   const { items, clearCart } = useCart();
+  const { t, formatPrice } = useLanguage();
 
   return (
     <div className="container-custom py-8">
-      <h1 className="page-title">Shopping Cart</h1>
+      <h1 className="page-title">{t("cart.title")}</h1>
 
       {items.length === 0 ? (
         <div className="text-center py-20">
@@ -29,13 +31,13 @@ export default function ShoppingCartPage() {
             />
           </svg>
           <h2 className="text-2xl font-bold text-dark mb-2">
-            Your cart is empty
+            {t("cart.empty")}
           </h2>
           <p className="text-medium mb-6">
             Looks like you haven&apos;t added any gifts yet.
           </p>
           <Link href="/products" className="btn-primary text-lg">
-            Browse Products
+            {t("cart.continueShopping")}
           </Link>
         </div>
       ) : (

@@ -7,11 +7,13 @@ import Image from "next/image";
 import { WishlistItem } from "@/types";
 import { wishlistApi } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function WishlistPage() {
   const { getToken } = useAuth();
   const { addItem } = useCart();
+  const { t, formatPrice } = useLanguage();
   const [items, setItems] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,7 +58,7 @@ export default function WishlistPage() {
 
   return (
     <div className="container-custom py-8">
-      <h1 className="page-title">My Wishlist</h1>
+      <h1 className="page-title">{t("wishlist.title")}</h1>
 
       {items.length === 0 ? (
         <div className="text-center py-20">
@@ -75,7 +77,7 @@ export default function WishlistPage() {
             />
           </svg>
           <h2 className="text-2xl font-bold text-dark mb-2">
-            Your wishlist is empty
+            {t("wishlist.empty")}
           </h2>
           <p className="text-medium mb-6">
             Save your favorite gifts to find them later.
@@ -116,14 +118,14 @@ export default function WishlistPage() {
                       </p>
                     )}
                     <p className="text-xl font-bold text-primary mt-2">
-                      ${item.product.price.toFixed(2)}
+                      {formatPrice(item.product.price)}
                     </p>
                     <div className="flex gap-2 mt-3">
                       <button
                         onClick={() => handleMoveToCart(item)}
                         className="btn-primary text-sm py-2 flex-1"
                       >
-                        Move to Cart
+                        {t("wishlist.addToCart")}
                       </button>
                       <button
                         onClick={() => handleRemove(item.product_id)}
