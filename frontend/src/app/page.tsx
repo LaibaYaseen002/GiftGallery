@@ -32,19 +32,19 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/10 via-secondary to-accent/10 py-20">
+      <section className="bg-gradient-to-br from-primary/10 via-secondary to-accent/10 py-14">
         <div className="container-custom text-center">
-          <h1 className="text-5xl font-bold text-dark mb-4">
+          <h1 className="text-3xl font-bold text-dark mb-3">
             {t("home.hero.title")}
           </h1>
-          <p className="text-xl text-medium mb-8 max-w-2xl mx-auto">
+          <p className="text-sm text-medium mb-6 max-w-2xl mx-auto">
             {t("home.hero.subtitle")}
           </p>
-          <div className="flex gap-4 justify-center">
-            <Link href="/products" className="btn-primary text-lg">
+          <div className="flex gap-3 justify-center">
+            <Link href="/products" className="btn-primary text-sm">
               {t("home.hero.shopNow")}
             </Link>
-            <Link href="/products" className="btn-secondary text-lg">
+            <Link href="/products" className="btn-secondary text-sm">
               {t("home.hero.browse")}
             </Link>
           </div>
@@ -55,45 +55,45 @@ export default function Home() {
       <FlashSaleBanner />
 
       {/* Categories */}
-      <section className="py-16">
+      <section className="py-10">
         <div className="container-custom">
           <h2 className="section-title text-center">{t("home.categories.title")}</h2>
-          <p className="text-medium text-center mb-10">
+          <p className="text-medium text-center text-xs mb-6">
             {t("home.categories.subtitle")}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3">
             {categories.length > 0
               ? categories.map((cat) => (
                   <Link
                     key={cat.id}
                     href={`/category/${cat.slug}`}
-                    className="card p-4 text-center cursor-pointer group"
+                    className="card p-2.5 text-center cursor-pointer group"
                   >
-                    <div className="relative w-full h-28 rounded-lg overflow-hidden mb-3">
+                    <div className="relative w-full h-20 rounded-md overflow-hidden mb-2">
                       {cat.image_url ? (
                         <Image
                           src={cat.image_url}
                           alt={cat.name}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                          sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, (max-width: 1024px) 16vw, 14vw"
                         />
                       ) : (
                         <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-3xl">🎁</span>
+                          <span className="text-xl">🎁</span>
                         </div>
                       )}
                     </div>
-                    <p className="font-medium text-dark group-hover:text-primary transition-colors text-sm">
+                    <p className="font-medium text-dark group-hover:text-primary transition-colors text-xs">
                       {cat.name}
                     </p>
                   </Link>
                 ))
               : // Skeleton placeholders while loading
                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-                  <div key={i} className="card p-4 text-center">
-                    <div className="w-full h-28 bg-border rounded-lg mb-3 animate-pulse" />
-                    <div className="h-4 bg-border rounded w-3/4 mx-auto animate-pulse" />
+                  <div key={i} className="card p-2.5 text-center">
+                    <div className="w-full h-20 bg-border rounded-md mb-2 animate-pulse" />
+                    <div className="h-3 bg-border rounded w-3/4 mx-auto animate-pulse" />
                   </div>
                 ))}
           </div>
@@ -101,31 +101,31 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-16 bg-light">
+      <section className="py-10 bg-light">
         <div className="container-custom">
           <h2 className="section-title text-center">{t("home.featured.title")}</h2>
-          <p className="text-medium text-center mb-10">
+          <p className="text-medium text-center text-xs mb-6">
             {t("home.featured.subtitle")}
           </p>
           {featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {featuredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="card p-4">
-                  <div className="w-full h-56 bg-border rounded-lg mb-4 animate-pulse" />
-                  <div className="h-4 bg-border rounded w-3/4 mb-2 animate-pulse" />
-                  <div className="h-4 bg-border rounded w-1/2 animate-pulse" />
+                <div key={i} className="card p-3">
+                  <div className="w-full h-40 bg-border rounded-md mb-3 animate-pulse" />
+                  <div className="h-3 bg-border rounded w-3/4 mb-2 animate-pulse" />
+                  <div className="h-3 bg-border rounded w-1/2 animate-pulse" />
                 </div>
               ))}
             </div>
           )}
-          <div className="text-center mt-10">
-            <Link href="/products" className="btn-primary text-lg">
+          <div className="text-center mt-8">
+            <Link href="/products" className="btn-primary text-sm">
               {t("home.featured.viewAll")}
             </Link>
           </div>
