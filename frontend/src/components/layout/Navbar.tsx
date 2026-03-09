@@ -34,9 +34,9 @@ export default function Navbar() {
       <div className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <span className="text-2xl">🎁</span>
-            <span className="text-xl font-bold text-primary">Gift Gallery</span>
+          <Link href="/" className="flex items-center gap-1.5 shrink-0">
+            <span className="text-lg sm:text-2xl">🎁</span>
+            <span className="text-sm sm:text-xl font-bold text-primary">Gift Gallery</span>
           </Link>
 
           {/* Desktop Nav Links */}
@@ -139,7 +139,7 @@ export default function Navbar() {
           </div>
 
           {/* Right Side: Language, Wishlist, Cart, Auth, Hamburger */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
 
             <SignedIn>
@@ -192,7 +192,7 @@ export default function Navbar() {
             </Link>
 
             <SignedOut>
-              <Link href="/sign-in" className="btn-primary text-sm py-2 px-4">
+              <Link href="/sign-in" className="btn-primary text-xs py-1.5 px-3 sm:text-sm sm:py-2 sm:px-4">
                 {t("nav.signIn")}
               </Link>
             </SignedOut>

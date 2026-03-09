@@ -112,7 +112,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
         <span className="text-dark">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
         {/* Product Image */}
         <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border">
           <ProductImage
@@ -142,8 +142,8 @@ export default function ProductDetailClient({ id }: { id: string }) {
               {product.category.name}
             </Link>
           )}
-          <div className="flex items-start justify-between mt-1 mb-2">
-            <h1 className="text-3xl font-bold text-dark">
+          <div className="flex items-start justify-between mt-1 mb-2 gap-2">
+            <h1 className="text-xl sm:text-3xl font-bold text-dark">
               {product.name}
             </h1>
             <WishlistButton productId={product.id} size="md" />
@@ -159,11 +159,11 @@ export default function ProductDetailClient({ id }: { id: string }) {
             </div>
           )}
 
-          <p className="text-3xl font-bold text-primary mb-6">
+          <p className="text-xl sm:text-3xl font-bold text-primary mb-4 sm:mb-6">
             {formatPrice(product.price)}
           </p>
 
-          <p className="text-medium leading-relaxed mb-8">
+          <p className="text-medium text-sm leading-relaxed mb-4 sm:mb-8">
             {product.description}
           </p>
 
@@ -181,20 +181,20 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
           {/* Quantity + Add to Cart */}
           {product.in_stock && (
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div className="flex items-center border border-border rounded-lg">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-4 py-2 text-lg hover:bg-light transition-colors"
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:bg-light transition-colors"
                 >
                   -
                 </button>
-                <span className="px-4 py-2 font-medium min-w-[50px] text-center">
+                <span className="px-3 py-1.5 sm:px-4 sm:py-2 font-medium min-w-[40px] text-center text-sm">
                   {quantity}
                 </span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="px-4 py-2 text-lg hover:bg-light transition-colors"
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:bg-light transition-colors"
                 >
                   +
                 </button>
@@ -202,7 +202,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
               <button
                 onClick={handleAddToCart}
-                className="btn-primary flex-1 text-lg py-3"
+                className="btn-primary flex-1 text-sm sm:text-lg py-2 sm:py-3"
               >
                 {t("products.addToCart")}
               </button>

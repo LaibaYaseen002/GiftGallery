@@ -91,12 +91,12 @@ export default function WishlistPage() {
           <p className="text-medium mb-6">
             {items.length} item{items.length !== 1 ? "s" : ""} saved
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
             {items.map((item) =>
               item.product ? (
                 <div key={item.id} className="card overflow-hidden">
                   <Link href={`/products/${item.product.id}`}>
-                    <div className="relative w-full h-56 overflow-hidden">
+                    <div className="relative w-full h-36 sm:h-44 overflow-hidden">
                       <Image
                         src={item.product.image_url}
                         alt={item.product.name}
@@ -106,30 +106,30 @@ export default function WishlistPage() {
                       />
                     </div>
                   </Link>
-                  <div className="p-4">
+                  <div className="p-2.5 sm:p-3">
                     <Link href={`/products/${item.product.id}`}>
-                      <h3 className="font-semibold text-dark text-lg mb-1 hover:text-primary transition-colors line-clamp-1">
+                      <h3 className="font-semibold text-dark text-xs sm:text-sm mb-0.5 hover:text-primary transition-colors line-clamp-1">
                         {item.product.name}
                       </h3>
                     </Link>
                     {item.product.category && (
-                      <p className="text-sm text-medium">
+                      <p className="text-[10px] sm:text-xs text-medium">
                         {item.product.category.name}
                       </p>
                     )}
-                    <p className="text-xl font-bold text-primary mt-2">
+                    <p className="text-sm sm:text-base font-bold text-primary mt-1.5">
                       {formatPrice(item.product.price)}
                     </p>
-                    <div className="flex gap-2 mt-3">
+                    <div className="flex gap-1.5 sm:gap-2 mt-2">
                       <button
                         onClick={() => handleMoveToCart(item)}
-                        className="btn-primary text-sm py-2 flex-1"
+                        className="btn-primary text-[10px] sm:text-xs py-1.5 flex-1"
                       >
                         {t("wishlist.addToCart")}
                       </button>
                       <button
                         onClick={() => handleRemove(item.product_id)}
-                        className="btn-secondary text-sm py-2 px-3"
+                        className="btn-secondary text-xs py-1.5 px-2 sm:px-3"
                         title="Remove from Wishlist"
                       >
                         <svg

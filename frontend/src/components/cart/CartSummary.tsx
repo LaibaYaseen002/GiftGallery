@@ -7,8 +7,8 @@ export default function CartSummary() {
   const { totalItems, totalPrice } = useCart();
 
   return (
-    <div className="card p-6 sticky top-24">
-      <h2 className="text-xl font-bold text-dark mb-4">Order Summary</h2>
+    <div className="card p-4 sm:p-6 sticky top-20 sm:top-24">
+      <h2 className="text-lg sm:text-xl font-bold text-dark mb-3 sm:mb-4">Order Summary</h2>
 
       <div className="space-y-3 mb-6">
         <div className="flex justify-between text-medium">
@@ -29,7 +29,7 @@ export default function CartSummary() {
 
       <Link
         href="/checkout"
-        className="btn-primary w-full text-center block text-lg py-3"
+        className="btn-primary w-full text-center block text-sm sm:text-lg py-2.5 sm:py-3"
       >
         Proceed to Checkout
       </Link>

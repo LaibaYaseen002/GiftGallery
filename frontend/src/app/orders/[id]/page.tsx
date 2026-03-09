@@ -74,8 +74,8 @@ function OrderDetailContent() {
     <div className="container-custom py-8">
       {/* Success Banner */}
       {isSuccess && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-8 text-center">
-          <h2 className="text-2xl font-bold text-green-800 mb-2">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 text-center">
+          <h2 className="text-lg sm:text-2xl font-bold text-green-800 mb-2">
             Order Placed Successfully!
           </h2>
           <p className="text-green-700">
@@ -85,15 +85,15 @@ function OrderDetailContent() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8">
         <div>
           <Link
             href="/orders"
-            className="text-sm text-medium hover:text-primary mb-2 inline-block"
+            className="text-xs sm:text-sm text-medium hover:text-primary mb-2 inline-block"
           >
             &larr; Back to Orders
           </Link>
-          <h1 className="text-3xl font-bold text-dark">
+          <h1 className="text-xl sm:text-3xl font-bold text-dark">
             Order #{order.id.slice(0, 8)}
           </h1>
           <p className="text-medium mt-1">
@@ -112,10 +112,10 @@ function OrderDetailContent() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
         {/* Order Items */}
         <div className="lg:col-span-2">
-          <div className="card p-6">
+          <div className="card p-3 sm:p-6">
             <h2 className="text-lg font-bold text-dark mb-4">Order Items</h2>
             <div className="space-y-4">
               {order.items?.map((item) => (

@@ -32,19 +32,19 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/10 via-secondary to-accent/10 py-14">
+      <section className="bg-gradient-to-br from-primary/10 via-secondary to-accent/10 py-8 sm:py-14">
         <div className="container-custom text-center">
-          <h1 className="text-3xl font-bold text-dark mb-3">
+          <h1 className="text-xl sm:text-3xl font-bold text-dark mb-2 sm:mb-3">
             {t("home.hero.title")}
           </h1>
-          <p className="text-sm text-medium mb-6 max-w-2xl mx-auto">
+          <p className="text-xs sm:text-sm text-medium mb-4 sm:mb-6 max-w-2xl mx-auto">
             {t("home.hero.subtitle")}
           </p>
-          <div className="flex gap-3 justify-center">
-            <Link href="/products" className="btn-primary text-sm">
+          <div className="flex gap-2 sm:gap-3 justify-center">
+            <Link href="/products" className="btn-primary text-xs sm:text-sm">
               {t("home.hero.shopNow")}
             </Link>
-            <Link href="/products" className="btn-secondary text-sm">
+            <Link href="/products" className="btn-secondary text-xs sm:text-sm">
               {t("home.hero.browse")}
             </Link>
           </div>

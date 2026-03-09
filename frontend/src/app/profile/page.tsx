@@ -61,12 +61,12 @@ export default function ProfilePage() {
     <div className="container-custom py-8">
       <h1 className="page-title">My Profile</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
         {/* Profile Card */}
         <div className="lg:col-span-1">
-          <div className="card p-6 text-center">
+          <div className="card p-4 sm:p-6 text-center">
             {/* Avatar */}
-            <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-4 border-primary/20 relative">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto mb-3 sm:mb-4 overflow-hidden border-4 border-primary/20 relative">
               {user.imageUrl ? (
                 <Image
                   src={user.imageUrl}
@@ -85,7 +85,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Name & Email */}
-            <h2 className="text-xl font-bold text-dark">
+            <h2 className="text-base sm:text-xl font-bold text-dark">
               {user.fullName || "User"}
             </h2>
             <p className="text-medium text-sm mt-1">
@@ -125,27 +125,27 @@ export default function ProfilePage() {
         {/* Stats & Recent Orders */}
         <div className="lg:col-span-2 space-y-6">
           {/* Order Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-primary">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div className="card p-3 sm:p-4 text-center">
+              <p className="text-lg sm:text-2xl font-bold text-primary">
                 {orders.length}
               </p>
               <p className="text-sm text-medium">Total Orders</p>
             </div>
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-success">
+            <div className="card p-3 sm:p-4 text-center">
+              <p className="text-lg sm:text-2xl font-bold text-success">
                 {deliveredOrders}
               </p>
               <p className="text-sm text-medium">Delivered</p>
             </div>
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-yellow-600">
+            <div className="card p-3 sm:p-4 text-center">
+              <p className="text-lg sm:text-2xl font-bold text-yellow-600">
                 {pendingOrders}
               </p>
               <p className="text-sm text-medium">In Progress</p>
             </div>
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-accent">
+            <div className="card p-3 sm:p-4 text-center">
+              <p className="text-lg sm:text-2xl font-bold text-accent">
                 ${totalSpent.toFixed(2)}
               </p>
               <p className="text-sm text-medium">Total Spent</p>

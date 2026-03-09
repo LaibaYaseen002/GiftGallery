@@ -68,16 +68,16 @@ export default function FlashSaleBanner() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-primary to-accent text-white py-3 relative">
-      <div className="container-custom flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
-        <div className="flex items-center gap-3 flex-wrap justify-center">
-          <span className="text-sm font-medium">Flash Sale!</span>
-          <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold font-mono">
+    <div className="bg-gradient-to-r from-primary to-accent text-white py-2 sm:py-3 relative">
+      <div className="container-custom flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-center sm:text-left pr-8">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
+          <span className="text-xs sm:text-sm font-medium">Flash Sale!</span>
+          <span className="bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold font-mono">
             {sale.code}
           </span>
-          <span className="text-sm font-bold">{sale.discount_percent}% OFF</span>
+          <span className="text-xs sm:text-sm font-bold">{sale.discount_percent}% OFF</span>
         </div>
-        <div className="flex items-center gap-1 text-sm font-mono bg-white/10 px-3 py-1 rounded-lg">
+        <div className="flex items-center gap-1 text-xs sm:text-sm font-mono bg-white/10 px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg">
           {timeLeft.days > 0 && <span>{timeLeft.days}d</span>}
           <span>{String(timeLeft.hours).padStart(2, "0")}h</span>
           <span>{String(timeLeft.minutes).padStart(2, "0")}m</span>

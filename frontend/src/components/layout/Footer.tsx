@@ -7,13 +7,13 @@ export default function Footer() {
   const { t } = useLanguage();
   return (
     <footer className="bg-dark text-white mt-auto">
-      <div className="container-custom py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container-custom py-8 sm:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🎁</span>
-              <span className="text-xl font-bold text-primary">Gift Gallery</span>
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-1.5 mb-3">
+              <span className="text-lg">🎁</span>
+              <span className="text-base font-bold text-primary">Gift Gallery</span>
             </div>
             <p className="text-gray-400 text-sm">
               Your one-stop shop for unique gifts and accessories. Find the
@@ -81,7 +81,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-500">
+        <div className="border-t border-gray-700 mt-6 pt-6 text-center text-xs sm:text-sm text-gray-500">
           <p>&copy; {new Date().getFullYear()} Gift Gallery. {t("footer.rights")}</p>
         </div>
       </div>

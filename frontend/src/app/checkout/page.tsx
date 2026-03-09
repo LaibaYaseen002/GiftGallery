@@ -264,13 +264,13 @@ export default function CheckoutPage() {
       <h1 className="page-title">{t("checkout.title")}</h1>
 
       <form onSubmit={handleContinueToPayment}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
           {/* Left: All checkout sections */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
 
             {/* 1. Shipping Details */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-4">{t("checkout.shipping")}</h2>
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-3 sm:mb-4">{t("checkout.shipping")}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-dark mb-1">{t("checkout.fullName")}</label>
@@ -300,8 +300,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* 2. Gift Wrapping (3.2.15) */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.giftWrapping")}</h2>
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.giftWrapping")}</h2>
               <p className="text-sm text-medium mb-4">{t("checkout.selectWrapping")}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <button type="button"
@@ -337,8 +337,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* 3. Gift Packaging (3.2.19) */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.packaging")}</h2>
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.packaging")}</h2>
               <p className="text-sm text-medium mb-4">{t("checkout.selectPackaging")}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <button type="button"
@@ -372,8 +372,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* 4. Gift Message (3.2.18) */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.giftMessage")}</h2>
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.giftMessage")}</h2>
               <p className="text-sm text-medium mb-3">Add a personal message to include with your gift.</p>
               <textarea
                 value={giftMessage}
@@ -419,8 +419,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* 5. Charity Integration (3.2.23) */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.charity")}</h2>
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.charity")}</h2>
               <p className="text-sm text-medium mb-4">{t("checkout.selectCharity")}</p>
               <div className="space-y-3">
                 {charities.map((charity) => (
@@ -458,7 +458,8 @@ export default function CheckoutPage() {
                   </label>
                   <input type="range" min="1" max="25" value={charityPercent}
                     onChange={(e) => setCharityPercent(Number(e.target.value))}
-                    className="w-full accent-primary" />
+                    className="w-full accent-primary"
+                    aria-label="Charity donation percentage" />
                   <div className="flex justify-between text-xs text-medium">
                     <span>1%</span><span>25%</span>
                   </div>
@@ -467,8 +468,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* 6. Scheduled Delivery (3.2.25) */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.scheduledDelivery")}</h2>
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.scheduledDelivery")}</h2>
               <p className="text-sm text-medium mb-4">{t("checkout.selectDate")}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -476,7 +477,8 @@ export default function CheckoutPage() {
                   <input type="date" value={scheduledDate}
                     onChange={(e) => setScheduledDate(e.target.value)}
                     min={minDate}
-                    className="input-field" />
+                    className="input-field"
+                    aria-label="Delivery date" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-dark mb-1">Delivery Note</label>
@@ -493,10 +495,10 @@ export default function CheckoutPage() {
             </div>
 
             {/* 7. Multi-Destination Checkout (3.2.20 + 3.2.26) */}
-            <div className="card p-6">
-              <div className="flex items-center justify-between mb-4">
+            <div className="card p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <div>
-                  <h2 className="text-xl font-bold text-dark">{t("checkout.multiDestination")}</h2>
+                  <h2 className="text-base sm:text-xl font-bold text-dark">{t("checkout.multiDestination")}</h2>
                   <p className="text-sm text-medium">Send items to different addresses</p>
                 </div>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -575,8 +577,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* 8. Discount Code (3.2.27 with flash sale) */}
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-2">{t("checkout.discount")}</h2>
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.discount")}</h2>
               {flashSales.length > 0 && !discountApplied && (
                 <div className="mb-3 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-lg p-3">
                   <div className="flex items-center gap-2">
@@ -592,7 +594,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               )}
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <input type="text" value={discountCode}
                   onChange={(e) => {
                     setDiscountCode(e.target.value.toUpperCase());
@@ -622,8 +624,8 @@ export default function CheckoutPage() {
 
           {/* Right: Order Summary */}
           <div>
-            <div className="card p-6 sticky top-24">
-              <h2 className="text-xl font-bold text-dark mb-4">{t("checkout.orderSummary")}</h2>
+            <div className="card p-4 sm:p-6 sticky top-20 sm:top-24">
+              <h2 className="text-base sm:text-xl font-bold text-dark mb-3 sm:mb-4">{t("checkout.orderSummary")}</h2>
 
               {/* Items */}
               <div className="space-y-3 max-h-48 overflow-y-auto mb-4">
@@ -689,7 +691,7 @@ export default function CheckoutPage() {
               {error && <p className="text-error text-sm mt-3">{error}</p>}
 
               <button type="submit" disabled={placing}
-                className="btn-primary w-full text-lg py-3 mt-4">
+                className="btn-primary w-full text-sm sm:text-lg py-2.5 sm:py-3 mt-3 sm:mt-4">
                 {placing ? (
                   <span className="flex items-center justify-center gap-2">
                     <LoadingSpinner size="sm" />Creating Order...

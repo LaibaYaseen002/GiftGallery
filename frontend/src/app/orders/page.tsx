@@ -69,7 +69,7 @@ export default function MyOrdersPage() {
             <Link
               key={order.id}
               href={`/orders/${order.id}`}
-              className="card p-6 block hover:shadow-lg transition-shadow"
+              className="card p-3 sm:p-6 block hover:shadow-lg transition-shadow"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
@@ -88,7 +88,7 @@ export default function MyOrdersPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl font-bold text-primary">
+                  <p className="text-base sm:text-xl font-bold text-primary">
                     {formatPrice(Number(order.total_amount))}
                   </p>
                   {order.discount_code && (

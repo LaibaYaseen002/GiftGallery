@@ -75,7 +75,9 @@ function ProductsContent() {
 
         {/* Category Filter */}
         <div>
+          <label htmlFor="category-filter" className="sr-only">Filter by category</label>
           <select
+            id="category-filter"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="input-field min-w-[180px]"
