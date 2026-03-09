@@ -295,6 +295,7 @@ export default function CreateBundlePage() {
                     </div>
                     <button
                       onClick={() => removeFromBundle(item.product.id)}
+                      aria-label={`Remove ${item.product.name}`}
                       className="text-error hover:text-error/80 shrink-0"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -398,10 +398,11 @@ export default function AdminBundlesPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label htmlFor="bundle-occasion" className="block text-sm font-medium text-dark mb-1">
                 Occasion
               </label>
               <select
+                id="bundle-occasion"
                 value={formOccasion}
                 onChange={(e) => setFormOccasion(e.target.value)}
                 className="input-field"
@@ -416,10 +417,11 @@ export default function AdminBundlesPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label htmlFor="bundle-discount" className="block text-sm font-medium text-dark mb-1">
                 Discount %
               </label>
               <input
+                id="bundle-discount"
                 type="number"
                 value={formDiscount}
                 onChange={(e) =>
@@ -494,8 +496,9 @@ export default function AdminBundlesPage() {
                       {product?.name || item.product_id}
                     </span>
                     <div className="flex items-center gap-2">
-                      <label className="text-xs text-medium">Qty:</label>
+                      <label htmlFor={`qty-${item.product_id}`} className="text-xs text-medium">Qty:</label>
                       <input
+                        id={`qty-${item.product_id}`}
                         type="number"
                         value={item.quantity}
                         onChange={(e) =>
@@ -508,6 +511,7 @@ export default function AdminBundlesPage() {
                     <button
                       type="button"
                       onClick={() => removeProduct(item.product_id)}
+                      aria-label={`Remove ${product?.name || "product"}`}
                       className="text-error hover:text-red-700 transition-colors"
                     >
                       <svg
