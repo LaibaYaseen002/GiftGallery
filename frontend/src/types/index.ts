@@ -241,8 +241,6 @@ export interface ShoppingSession {
   is_active: boolean;
   created_at: string;
   ended_at: string | null;
-  video_room_url: string | null;
-  video_room_name: string | null;
   participants?: SessionParticipant[];
 }
 

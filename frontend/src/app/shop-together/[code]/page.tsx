@@ -30,10 +30,8 @@ export default function ShopTogetherSessionPage() {
   const [error, setError] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
 
-  // Video call state
-  const [videoRoomUrl, setVideoRoomUrl] = useState<string | null>(null);
+  // Video call state (Jitsi - no backend needed)
   const [showVideo, setShowVideo] = useState(false);
-  const [startingCall, setStartingCall] = useState(false);
   const [videoMinimized, setVideoMinimized] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -100,56 +98,18 @@ export default function ShopTogetherSessionPage() {
     }
   };
 
-  // Fetch video room status
-  const fetchVideoRoom = async () => {
-    try {
-      const token = await getToken();
-      if (!token) return;
-      const res = await socialShoppingApi.getVideoRoom(code, token);
-      if (res.data?.url) {
-        setVideoRoomUrl(res.data.url);
-      } else {
-        setVideoRoomUrl(null);
-        setShowVideo(false);
-      }
-    } catch (err) {
-      console.error("Failed to fetch video room:", err);
-    }
+  // Jitsi room name derived from session code (deterministic, no backend needed)
+  const jitsiRoomName = `GiftGallery-${code}`;
+  const jitsiUrl = `https://meet.jit.si/${jitsiRoomName}`;
+
+  const handleStartVideoCall = () => {
+    setShowVideo(true);
+    setVideoMinimized(false);
   };
 
-  const handleStartVideoCall = async () => {
-    setStartingCall(true);
-    try {
-      const token = await getToken();
-      if (!token) return;
-      const res = await socialShoppingApi.createVideoRoom(code, token);
-      setVideoRoomUrl(res.data.url);
-      setShowVideo(true);
-      setVideoMinimized(false);
-    } catch (err) {
-      console.error("Failed to start video call:", err);
-    } finally {
-      setStartingCall(false);
-    }
-  };
-
-  const handleJoinVideoCall = () => {
-    if (videoRoomUrl) {
-      setShowVideo(true);
-      setVideoMinimized(false);
-    }
-  };
-
-  const handleEndVideoCall = async () => {
-    try {
-      const token = await getToken();
-      if (!token) return;
-      await socialShoppingApi.endVideoCall(code, token);
-      setVideoRoomUrl(null);
-      setShowVideo(false);
-    } catch (err) {
-      console.error("Failed to end video call:", err);
-    }
+  const handleEndVideoCall = () => {
+    setShowVideo(false);
+    setVideoMinimized(false);
   };
 
   useEffect(() => {
@@ -157,7 +117,6 @@ export default function ShopTogetherSessionPage() {
       fetchSession();
       fetchMessages();
       fetchProducts();
-      fetchVideoRoom();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignedIn, code]);
@@ -168,7 +127,6 @@ export default function ShopTogetherSessionPage() {
 
     intervalRef.current = setInterval(() => {
       fetchMessages();
-      fetchVideoRoom();
     }, 3000);
 
     return () => {
@@ -416,13 +374,12 @@ export default function ShopTogetherSessionPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {/* Video Call Button */}
+          {/* Video/Voice Call Button */}
           {session.is_active && (
             <>
-              {!videoRoomUrl && isHost && (
+              {!showVideo && (
                 <button
                   onClick={handleStartVideoCall}
-                  disabled={startingCall}
                   className="text-sm px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
                   style={{
                     backgroundColor: "#B76E7915",
@@ -433,26 +390,10 @@ export default function ShopTogetherSessionPage() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
-                  {startingCall ? "Starting..." : "Start Call"}
-                </button>
-              )}
-              {videoRoomUrl && !showVideo && (
-                <button
-                  onClick={handleJoinVideoCall}
-                  className="text-sm px-4 py-2 rounded-lg transition-colors flex items-center gap-2 animate-pulse"
-                  style={{
-                    backgroundColor: "#10b98120",
-                    color: "#10b981",
-                    border: "1px solid #10b98140",
-                  }}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
                   Join Call
                 </button>
               )}
-              {videoRoomUrl && showVideo && (
+              {showVideo && (
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setVideoMinimized(!videoMinimized)}
@@ -465,14 +406,12 @@ export default function ShopTogetherSessionPage() {
                   >
                     {videoMinimized ? "Expand" : "Minimize"}
                   </button>
-                  {isHost && (
-                    <button
-                      onClick={handleEndVideoCall}
-                      className="text-sm px-3 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
-                    >
-                      End Call
-                    </button>
-                  )}
+                  <button
+                    onClick={handleEndVideoCall}
+                    className="text-sm px-3 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    Leave Call
+                  </button>
                 </div>
               )}
             </>
@@ -489,8 +428,8 @@ export default function ShopTogetherSessionPage() {
         </div>
       </div>
 
-      {/* Video Call Panel */}
-      {showVideo && videoRoomUrl && (
+      {/* Video Call Panel (Jitsi Meet) */}
+      {showVideo && (
         <div
           className={`mb-6 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
             videoMinimized ? "h-16" : ""
@@ -513,7 +452,7 @@ export default function ShopTogetherSessionPage() {
             </div>
           ) : (
             <iframe
-              src={`${videoRoomUrl}?showLeaveButton=true&showFullscreenButton=true`}
+              src={`${jitsiUrl}#userInfo.displayName="${user?.firstName || "Guest"}"&config.prejoinPageEnabled=false&config.startWithVideoMuted=true&config.startWithAudioMuted=false`}
               allow="camera; microphone; fullscreen; display-capture; autoplay"
               className="w-full border-0"
               style={{ height: "400px" }}
