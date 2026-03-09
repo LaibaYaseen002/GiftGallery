@@ -30,6 +30,12 @@ export default function ShopTogetherSessionPage() {
   const [error, setError] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
 
+  // Video call state
+  const [videoRoomUrl, setVideoRoomUrl] = useState<string | null>(null);
+  const [showVideo, setShowVideo] = useState(false);
+  const [startingCall, setStartingCall] = useState(false);
+  const [videoMinimized, setVideoMinimized] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -94,11 +100,64 @@ export default function ShopTogetherSessionPage() {
     }
   };
 
+  // Fetch video room status
+  const fetchVideoRoom = async () => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+      const res = await socialShoppingApi.getVideoRoom(code, token);
+      if (res.data?.url) {
+        setVideoRoomUrl(res.data.url);
+      } else {
+        setVideoRoomUrl(null);
+        setShowVideo(false);
+      }
+    } catch (err) {
+      console.error("Failed to fetch video room:", err);
+    }
+  };
+
+  const handleStartVideoCall = async () => {
+    setStartingCall(true);
+    try {
+      const token = await getToken();
+      if (!token) return;
+      const res = await socialShoppingApi.createVideoRoom(code, token);
+      setVideoRoomUrl(res.data.url);
+      setShowVideo(true);
+      setVideoMinimized(false);
+    } catch (err) {
+      console.error("Failed to start video call:", err);
+    } finally {
+      setStartingCall(false);
+    }
+  };
+
+  const handleJoinVideoCall = () => {
+    if (videoRoomUrl) {
+      setShowVideo(true);
+      setVideoMinimized(false);
+    }
+  };
+
+  const handleEndVideoCall = async () => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+      await socialShoppingApi.endVideoCall(code, token);
+      setVideoRoomUrl(null);
+      setShowVideo(false);
+    } catch (err) {
+      console.error("Failed to end video call:", err);
+    }
+  };
+
   useEffect(() => {
     if (isSignedIn) {
       fetchSession();
       fetchMessages();
       fetchProducts();
+      fetchVideoRoom();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignedIn, code]);
@@ -109,6 +168,7 @@ export default function ShopTogetherSessionPage() {
 
     intervalRef.current = setInterval(() => {
       fetchMessages();
+      fetchVideoRoom();
     }, 3000);
 
     return () => {
@@ -355,15 +415,113 @@ export default function ShopTogetherSessionPage() {
             </span>
           </p>
         </div>
-        {isHost && session.is_active && (
-          <button
-            onClick={handleEndSession}
-            className="text-sm px-4 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
-          >
-            End Session
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Video Call Button */}
+          {session.is_active && (
+            <>
+              {!videoRoomUrl && isHost && (
+                <button
+                  onClick={handleStartVideoCall}
+                  disabled={startingCall}
+                  className="text-sm px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                  style={{
+                    backgroundColor: "#B76E7915",
+                    color: "#B76E79",
+                    border: "1px solid #B76E7940",
+                  }}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  {startingCall ? "Starting..." : "Start Call"}
+                </button>
+              )}
+              {videoRoomUrl && !showVideo && (
+                <button
+                  onClick={handleJoinVideoCall}
+                  className="text-sm px-4 py-2 rounded-lg transition-colors flex items-center gap-2 animate-pulse"
+                  style={{
+                    backgroundColor: "#10b98120",
+                    color: "#10b981",
+                    border: "1px solid #10b98140",
+                  }}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  Join Call
+                </button>
+              )}
+              {videoRoomUrl && showVideo && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setVideoMinimized(!videoMinimized)}
+                    className="text-sm px-3 py-2 rounded-lg transition-colors"
+                    style={{
+                      backgroundColor: "#D4A85320",
+                      color: "#D4A853",
+                      border: "1px solid #D4A85340",
+                    }}
+                  >
+                    {videoMinimized ? "Expand" : "Minimize"}
+                  </button>
+                  {isHost && (
+                    <button
+                      onClick={handleEndVideoCall}
+                      className="text-sm px-3 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
+                    >
+                      End Call
+                    </button>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+
+          {isHost && session.is_active && (
+            <button
+              onClick={handleEndSession}
+              className="text-sm px-4 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
+            >
+              End Session
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Video Call Panel */}
+      {showVideo && videoRoomUrl && (
+        <div
+          className={`mb-6 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
+            videoMinimized ? "h-16" : ""
+          }`}
+          style={{ border: "2px solid #B76E7940" }}
+        >
+          {videoMinimized ? (
+            <div
+              className="h-16 flex items-center justify-between px-5 cursor-pointer"
+              style={{ backgroundColor: "#FFF8F0" }}
+              onClick={() => setVideoMinimized(false)}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+                <span className="font-medium text-gray-700">Video call in progress</span>
+              </div>
+              <span className="text-sm" style={{ color: "#B76E79" }}>
+                Click to expand
+              </span>
+            </div>
+          ) : (
+            <iframe
+              src={`${videoRoomUrl}?showLeaveButton=true&showFullscreenButton=true`}
+              allow="camera; microphone; fullscreen; display-capture; autoplay"
+              className="w-full border-0"
+              style={{ height: "400px" }}
+              title="Video Call"
+            />
+          )}
+        </div>
+      )}
 
       {/* Main Layout */}
       <div className="flex flex-col lg:flex-row gap-6" style={{ minHeight: "calc(100vh - 220px)" }}>

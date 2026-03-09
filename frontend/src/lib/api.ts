@@ -410,4 +410,11 @@ export const socialShoppingApi = {
     fetchApi<{ data: SessionMessage; message: string }>(`/social-shopping/sessions/${code}/messages`, { method: "POST", body: JSON.stringify(data), token }),
   endSession: (code: string, token: string) =>
     fetchApi<{ message: string }>(`/social-shopping/sessions/${code}/end`, { method: "PATCH", token }),
+  // Video call
+  createVideoRoom: (code: string, token: string) =>
+    fetchApi<{ data: { url: string; name: string }; message?: string }>(`/social-shopping/sessions/${code}/video-room`, { method: "POST", token }),
+  getVideoRoom: (code: string, token: string) =>
+    fetchApi<{ data: { url: string; name: string; is_active: boolean } | null }>(`/social-shopping/sessions/${code}/video-room`, { token }),
+  endVideoCall: (code: string, token: string) =>
+    fetchApi<{ message: string }>(`/social-shopping/sessions/${code}/video-room`, { method: "DELETE", token }),
 };
