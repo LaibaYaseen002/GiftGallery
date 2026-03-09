@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { clerkClient } from "@clerk/express";
 import { supabase } from "../services/supabase";
 import { requireAuth, requireAdmin, getUserId } from "../middleware/auth";
 
@@ -28,9 +29,14 @@ router.get("/", async (req: Request, res: Response) => {
 
     // Compute total_value and bundle_price for each bundle
     const enriched = (data || []).map((bundle: Record<string, unknown>) => {
-      const items = (bundle.bundle_items as { quantity: number; products: { price: number } | null }[]) || [];
+      const rawItems = (bundle.bundle_items as { quantity: number; products: { price: number } | null }[]) || [];
+      // Rename 'products' (Supabase join name) to 'product' for frontend compatibility
+      const items = rawItems.map((item) => ({
+        ...item,
+        product: item.products,
+      }));
       const totalValue = items.reduce((sum, item) => {
-        const price = item.products?.price || 0;
+        const price = item.product?.price || 0;
         return sum + price * item.quantity;
       }, 0);
       const discount = (bundle.discount_percent as number) || 0;
@@ -61,7 +67,14 @@ router.get("/:id", async (req: Request, res: Response) => {
       return;
     }
 
-    res.json({ data });
+    // Rename 'products' to 'product' for frontend compatibility
+    const rawItems = (data.bundle_items as { quantity: number; products: { price: number } | null }[]) || [];
+    const items = rawItems.map((item) => ({
+      ...item,
+      product: item.products,
+    }));
+
+    res.json({ data: { ...data, items } });
   } catch (err) {
     console.error("Error fetching bundle:", err);
     res.status(500).json({ error: "Failed to fetch bundle" });
@@ -107,12 +120,21 @@ router.post("/custom", requireAuth, async (req: Request, res: Response) => {
     }
     const bundlePrice = totalValue * (1 - discountPercent / 100);
 
+    // Fetch the user's name from Clerk
+    let userName = "user";
+    try {
+      const user = await clerkClient.users.getUser(userId);
+      userName = user.firstName || user.username || "user";
+    } catch {
+      // fallback to "user" if Clerk lookup fails
+    }
+
     // Create the bundle
     const { data: bundle, error: bundleError } = await supabase
       .from("product_bundles")
       .insert({
         name: name.trim(),
-        description: `Custom bundle by user`,
+        description: `Custom bundle by ${userName}`,
         occasion: "custom",
         discount_percent: discountPercent,
         is_active: true,
