@@ -12,7 +12,7 @@ router.get("/my", requireAuth, async (req: Request, res: Response) => {
 
     const { data, error } = await supabase
       .from("gift_registries")
-      .select("*")
+      .select("*, gift_registry_items(*, products(*))")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
 
@@ -21,7 +21,17 @@ router.get("/my", requireAuth, async (req: Request, res: Response) => {
       return;
     }
 
-    res.json({ data });
+    const registries = (data || []).map((reg: Record<string, unknown>) => {
+      const rawItems = (reg.gift_registry_items || []) as Record<string, unknown>[];
+      const items = rawItems.map((item) => ({
+        ...item,
+        product: item.products,
+        products: undefined,
+      }));
+      return { ...reg, items, gift_registry_items: undefined };
+    });
+
+    res.json({ data: registries });
   } catch (err) {
     console.error("Error fetching registries:", err);
     res.status(500).json({ error: "Failed to fetch registries" });
@@ -55,7 +65,13 @@ router.get("/shared/:shareCode", async (req: Request, res: Response) => {
       return;
     }
 
-    res.json({ data: { ...registry, items: items || [] } });
+    const mappedItems = (items || []).map((item: Record<string, unknown>) => ({
+      ...item,
+      product: item.products,
+      products: undefined,
+    }));
+
+    res.json({ data: { ...registry, items: mappedItems } });
   } catch (err) {
     console.error("Error fetching shared registry:", err);
     res.status(500).json({ error: "Failed to fetch shared registry" });
@@ -90,7 +106,13 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
       return;
     }
 
-    res.json({ data: { ...registry, items: items || [] } });
+    const mappedItems = (items || []).map((item: Record<string, unknown>) => ({
+      ...item,
+      product: item.products,
+      products: undefined,
+    }));
+
+    res.json({ data: { ...registry, items: mappedItems } });
   } catch (err) {
     console.error("Error fetching registry:", err);
     res.status(500).json({ error: "Failed to fetch registry" });

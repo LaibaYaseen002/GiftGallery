@@ -56,6 +56,8 @@ export default function GiftRegistryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   // Copy feedback
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -145,11 +147,16 @@ export default function GiftRegistryPage() {
   const handleSearchProducts = async () => {
     if (!searchQuery.trim()) return;
     setSearching(true);
+    setSearchError(null);
+    setHasSearched(false);
     try {
       const res = await productsApi.getAll({ search: searchQuery, limit: 12 });
       setSearchResults(res.data || []);
+      setHasSearched(true);
     } catch (err) {
       console.error("Failed to search products:", err);
+      setSearchError("Failed to search products. Please try again.");
+      setSearchResults([]);
     } finally {
       setSearching(false);
     }
@@ -223,8 +230,9 @@ export default function GiftRegistryPage() {
           <h2 className="text-xl font-bold text-dark mb-4">Create New Registry</h2>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">Event Name *</label>
+              <label htmlFor="event-name" className="block text-sm font-medium text-dark mb-1">Event Name *</label>
               <input
+                id="event-name"
                 type="text"
                 value={form.event_name}
                 onChange={(e) => setForm({ ...form, event_name: e.target.value })}
@@ -235,11 +243,13 @@ export default function GiftRegistryPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-dark mb-1">Event Type</label>
+                <label htmlFor="event-type" className="block text-sm font-medium text-dark mb-1">Event Type</label>
                 <select
+                  id="event-type"
                   value={form.event_type}
                   onChange={(e) => setForm({ ...form, event_type: e.target.value as EventType })}
                   className="input-field"
+                  title="Select an event type"
                 >
                   <option value="birthday">Birthday</option>
                   <option value="wedding">Wedding</option>
@@ -249,8 +259,9 @@ export default function GiftRegistryPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-dark mb-1">Event Date</label>
+                <label htmlFor="event-date" className="block text-sm font-medium text-dark mb-1">Event Date</label>
                 <input
+                  id="event-date"
                   type="date"
                   value={form.event_date}
                   onChange={(e) => setForm({ ...form, event_date: e.target.value })}
@@ -259,8 +270,9 @@ export default function GiftRegistryPage() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">Description</label>
+              <label htmlFor="registry-description" className="block text-sm font-medium text-dark mb-1">Description</label>
               <textarea
+                id="registry-description"
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 className="input-field"
@@ -361,12 +373,14 @@ export default function GiftRegistryPage() {
 
                   {/* Share Link */}
                   <div className="mb-4 p-3 rounded-lg" style={{ backgroundColor: "#FFF8F0" }}>
-                    <label className="block text-xs font-medium text-medium mb-1">Share Link</label>
+                    <label htmlFor={`share-link-${registry.id}`} className="block text-xs font-medium text-medium mb-1">Share Link</label>
                     <div className="flex items-center gap-2">
                       <input
+                        id={`share-link-${registry.id}`}
                         type="text"
                         value={shareUrl}
                         readOnly
+                        title="Share link for this registry"
                         className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-xs text-medium truncate"
                       />
                       <button
@@ -434,6 +448,7 @@ export default function GiftRegistryPage() {
                                 onKeyDown={(e) => e.key === "Enter" && handleSearchProducts()}
                                 className="input-field flex-1"
                                 placeholder="Search for products..."
+                                aria-label="Search products to add to registry"
                               />
                               <button
                                 onClick={handleSearchProducts}
@@ -443,7 +458,10 @@ export default function GiftRegistryPage() {
                                 {searching ? "..." : "Search"}
                               </button>
                             </div>
-                            {searchResults.length > 0 && (
+                            {searchError && (
+                              <p className="text-red-500 text-sm text-center py-3">{searchError}</p>
+                            )}
+                            {searchResults.length > 0 ? (
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto">
                                 {searchResults.map((product) => {
                                   const alreadyAdded = managingRegistry?.items?.some(
@@ -483,6 +501,12 @@ export default function GiftRegistryPage() {
                                   );
                                 })}
                               </div>
+                            ) : (
+                              hasSearched && !searchError && (
+                                <p className="text-medium text-sm text-center py-3">
+                                  No products found for &quot;{searchQuery}&quot;. Try a different search term.
+                                </p>
+                              )
                             )}
                           </div>
                         )}

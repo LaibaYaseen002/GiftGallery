@@ -227,23 +227,33 @@ export default function GroupGiftPage() {
                   <input
                     type="text"
                     value={productSearch}
-                    onChange={(e) => setProductSearch(e.target.value)}
-                    placeholder="Search for a product..."
+                    onChange={(e) => {
+                      setProductSearch(e.target.value);
+                      setSelectedProduct(null);
+                    }}
+                    placeholder="Type to search, then select from dropdown..."
                     className="input-field"
                     onFocus={() => {
                       if (products.length > 0) setShowProductDropdown(true);
                     }}
                     onBlur={() => {
-                      setTimeout(() => setShowProductDropdown(false), 200);
+                      setTimeout(() => setShowProductDropdown(false), 300);
                     }}
                   />
+                  {productSearch.length >= 2 && !showProductDropdown && products.length === 0 && (
+                    <p className="text-medium text-xs mt-1">No products found. Try a different search term.</p>
+                  )}
+                  {productSearch.length >= 2 && products.length > 0 && !showProductDropdown && !selectedProduct && (
+                    <p className="text-amber-600 text-xs mt-1">Click on a product from the list to select it.</p>
+                  )}
                   {showProductDropdown && products.length > 0 && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                       {products.map((product) => (
                         <button
                           key={product.id}
                           type="button"
-                          onClick={() => {
+                          onMouseDown={(e) => {
+                            e.preventDefault();
                             setSelectedProduct(product);
                             setProductSearch(product.name);
                             setShowProductDropdown(false);
@@ -329,6 +339,8 @@ export default function GroupGiftPage() {
                 onChange={(e) => setExpiryDate(e.target.value)}
                 className="input-field"
                 min={new Date().toISOString().split("T")[0]}
+                title="Select the expiry date for this group gift"
+                placeholder="Select a date"
               />
             </div>
 
