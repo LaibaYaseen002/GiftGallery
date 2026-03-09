@@ -109,7 +109,7 @@ function ProductsContent() {
               ? `${pagination.total} product${pagination.total !== 1 ? "s" : ""} found`
               : `${products.length} product${products.length !== 1 ? "s" : ""} found`}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

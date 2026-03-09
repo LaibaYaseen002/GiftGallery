@@ -61,7 +61,7 @@ export default function Home() {
           <p className="text-medium text-center text-xs mb-6">
             {t("home.categories.subtitle")}
           </p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {categories.length > 0
               ? categories.map((cat) => (
                   <Link
@@ -108,13 +108,13 @@ export default function Home() {
             {t("home.featured.subtitle")}
           </p>
           {featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {featuredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="card p-3">
                   <div className="w-full h-40 bg-border rounded-md mb-3 animate-pulse" />
