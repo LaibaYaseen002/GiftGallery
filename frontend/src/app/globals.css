@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    font-size: 100%; /* 16px base – prevents browser/OS scaling overrides */
+  }
+
   body {
-    @apply bg-secondary text-dark antialiased;
+    @apply bg-secondary text-dark antialiased text-xs;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -14,20 +18,20 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-white px-6 py-2.5 rounded-lg font-medium
+    @apply bg-primary text-white px-4 py-1.5 rounded-md text-xs font-medium
            hover:bg-primary-dark transition-colors duration-200
            focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-white text-dark px-6 py-2.5 rounded-lg font-medium
+    @apply bg-white text-dark px-4 py-1.5 rounded-md text-xs font-medium
            border border-border hover:bg-light transition-colors duration-200
            focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
   }
 
   .btn-accent {
-    @apply bg-accent text-white px-6 py-2.5 rounded-lg font-medium
+    @apply bg-accent text-white px-4 py-1.5 rounded-md text-xs font-medium
            hover:opacity-90 transition-opacity duration-200
            focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
   }
@@ -38,7 +42,7 @@
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 rounded-lg border border-border bg-white
+    @apply w-full px-3 py-1.5 rounded-md border border-border bg-white text-xs
            text-dark placeholder-medium
            focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
            transition-all duration-200;
@@ -49,11 +53,11 @@
   }
 
   .page-title {
-    @apply text-3xl font-bold text-dark mb-6;
+    @apply text-xl font-bold text-dark mb-4;
   }
 
   .section-title {
-    @apply text-2xl font-bold text-dark mb-4;
+    @apply text-lg font-bold text-dark mb-3;
   }
 }
 

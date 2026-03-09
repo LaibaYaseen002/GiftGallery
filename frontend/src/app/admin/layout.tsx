@@ -26,7 +26,7 @@ export default function AdminLayout({
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Top Header Bar */}
-          <header className="bg-white/80 backdrop-blur-sm border-b border-border h-16 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30 shadow-sm">
+          <header className="bg-white/80 backdrop-blur-sm border-b border-border h-12 flex items-center justify-between px-3 lg:px-5 sticky top-0 z-30 shadow-sm">
             {/* Left: Hamburger + Title */}
             <div className="flex items-center gap-3">
               <button
@@ -40,7 +40,7 @@ export default function AdminLayout({
               </button>
               <div className="hidden sm:flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary" />
-                <h1 className="text-lg font-semibold text-dark">
+                <h1 className="text-sm font-semibold text-dark">
                   Gift Gallery Admin
                 </h1>
               </div>
@@ -69,7 +69,7 @@ export default function AdminLayout({
           </header>
 
           {/* Page Content */}
-          <main className="flex-1 p-4 lg:p-6 overflow-auto">
+          <main className="flex-1 p-3 lg:p-4 overflow-auto">
             {children}
           </main>
         </div>
