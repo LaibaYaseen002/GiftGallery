@@ -360,7 +360,7 @@ router.post("/sessions/:code/video-room", requireAuth, async (req: Request, res:
     }
 
     // Create new Daily room
-    const roomName = `gg-${String(code).toLowerCase()}-${Date.now()}`;
+    const roomName = `gg-${(code as string).toLowerCase()}-${Date.now()}`;
     const room = await createDailyRoom(roomName);
 
     // Save room URL in database
