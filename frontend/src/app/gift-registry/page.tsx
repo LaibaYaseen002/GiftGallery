@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
-import Link from "next/link";
 import { GiftRegistry, GiftRegistryItem, Product } from "@/types";
 import { registryApi, productsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";

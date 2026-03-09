@@ -8,7 +8,7 @@ import CartSummary from "@/components/cart/CartSummary";
 
 export default function ShoppingCartPage() {
   const { items, clearCart } = useCart();
-  const { t, formatPrice } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <div className="container-custom py-8">

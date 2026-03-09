@@ -10,7 +10,7 @@ import FlashSaleBanner from "@/components/FlashSaleBanner";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Home() {
-  const { t, formatPrice } = useLanguage();
+  const { t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 

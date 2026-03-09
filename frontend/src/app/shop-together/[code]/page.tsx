@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { ShoppingSession, SessionMessage, Product } from "@/types";
 import { socialShoppingApi, productsApi } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
@@ -12,7 +12,6 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function ShopTogetherSessionPage() {
   const { code } = useParams<{ code: string }>();
-  const router = useRouter();
   const { getToken, isSignedIn, userId } = useAuth();
   const { user } = useUser();
   const { addItem } = useCart();

@@ -51,7 +51,7 @@ export default function BundlesPage() {
   const [addingBundleId, setAddingBundleId] = useState<string | null>(null);
   const [addedBundleId, setAddedBundleId] = useState<string | null>(null);
   const { addItem } = useCart();
-  const { t, formatPrice } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     setLoading(true);

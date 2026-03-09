@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ShoppingSession } from "@/types";
@@ -10,7 +10,6 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function ShopTogetherPage() {
   const { getToken, isSignedIn } = useAuth();
-  const { user } = useUser();
   const router = useRouter();
 
   const [sessions, setSessions] = useState<ShoppingSession[]>([]);

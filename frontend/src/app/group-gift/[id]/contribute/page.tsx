@@ -4,14 +4,13 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
-import { GroupGift, Product } from "@/types";
+import { useParams } from "next/navigation";
+import { GroupGift } from "@/types";
 import { groupGiftsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function ContributePage() {
   const { getToken } = useAuth();
-  const router = useRouter();
   const params = useParams();
   const id = params.id as string;
 
