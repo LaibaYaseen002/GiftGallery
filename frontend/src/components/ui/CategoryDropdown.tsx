@@ -44,17 +44,6 @@ export default function CategoryDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Lock body scroll on mobile when open
-  useEffect(() => {
-    if (open && window.innerWidth < 640) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
 
   function handleSelect(slug: string) {
     onChange(slug);
@@ -94,29 +83,21 @@ export default function CategoryDropdown({
         </svg>
       </button>
 
-      {/* Mobile: fullscreen overlay */}
-      {open && (
-        <div className="sm:hidden fixed inset-0 bg-black/40 z-40" onClick={() => setOpen(false)} />
-      )}
-
       {/* Dropdown panel */}
       {open && (
         <div
-          className={`
+          className="absolute top-full mt-1 left-0 right-0 sm:left-auto sm:right-0
             z-50 bg-white border border-border shadow-xl overflow-hidden
-            /* Mobile: bottom sheet */
-            fixed bottom-0 left-0 right-0 rounded-t-2xl max-h-[70vh]
-            /* Desktop: normal dropdown */
-            sm:absolute sm:top-full sm:mt-1 sm:left-auto sm:right-0 sm:bottom-auto
-            sm:rounded-lg sm:w-[320px] sm:max-h-[360px]
-          `}
+            rounded-lg w-full sm:w-[320px]"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-light/50">
             <h3 className="text-xs font-bold text-dark">Choose Category</h3>
             <button
+              type="button"
               onClick={() => setOpen(false)}
-              className="sm:hidden text-medium hover:text-dark p-0.5"
+              className="text-medium hover:text-dark p-0.5"
+              aria-label="Close"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -125,7 +106,7 @@ export default function CategoryDropdown({
           </div>
 
           {/* Scrollable list */}
-          <div className="overflow-y-auto max-h-[calc(70vh-44px)] sm:max-h-[316px]">
+          <div className="overflow-y-auto max-h-[50vh] sm:max-h-[316px]">
             {/* All Categories option */}
             <button
               onClick={() => handleSelect("")}
