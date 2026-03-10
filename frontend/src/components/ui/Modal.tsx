@@ -24,14 +24,15 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative z-[101] bg-white rounded-xl shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         {title && (
           <div className="flex items-center justify-between px-4 py-3 border-b border-border">
             <h2 className="text-base font-bold text-dark">{title}</h2>
             <button
               onClick={onClose}
+              aria-label="Close"
               className="text-medium hover:text-dark transition-colors"
             >
               <svg

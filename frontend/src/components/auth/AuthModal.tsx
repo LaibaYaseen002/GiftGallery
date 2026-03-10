@@ -16,14 +16,15 @@ export default function AuthModal({ isOpen, onClose, redirectUrl = "/checkout" }
   const clerkAppearance = {
     elements: {
       rootBox: "w-full",
-      card: "shadow-none border-0 p-0 w-full",
+      card: "shadow-none border-0 p-0 w-full !bg-transparent",
+      cardBox: "shadow-none border-0 w-full",
+      header: "hidden",
       formButtonPrimary: "bg-primary hover:bg-primary-dark text-white",
-      headerTitle: "text-dark",
-      headerSubtitle: "text-medium",
       socialButtonsBlockButton: "border-border text-dark hover:bg-light",
       formFieldInput: "border-border focus:ring-primary focus:border-primary",
       footerActionLink: "text-primary hover:text-primary-dark",
       footer: "hidden",
+      main: "w-full",
     },
   };
 
