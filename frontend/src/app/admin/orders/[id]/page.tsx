@@ -78,13 +78,13 @@ export default function AdminOrderDetailPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   if (!order) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-bold text-dark mb-2">Order not found</h2>
+        <h2 className="text-xl font-bold text-dark mb-2">Order not found</h2>
         <button onClick={() => router.push("/admin/orders")} className="btn-primary mt-4">
           Back to Orders
         </button>
@@ -97,11 +97,11 @@ export default function AdminOrderDetailPage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <div>
           <Link
             href="/admin/orders"
-            className="text-sm text-medium hover:text-primary transition-colors mb-2 inline-flex items-center gap-1"
+            className="text-xs text-medium hover:text-primary transition-colors mb-2 inline-flex items-center gap-1"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -109,7 +109,7 @@ export default function AdminOrderDetailPage() {
             Back to Orders
           </Link>
           <h1 className="page-title mb-1">Order #{order.id.slice(0, 8)}</h1>
-          <p className="text-sm text-medium">
+          <p className="text-xs text-medium">
             Placed on{" "}
             {new Date(order.created_at).toLocaleDateString("en-US", {
               year: "numeric",
@@ -126,7 +126,7 @@ export default function AdminOrderDetailPage() {
             value={order.status}
             onChange={(e) => handleStatusUpdate(e.target.value)}
             disabled={updatingStatus}
-            className="input-field text-sm py-2 w-40"
+            className="input-field text-xs py-2 w-40"
           >
             {ALL_STATUSES.map((s) => (
               <option key={s} value={s}>
@@ -138,9 +138,9 @@ export default function AdminOrderDetailPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Left Column - Main Info */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4">
           {/* Order Items */}
           <div className="card p-5">
             <h2 className="font-semibold text-dark mb-4">
@@ -148,10 +148,10 @@ export default function AdminOrderDetailPage() {
             </h2>
             <div className="divide-y divide-border">
               {order.items?.map((item) => (
-                <div key={item.id} className="flex items-center justify-between py-3">
+                <div key={item.id} className="flex items-center justify-between py-2">
                   <div>
                     <p className="font-medium text-dark">{item.product_name}</p>
-                    <p className="text-sm text-medium">
+                    <p className="text-xs text-medium">
                       ${Number(item.price).toFixed(2)} x {item.quantity}
                     </p>
                   </div>
@@ -164,12 +164,12 @@ export default function AdminOrderDetailPage() {
 
             {/* Totals */}
             <div className="border-t border-border mt-3 pt-3 space-y-1">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xs">
                 <span className="text-medium">Subtotal</span>
                 <span className="text-dark">${subtotal.toFixed(2)}</span>
               </div>
               {order.discount_code && (
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs">
                   <span className="text-success">
                     Discount ({order.discount_code})
                   </span>
@@ -178,7 +178,7 @@ export default function AdminOrderDetailPage() {
                   </span>
                 </div>
               )}
-              <div className="flex justify-between font-bold text-lg pt-1">
+              <div className="flex justify-between font-bold text-base pt-1">
                 <span className="text-dark">Total</span>
                 <span className="text-primary">
                   ${Number(order.total_amount).toFixed(2)}
@@ -201,7 +201,7 @@ export default function AdminOrderDetailPage() {
               </h2>
               <div className="bg-secondary border-l-4 border-accent rounded-lg p-4">
                 <p
-                  className={`text-lg italic ${
+                  className={`text-base italic ${
                     order.gift_font === "handwritten"
                       ? "font-[family-name:var(--font-dancing)]"
                       : order.gift_font === "elegant"
@@ -230,12 +230,12 @@ export default function AdminOrderDetailPage() {
               <button
                 onClick={handleSaveNotes}
                 disabled={savingNotes}
-                className="btn-primary text-sm"
+                className="btn-primary text-xs"
               >
                 {savingNotes ? "Saving..." : "Save Notes"}
               </button>
               {notesSaved && (
-                <span className="text-sm text-success">Notes saved!</span>
+                <span className="text-xs text-success">Notes saved!</span>
               )}
             </div>
           </div>
@@ -248,7 +248,7 @@ export default function AdminOrderDetailPage() {
                 {order.status_history.map((entry) => (
                   <div
                     key={entry.id}
-                    className="flex items-start gap-3 text-sm"
+                    className="flex items-start gap-3 text-xs"
                   >
                     <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
                     <div className="flex-1">
@@ -285,11 +285,11 @@ export default function AdminOrderDetailPage() {
         </div>
 
         {/* Right Column - Customer & Shipping */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Customer Info */}
           <div className="card p-5">
             <h2 className="font-semibold text-dark mb-3">Customer</h2>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs">
               <div>
                 <p className="text-medium">Name</p>
                 <p className="text-dark font-medium">{order.shipping_name}</p>
@@ -304,7 +304,7 @@ export default function AdminOrderDetailPage() {
           {/* Shipping Info */}
           <div className="card p-5">
             <h2 className="font-semibold text-dark mb-3">Shipping Address</h2>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs">
               <div>
                 <p className="text-medium">Address</p>
                 <p className="text-dark font-medium">{order.shipping_address}</p>
@@ -323,7 +323,7 @@ export default function AdminOrderDetailPage() {
           {/* Order Summary */}
           <div className="card p-5">
             <h2 className="font-semibold text-dark mb-3">Order Summary</h2>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs">
               <div className="flex justify-between">
                 <span className="text-medium">Order ID</span>
                 <span className="text-dark font-mono text-xs">{order.id.slice(0, 8)}...</span>

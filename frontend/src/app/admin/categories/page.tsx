@@ -140,16 +140,16 @@ export default function AdminCategoriesPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <div>
           <h1 className="page-title mb-1">Category Management</h1>
-          <p className="text-medium text-sm">{categories.length} categories total</p>
+          <p className="text-medium text-xs">{categories.length} categories total</p>
         </div>
         <button onClick={openCreate} className="btn-primary flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -161,7 +161,7 @@ export default function AdminCategoriesPage() {
 
       {/* Categories Grid */}
       {categories.length === 0 ? (
-        <div className="card p-8 text-center">
+        <div className="card p-6 text-center">
           <p className="text-medium">No categories yet. Create your first one.</p>
         </div>
       ) : (
@@ -181,7 +181,7 @@ export default function AdminCategoriesPage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-2xl">🎁</span>
+                      <span className="text-xl">🎁</span>
                     </div>
                   )}
                 </div>
@@ -190,7 +190,7 @@ export default function AdminCategoriesPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-dark truncate">{cat.name}</h3>
                   <p className="text-xs text-medium mt-0.5">/{cat.slug}</p>
-                  <p className="text-sm text-medium mt-1">
+                  <p className="text-xs text-medium mt-1">
                     {cat.product_count} product{cat.product_count !== 1 ? "s" : ""}
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export default function AdminCategoriesPage() {
               <div className="flex gap-2 mt-3 pt-3 border-t border-border">
                 <button
                   onClick={() => openEdit(cat)}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
                 >
                   Edit
                 </button>
@@ -209,7 +209,7 @@ export default function AdminCategoriesPage() {
                     setError("");
                     setDeleting(cat);
                   }}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-error hover:border-error transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-error hover:border-error transition-colors"
                 >
                   Delete
                 </button>
@@ -225,15 +225,15 @@ export default function AdminCategoriesPage() {
         onClose={() => setModalOpen(false)}
         title={editing ? "Edit Category" : "Add Category"}
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-2 text-xs">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Category Name *
             </label>
             <input
@@ -246,7 +246,7 @@ export default function AdminCategoriesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Slug *
             </label>
             <input
@@ -262,7 +262,7 @@ export default function AdminCategoriesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Image URL
             </label>
             <input
@@ -313,9 +313,9 @@ export default function AdminCategoriesPage() {
         onClose={() => setDeleting(null)}
         title="Delete Category"
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-2 text-xs">
               {error}
             </div>
           )}
@@ -325,7 +325,7 @@ export default function AdminCategoriesPage() {
           </p>
 
           {deleting && deleting.product_count > 0 && (
-            <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg px-4 py-3 text-sm">
+            <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg px-4 py-2 text-xs">
               This category has {deleting.product_count} product{deleting.product_count > 1 ? "s" : ""}. You must remove or reassign them before deleting.
             </div>
           )}
@@ -340,7 +340,7 @@ export default function AdminCategoriesPage() {
             </button>
             <button
               onClick={handleDelete}
-              className="flex-1 bg-error text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="flex-1 bg-error text-white px-6 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
               disabled={saving}
             >
               {saving ? "Deleting..." : "Delete"}

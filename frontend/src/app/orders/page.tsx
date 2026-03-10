@@ -32,7 +32,7 @@ export default function MyOrdersPage() {
   }, [getToken]);
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
@@ -47,7 +47,7 @@ export default function MyOrdersPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -55,21 +55,21 @@ export default function MyOrdersPage() {
               d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">{t("orders.noOrders")}</h2>
-          <p className="text-medium mb-6">
+          <h2 className="text-xl font-bold text-dark mb-2">{t("orders.noOrders")}</h2>
+          <p className="text-medium mb-4">
             Start shopping to see your orders here.
           </p>
-          <Link href="/products" className="btn-primary text-lg">
+          <Link href="/products" className="btn-primary text-base">
             Browse Products
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {orders.map((order) => (
             <Link
               key={order.id}
               href={`/orders/${order.id}`}
-              className="card p-3 sm:p-6 block hover:shadow-lg transition-shadow"
+              className="card p-3 sm:p-4 block hover:shadow-lg transition-shadow"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
@@ -79,7 +79,7 @@ export default function MyOrdersPage() {
                     </span>
                     <OrderStatusBadge status={order.status} />
                   </div>
-                  <p className="text-sm text-medium">
+                  <p className="text-xs text-medium">
                     {new Date(order.created_at).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
@@ -88,7 +88,7 @@ export default function MyOrdersPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-base sm:text-xl font-bold text-primary">
+                  <p className="text-base sm:text-lg font-bold text-primary">
                     {formatPrice(Number(order.total_amount))}
                   </p>
                   {order.discount_code && (

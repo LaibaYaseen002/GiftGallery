@@ -59,7 +59,7 @@ export default function AdminReturnsPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
@@ -67,13 +67,13 @@ export default function AdminReturnsPage() {
       <h1 className="page-title">Return Requests</h1>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-4">
         {(["all", "pending", "approved", "rejected", "refunded"] as const).map(
           (tab) => (
             <button
               key={tab}
               onClick={() => setFilter(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
                 filter === tab
                   ? "bg-primary text-white"
                   : "bg-white text-medium border border-border hover:bg-light"
@@ -94,7 +94,7 @@ export default function AdminReturnsPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -102,7 +102,7 @@ export default function AdminReturnsPage() {
               d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">
+          <h2 className="text-xl font-bold text-dark mb-2">
             No return requests
           </h2>
           <p className="text-medium">
@@ -112,7 +112,7 @@ export default function AdminReturnsPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {filteredReturns.map((returnReq) => (
             <ReturnRequestCard
               key={returnReq.id}

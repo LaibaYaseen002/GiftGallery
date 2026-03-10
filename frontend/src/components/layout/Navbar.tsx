@@ -32,43 +32,43 @@ export default function Navbar() {
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
       <div className="container-custom">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1.5 shrink-0">
-            <span className="text-lg sm:text-2xl">🎁</span>
-            <span className="text-sm sm:text-xl font-bold text-primary">Gift Gallery</span>
+            <span className="text-base sm:text-lg">🎁</span>
+            <span className="text-xs sm:text-base font-bold text-primary">Gift Gallery</span>
           </Link>
 
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-5">
             <Link
               href="/products"
-              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
+              className="text-xs text-medium hover:text-primary transition-colors whitespace-nowrap"
             >
               {t("nav.products")}
             </Link>
             <Link
               href="/bundles"
-              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
+              className="text-xs text-medium hover:text-primary transition-colors whitespace-nowrap"
             >
               {t("nav.bundles")}
             </Link>
             <Link
               href="/faq"
-              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
+              className="text-xs text-medium hover:text-primary transition-colors whitespace-nowrap"
             >
               {t("nav.faq")}
             </Link>
             <Link
               href="/contact"
-              className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
+              className="text-xs text-medium hover:text-primary transition-colors whitespace-nowrap"
             >
               {t("nav.contact")}
             </Link>
             <SignedIn>
               <Link
                 href="/orders"
-                className="text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
+                className="text-xs text-medium hover:text-primary transition-colors whitespace-nowrap"
               >
                 {t("nav.orders")}
               </Link>
@@ -76,7 +76,7 @@ export default function Navbar() {
               <div className="relative" ref={moreRef}>
                 <button
                   onClick={() => setMoreOpen(!moreOpen)}
-                  className="flex items-center gap-1 text-sm text-medium hover:text-primary transition-colors whitespace-nowrap"
+                  className="flex items-center gap-1 text-xs text-medium hover:text-primary transition-colors whitespace-nowrap"
                 >
                   {t("nav.more")}
                   <svg
@@ -95,28 +95,28 @@ export default function Navbar() {
                     <Link
                       href="/gift-registry"
                       onClick={() => setMoreOpen(false)}
-                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                      className="block px-3 py-1.5 text-xs text-medium hover:bg-primary/5 hover:text-primary transition-colors"
                     >
                       {t("nav.registry")}
                     </Link>
                     <Link
                       href="/group-gift"
                       onClick={() => setMoreOpen(false)}
-                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                      className="block px-3 py-1.5 text-xs text-medium hover:bg-primary/5 hover:text-primary transition-colors"
                     >
                       {t("nav.groupGift")}
                     </Link>
                     <Link
                       href="/shop-together"
                       onClick={() => setMoreOpen(false)}
-                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                      className="block px-3 py-1.5 text-xs text-medium hover:bg-primary/5 hover:text-primary transition-colors"
                     >
                       {t("nav.shopTogether")}
                     </Link>
                     <Link
                       href="/profile"
                       onClick={() => setMoreOpen(false)}
-                      className="block px-4 py-2.5 text-sm text-medium hover:bg-primary/5 hover:text-primary transition-colors"
+                      className="block px-3 py-1.5 text-xs text-medium hover:bg-primary/5 hover:text-primary transition-colors"
                     >
                       {t("nav.profile")}
                     </Link>
@@ -126,7 +126,7 @@ export default function Navbar() {
                         <Link
                           href="/admin"
                           onClick={() => setMoreOpen(false)}
-                          className="block px-4 py-2.5 text-sm text-primary font-medium hover:bg-primary/5 transition-colors"
+                          className="block px-3 py-1.5 text-xs text-primary font-medium hover:bg-primary/5 transition-colors"
                         >
                           {t("nav.admin")}
                         </Link>
@@ -185,14 +185,14 @@ export default function Navbar() {
                 />
               </svg>
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-2xs w-4 h-4 rounded-full flex items-center justify-center font-medium">
                   {totalItems}
                 </span>
               )}
             </Link>
 
             <SignedOut>
-              <Link href="/sign-in" className="btn-primary text-xs py-1.5 px-3 sm:text-sm sm:py-2 sm:px-4">
+              <Link href="/sign-in" className="btn-primary text-xs py-1 px-3 sm:py-1.5 sm:px-4">
                 {t("nav.signIn")}
               </Link>
             </SignedOut>
@@ -231,40 +231,40 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden border-t border-border bg-white">
           <div className="container-custom py-4 space-y-1">
-            <Link href="/products" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+            <Link href="/products" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
               {t("nav.products")}
             </Link>
-            <Link href="/bundles" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+            <Link href="/bundles" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
               {t("nav.bundles")}
             </Link>
-            <Link href="/faq" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+            <Link href="/faq" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
               {t("nav.faq")}
             </Link>
-            <Link href="/contact" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+            <Link href="/contact" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
               {t("nav.contact")}
             </Link>
             <SignedIn>
               <div className="border-t border-border pt-3 mt-3 space-y-1">
-                <Link href="/orders" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                <Link href="/orders" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
                   {t("nav.orders")}
                 </Link>
-                <Link href="/wishlist" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                <Link href="/wishlist" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
                   {t("nav.wishlist")}
                 </Link>
-                <Link href="/gift-registry" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                <Link href="/gift-registry" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
                   {t("nav.registry")}
                 </Link>
-                <Link href="/group-gift" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                <Link href="/group-gift" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
                   {t("nav.groupGift")}
                 </Link>
-                <Link href="/shop-together" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                <Link href="/shop-together" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
                   {t("nav.shopTogether")}
                 </Link>
-                <Link href="/profile" onClick={closeMobile} className="block text-medium hover:text-primary transition-colors py-2.5">
+                <Link href="/profile" onClick={closeMobile} className="block text-xs text-medium hover:text-primary transition-colors py-2">
                   {t("nav.profile")}
                 </Link>
                 {isAdmin && (
-                  <Link href="/admin" onClick={closeMobile} className="block text-primary font-medium hover:text-primary-dark transition-colors py-2.5">
+                  <Link href="/admin" onClick={closeMobile} className="block text-xs text-primary font-medium hover:text-primary-dark transition-colors py-2">
                     {t("nav.admin")}
                   </Link>
                 )}

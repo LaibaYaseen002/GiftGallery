@@ -34,25 +34,25 @@ export default function Pagination({
   };
 
   return (
-    <nav className="flex items-center justify-center gap-1 mt-8">
+    <nav className="flex items-center justify-center gap-1 mt-6">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-2 text-sm font-medium rounded-lg border border-border text-medium hover:bg-light disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="px-2.5 py-1.5 text-xs font-medium rounded-md border border-border text-medium hover:bg-light disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         Previous
       </button>
 
       {getPageNumbers().map((page, idx) =>
         page === "..." ? (
-          <span key={`dots-${idx}`} className="px-2 py-2 text-sm text-medium">
+          <span key={`dots-${idx}`} className="px-1.5 py-1 text-xs text-medium">
             ...
           </span>
         ) : (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`w-10 h-10 text-sm font-medium rounded-lg transition-colors ${
+            className={`w-8 h-8 text-xs font-medium rounded-md transition-colors ${
               page === currentPage
                 ? "bg-primary text-white"
                 : "border border-border text-medium hover:bg-light"
@@ -66,7 +66,7 @@ export default function Pagination({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-2 text-sm font-medium rounded-lg border border-border text-medium hover:bg-light disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="px-2.5 py-1.5 text-xs font-medium rounded-md border border-border text-medium hover:bg-light disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         Next
       </button>

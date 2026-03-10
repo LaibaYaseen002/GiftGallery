@@ -207,8 +207,8 @@ export default function CheckoutPage() {
   if (items.length === 0 && !clientSecret) {
     return (
       <div className="container-custom py-20 text-center">
-        <h1 className="text-3xl font-bold mb-4">Your cart is empty</h1>
-        <p className="text-medium mb-6">Add some items before checking out.</p>
+        <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
+        <p className="text-medium mb-4">Add some items before checking out.</p>
         <Link href="/products" className="btn-primary">
           Browse Products
         </Link>
@@ -222,9 +222,9 @@ export default function CheckoutPage() {
       <div className="container-custom py-8">
         <h1 className="page-title">{t("checkout.payment")}</h1>
         <div className="max-w-lg mx-auto">
-          <div className="card p-6 mb-6">
-            <h2 className="text-xl font-bold text-dark mb-4">Complete Your Payment</h2>
-            <p className="text-sm text-medium mb-6">
+          <div className="card p-4 mb-4">
+            <h2 className="text-lg font-bold text-dark mb-4">Complete Your Payment</h2>
+            <p className="text-xs text-medium mb-4">
               Enter your card details below. Use test card{" "}
               <span className="font-mono bg-light px-1.5 py-0.5 rounded text-dark">4242 4242 4242 4242</span>{" "}
               with any future expiry and any CVC.
@@ -250,7 +250,7 @@ export default function CheckoutPage() {
           <div className="card p-4">
             <div className="flex justify-between items-center">
               <span className="text-medium">{t("checkout.total")}</span>
-              <span className="text-lg font-bold text-primary">{formatPrice(finalTotal)}</span>
+              <span className="text-base font-bold text-primary">{formatPrice(finalTotal)}</span>
             </div>
           </div>
         </div>
@@ -264,34 +264,34 @@ export default function CheckoutPage() {
       <h1 className="page-title">{t("checkout.title")}</h1>
 
       <form onSubmit={handleContinueToPayment}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-4">
           {/* Left: All checkout sections */}
-          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4">
 
             {/* 1. Shipping Details */}
-            <div className="card p-4 sm:p-6">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-3 sm:mb-4">{t("checkout.shipping")}</h2>
+            <div className="card p-4 sm:p-4">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-3 sm:mb-4">{t("checkout.shipping")}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.fullName")}</label>
+                  <label className="block text-xs font-medium text-dark mb-1">{t("checkout.fullName")}</label>
                   <input type="text" value={shipping.shipping_name}
                     onChange={(e) => setShipping({ ...shipping, shipping_name: e.target.value })}
                     className="input-field" placeholder="Enter your full name" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.phone")}</label>
+                  <label className="block text-xs font-medium text-dark mb-1">{t("checkout.phone")}</label>
                   <input type="tel" value={shipping.shipping_phone}
                     onChange={(e) => setShipping({ ...shipping, shipping_phone: e.target.value })}
                     className="input-field" placeholder="Enter phone number" required />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.address")}</label>
+                  <label className="block text-xs font-medium text-dark mb-1">{t("checkout.address")}</label>
                   <input type="text" value={shipping.shipping_address}
                     onChange={(e) => setShipping({ ...shipping, shipping_address: e.target.value })}
                     className="input-field" placeholder="Street address, apartment, suite" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">{t("checkout.city")}</label>
+                  <label className="block text-xs font-medium text-dark mb-1">{t("checkout.city")}</label>
                   <input type="text" value={shipping.shipping_city}
                     onChange={(e) => setShipping({ ...shipping, shipping_city: e.target.value })}
                     className="input-field" placeholder="City name" required />
@@ -300,23 +300,23 @@ export default function CheckoutPage() {
             </div>
 
             {/* 2. Gift Wrapping (3.2.15) */}
-            <div className="card p-4 sm:p-6">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.giftWrapping")}</h2>
-              <p className="text-sm text-medium mb-4">{t("checkout.selectWrapping")}</p>
+            <div className="card p-4 sm:p-4">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-2">{t("checkout.giftWrapping")}</h2>
+              <p className="text-xs text-medium mb-4">{t("checkout.selectWrapping")}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <button type="button"
                   onClick={() => setSelectedWrapping(null)}
-                  className={`p-3 rounded-lg border-2 text-center text-sm transition-all ${
+                  className={`p-3 rounded-lg border-2 text-center text-xs transition-all ${
                     !selectedWrapping ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
                   }`}>
-                  <span className="block text-2xl mb-1">-</span>
+                  <span className="block text-xl mb-1">-</span>
                   <span className="font-medium">No Wrapping</span>
                   <span className="block text-xs text-medium">Free</span>
                 </button>
                 {wrappingOptions.map((opt) => (
                   <button key={opt.id} type="button"
                     onClick={() => setSelectedWrapping(opt)}
-                    className={`p-3 rounded-lg border-2 text-center text-sm transition-all ${
+                    className={`p-3 rounded-lg border-2 text-center text-xs transition-all ${
                       selectedWrapping?.id === opt.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
                     }`}>
                     <div className="w-8 h-8 rounded-full mx-auto mb-1" style={{ backgroundColor: opt.color || "#ccc" }} />
@@ -330,30 +330,30 @@ export default function CheckoutPage() {
               </div>
               {selectedWrapping && (
                 <div className="mt-3 p-3 bg-primary/5 rounded-lg">
-                  <p className="text-sm font-medium text-dark">Selected: {selectedWrapping.name}</p>
+                  <p className="text-xs font-medium text-dark">Selected: {selectedWrapping.name}</p>
                   <p className="text-xs text-medium">{selectedWrapping.description}</p>
                 </div>
               )}
             </div>
 
             {/* 3. Gift Packaging (3.2.19) */}
-            <div className="card p-4 sm:p-6">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.packaging")}</h2>
-              <p className="text-sm text-medium mb-4">{t("checkout.selectPackaging")}</p>
+            <div className="card p-4 sm:p-4">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-2">{t("checkout.packaging")}</h2>
+              <p className="text-xs text-medium mb-4">{t("checkout.selectPackaging")}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <button type="button"
                   onClick={() => setSelectedPackaging(null)}
-                  className={`p-3 rounded-lg border-2 text-center text-sm transition-all ${
+                  className={`p-3 rounded-lg border-2 text-center text-xs transition-all ${
                     !selectedPackaging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
                   }`}>
-                  <span className="block text-2xl mb-1">-</span>
+                  <span className="block text-xl mb-1">-</span>
                   <span className="font-medium">Standard</span>
                   <span className="block text-xs text-medium">Free</span>
                 </button>
                 {packagingOptions.map((opt) => (
                   <button key={opt.id} type="button"
                     onClick={() => setSelectedPackaging(opt)}
-                    className={`p-3 rounded-lg border-2 text-center text-sm transition-all ${
+                    className={`p-3 rounded-lg border-2 text-center text-xs transition-all ${
                       selectedPackaging?.id === opt.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
                     }`}>
                     <div className="w-8 h-8 rounded-full mx-auto mb-1 bg-accent/20 flex items-center justify-center">
@@ -372,9 +372,9 @@ export default function CheckoutPage() {
             </div>
 
             {/* 4. Gift Message (3.2.18) */}
-            <div className="card p-4 sm:p-6">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.giftMessage")}</h2>
-              <p className="text-sm text-medium mb-3">Add a personal message to include with your gift.</p>
+            <div className="card p-4 sm:p-4">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-2">{t("checkout.giftMessage")}</h2>
+              <p className="text-xs text-medium mb-3">Add a personal message to include with your gift.</p>
               <textarea
                 value={giftMessage}
                 onChange={(e) => setGiftMessage(e.target.value)}
@@ -387,12 +387,12 @@ export default function CheckoutPage() {
 
               {/* Font Style Selector */}
               <div className="mt-4">
-                <p className="text-sm font-medium text-dark mb-2">{t("checkout.fontStyle")}</p>
+                <p className="text-xs font-medium text-dark mb-2">{t("checkout.fontStyle")}</p>
                 <div className="flex flex-wrap gap-2">
                   {FONT_OPTIONS.map((font) => (
                     <button key={font.key} type="button"
                       onClick={() => setGiftFont(font.key)}
-                      className={`px-4 py-2 rounded-full text-sm transition-colors ${font.className} ${
+                      className={`px-4 py-2 rounded-full text-xs transition-colors ${font.className} ${
                         giftFont === font.key
                           ? "bg-primary text-white"
                           : "bg-light text-dark border border-border hover:border-primary"
@@ -408,7 +408,7 @@ export default function CheckoutPage() {
                 <div className="mt-4 bg-secondary border-l-4 border-accent rounded-lg p-4">
                   <p className="text-xs text-medium mb-2 uppercase tracking-wide">Preview</p>
                   <div className="bg-white rounded-lg p-4 shadow-sm border border-border">
-                    <p className={`text-lg text-dark italic ${
+                    <p className={`text-base text-dark italic ${
                       FONT_OPTIONS.find((f) => f.key === giftFont)?.className || "font-sans"
                     }`}>
                       &ldquo;{giftMessage}&rdquo;
@@ -419,9 +419,9 @@ export default function CheckoutPage() {
             </div>
 
             {/* 5. Charity Integration (3.2.23) */}
-            <div className="card p-4 sm:p-6">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.charity")}</h2>
-              <p className="text-sm text-medium mb-4">{t("checkout.selectCharity")}</p>
+            <div className="card p-4 sm:p-4">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-2">{t("checkout.charity")}</h2>
+              <p className="text-xs text-medium mb-4">{t("checkout.selectCharity")}</p>
               <div className="space-y-3">
                 {charities.map((charity) => (
                   <label key={charity.id}
@@ -453,7 +453,7 @@ export default function CheckoutPage() {
               </div>
               {selectedCharity && (
                 <div className="mt-4">
-                  <label className="block text-sm font-medium text-dark mb-1">
+                  <label className="block text-xs font-medium text-dark mb-1">
                     {t("checkout.donatePercent")}: {charityPercent}% ({formatPrice(charityAmount)})
                   </label>
                   <input type="range" min="1" max="25" value={charityPercent}
@@ -468,12 +468,12 @@ export default function CheckoutPage() {
             </div>
 
             {/* 6. Scheduled Delivery (3.2.25) */}
-            <div className="card p-4 sm:p-6">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.scheduledDelivery")}</h2>
-              <p className="text-sm text-medium mb-4">{t("checkout.selectDate")}</p>
+            <div className="card p-4 sm:p-4">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-2">{t("checkout.scheduledDelivery")}</h2>
+              <p className="text-xs text-medium mb-4">{t("checkout.selectDate")}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">Delivery Date</label>
+                  <label className="block text-xs font-medium text-dark mb-1">Delivery Date</label>
                   <input type="date" value={scheduledDate}
                     onChange={(e) => setScheduledDate(e.target.value)}
                     min={minDate}
@@ -481,25 +481,25 @@ export default function CheckoutPage() {
                     aria-label="Delivery date" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-dark mb-1">Delivery Note</label>
+                  <label className="block text-xs font-medium text-dark mb-1">Delivery Note</label>
                   <input type="text" value={deliveryNote}
                     onChange={(e) => setDeliveryNote(e.target.value)}
                     className="input-field" placeholder="e.g., Leave at front door" />
                 </div>
               </div>
               {scheduledDate && (
-                <p className="mt-2 text-sm text-success">
+                <p className="mt-2 text-xs text-success">
                   Your gift will be delivered on {new Date(scheduledDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
                 </p>
               )}
             </div>
 
             {/* 7. Multi-Destination Checkout (3.2.20 + 3.2.26) */}
-            <div className="card p-4 sm:p-6">
+            <div className="card p-4 sm:p-4">
               <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <div>
-                  <h2 className="text-base sm:text-xl font-bold text-dark">{t("checkout.multiDestination")}</h2>
-                  <p className="text-sm text-medium">Send items to different addresses</p>
+                  <h2 className="text-base sm:text-lg font-bold text-dark">{t("checkout.multiDestination")}</h2>
+                  <p className="text-xs text-medium">Send items to different addresses</p>
                 </div>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={multiDestEnabled}
@@ -508,18 +508,18 @@ export default function CheckoutPage() {
                       if (!e.target.checked) setRecipients([]);
                     }}
                     className="accent-primary w-5 h-5" />
-                  <span className="text-sm font-medium text-dark">Enable</span>
+                  <span className="text-xs font-medium text-dark">Enable</span>
                 </label>
               </div>
 
               {multiDestEnabled && (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {recipients.map((r, i) => (
                     <div key={i} className="bg-light rounded-lg p-4 border border-border">
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="font-medium text-dark">Recipient {i + 1}</h3>
                         <button type="button" onClick={() => removeRecipient(i)}
-                          className="text-error text-sm hover:underline">Remove</button>
+                          className="text-error text-xs hover:underline">Remove</button>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input type="text" value={r.name} placeholder="Recipient Name"
@@ -543,7 +543,7 @@ export default function CheckoutPage() {
                       </div>
                       {/* Item assignment */}
                       <div className="mt-3">
-                        <p className="text-sm font-medium text-dark mb-2">Assign Items:</p>
+                        <p className="text-xs font-medium text-dark mb-2">Assign Items:</p>
                         <div className="flex flex-wrap gap-2">
                           {items.map((item, idx) => (
                             <label key={idx} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
@@ -577,14 +577,14 @@ export default function CheckoutPage() {
             </div>
 
             {/* 8. Discount Code (3.2.27 with flash sale) */}
-            <div className="card p-4 sm:p-6">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-2">{t("checkout.discount")}</h2>
+            <div className="card p-4 sm:p-4">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-2">{t("checkout.discount")}</h2>
               {flashSales.length > 0 && !discountApplied && (
                 <div className="mb-3 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-lg p-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg animate-pulse">*</span>
+                    <span className="text-base animate-pulse">*</span>
                     <div>
-                      <p className="text-sm font-medium text-primary">
+                      <p className="text-xs font-medium text-primary">
                         Flash Sale Active! Try code{" "}
                         <span className="font-bold font-mono bg-white px-1.5 py-0.5 rounded">{flashSales[0].code}</span>
                         {" "}for {flashSales[0].discount_percent}% off
@@ -614,18 +614,18 @@ export default function CheckoutPage() {
                 </button>
               </div>
               {discountApplied && (
-                <p className="text-success text-sm mt-2">{discountPercent}% discount applied! You save {formatPrice(discountAmount)}</p>
+                <p className="text-success text-xs mt-2">{discountPercent}% discount applied! You save {formatPrice(discountAmount)}</p>
               )}
               {discountError && (
-                <p className="text-error text-sm mt-2">{discountError}</p>
+                <p className="text-error text-xs mt-2">{discountError}</p>
               )}
             </div>
           </div>
 
           {/* Right: Order Summary */}
           <div>
-            <div className="card p-4 sm:p-6 sticky top-20 sm:top-24">
-              <h2 className="text-base sm:text-xl font-bold text-dark mb-3 sm:mb-4">{t("checkout.orderSummary")}</h2>
+            <div className="card p-4 sm:p-4 sticky top-20 sm:top-24">
+              <h2 className="text-base sm:text-lg font-bold text-dark mb-3 sm:mb-4">{t("checkout.orderSummary")}</h2>
 
               {/* Items */}
               <div className="space-y-3 max-h-48 overflow-y-auto mb-4">
@@ -635,15 +635,15 @@ export default function CheckoutPage() {
                       <Image src={item.product.image_url} alt={item.product.name} fill className="object-cover" sizes="48px" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-dark line-clamp-1">{item.product.name}</p>
+                      <p className="text-xs font-medium text-dark line-clamp-1">{item.product.name}</p>
                       <p className="text-xs text-medium">Qty: {item.quantity}</p>
                     </div>
-                    <span className="text-sm font-medium">{formatPrice(item.product.price * item.quantity)}</span>
+                    <span className="text-xs font-medium">{formatPrice(item.product.price * item.quantity)}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-border pt-4 space-y-2 text-sm">
+              <div className="border-t border-border pt-4 space-y-2 text-xs">
                 <div className="flex justify-between text-medium">
                   <span>{t("cart.subtotal")}</span>
                   <span>{formatPrice(totalPrice)}</span>
@@ -683,15 +683,15 @@ export default function CheckoutPage() {
                   </div>
                 )}
                 <div className="border-t border-border pt-2 flex justify-between">
-                  <span className="text-lg font-bold">{t("checkout.total")}</span>
-                  <span className="text-lg font-bold text-primary">{formatPrice(finalTotal)}</span>
+                  <span className="text-base font-bold">{t("checkout.total")}</span>
+                  <span className="text-base font-bold text-primary">{formatPrice(finalTotal)}</span>
                 </div>
               </div>
 
-              {error && <p className="text-error text-sm mt-3">{error}</p>}
+              {error && <p className="text-error text-xs mt-3">{error}</p>}
 
               <button type="submit" disabled={placing}
-                className="btn-primary w-full text-sm sm:text-lg py-2.5 sm:py-3 mt-3 sm:mt-4">
+                className="btn-primary w-full text-xs sm:text-base py-1.5 sm:py-2 mt-3 sm:mt-4">
                 {placing ? (
                   <span className="flex items-center justify-center gap-2">
                     <LoadingSpinner size="sm" />Creating Order...

@@ -109,25 +109,25 @@ export default function NotificationsPage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div>
           <h1 className="page-title mb-1">Notifications</h1>
-          <p className="text-medium text-sm">
+          <p className="text-medium text-xs">
             {unreadCount > 0 ? `${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}` : "All caught up!"}
           </p>
         </div>
         {unreadCount > 0 && (
-          <button onClick={handleMarkAllRead} className="btn-secondary text-sm">
+          <button onClick={handleMarkAllRead} className="btn-secondary text-xs">
             Mark all as read
           </button>
         )}
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-4">
         <button
           onClick={() => setFilter("all")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
             filter === "all"
               ? "bg-primary text-white"
               : "bg-white text-medium hover:text-dark border border-border"
@@ -137,7 +137,7 @@ export default function NotificationsPage() {
         </button>
         <button
           onClick={() => setFilter("unread")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
             filter === "unread"
               ? "bg-primary text-white"
               : "bg-white text-medium hover:text-dark border border-border"
@@ -164,10 +164,10 @@ export default function NotificationsPage() {
                 !n.is_read ? "border-l-4 border-l-primary bg-primary/5" : ""
               }`}
             >
-              <span className="text-2xl flex-shrink-0 mt-0.5">{getTypeIcon(n.type)}</span>
+              <span className="text-xl flex-shrink-0 mt-0.5">{getTypeIcon(n.type)}</span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className={`text-sm ${!n.is_read ? "font-semibold text-dark" : "text-dark/80"}`}>
+                  <h3 className={`text-xs ${!n.is_read ? "font-semibold text-dark" : "text-dark/80"}`}>
                     {n.title}
                   </h3>
                   <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${getTypeBadgeColor(n.type)}`}>
@@ -177,7 +177,7 @@ export default function NotificationsPage() {
                     <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                   )}
                 </div>
-                <p className="text-sm text-medium">{n.message}</p>
+                <p className="text-xs text-medium">{n.message}</p>
                 <p className="text-xs text-medium/60 mt-1">{formatDate(n.created_at)}</p>
               </div>
               {!n.is_read && (

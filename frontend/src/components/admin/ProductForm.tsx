@@ -85,7 +85,7 @@ export default function ProductForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="name" className="block text-xs font-medium text-dark mb-1">
           Product Name
         </label>
         <input
@@ -100,7 +100,7 @@ export default function ProductForm({
 
       {/* Description */}
       <div>
-        <label htmlFor="desc" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="desc" className="block text-xs font-medium text-dark mb-1">
           Description <span className="text-medium font-normal">(optional)</span>
         </label>
         <textarea
@@ -116,7 +116,7 @@ export default function ProductForm({
       {/* Price & Category row */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="price" className="block text-sm font-medium text-dark mb-1">
+          <label htmlFor="price" className="block text-xs font-medium text-dark mb-1">
             Price ($)
           </label>
           <input
@@ -131,7 +131,7 @@ export default function ProductForm({
           />
         </div>
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-dark mb-1">
+          <label htmlFor="category" className="block text-xs font-medium text-dark mb-1">
             Category
           </label>
           <select
@@ -152,7 +152,7 @@ export default function ProductForm({
 
       {/* Image URL */}
       <div>
-        <label htmlFor="image" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="image" className="block text-xs font-medium text-dark mb-1">
           Image URL
         </label>
         <input
@@ -189,14 +189,14 @@ export default function ProductForm({
             onChange={(e) => setInStock(e.target.checked)}
             className="sr-only peer"
           />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-success"></div>
+          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success"></div>
         </label>
-        <span className="text-sm font-medium text-dark">
+        <span className="text-xs font-medium text-dark">
           {inStock ? "In Stock" : "Out of Stock"}
         </span>
       </div>
 
-      {error && <p className="text-sm text-error">{error}</p>}
+      {error && <p className="text-xs text-error">{error}</p>}
 
       {/* Actions */}
       <div className="flex gap-3 pt-2">

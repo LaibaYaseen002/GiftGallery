@@ -36,7 +36,7 @@ function BundleCardSkeleton() {
 
 function SkeletonGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       {Array.from({ length: 6 }).map((_, i) => (
         <BundleCardSkeleton key={i} />
       ))}
@@ -119,7 +119,7 @@ export default function BundlesPage() {
       {/* Page Header */}
       <div className="text-center mb-10">
         <h1 className="page-title">{t("bundles.title")}</h1>
-        <p className="text-gray-600 mt-2 max-w-2xl mx-auto text-lg">
+        <p className="text-gray-600 mt-2 max-w-2xl mx-auto text-base">
           Curated gift sets for every occasion. Save more when you shop our
           thoughtfully assembled bundles, each wrapped with care and ready to
           delight.
@@ -127,7 +127,7 @@ export default function BundlesPage() {
         <SignedIn>
           <Link
             href="/bundles/create"
-            className="btn-primary inline-flex items-center gap-2 mt-6 px-6 py-3"
+            className="btn-primary inline-flex items-center gap-2 mt-6 px-6 py-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
@@ -143,7 +143,7 @@ export default function BundlesPage() {
           <button
             key={occasion}
             onClick={() => setActiveOccasion(occasion)}
-            className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-200 border ${
+            className={`px-6 py-1.5 rounded-full font-medium text-xs transition-all duration-200 border ${
               activeOccasion === occasion
                 ? "bg-[#B76E79] text-white border-[#B76E79] shadow-md"
                 : "bg-white text-gray-600 border-gray-200 hover:border-[#B76E79] hover:text-[#B76E79]"
@@ -160,7 +160,7 @@ export default function BundlesPage() {
       ) : bundles.length === 0 ? (
         <div className="text-center py-20">
           <div
-            className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#FFF8F0] flex items-center justify-center"
+            className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#FFF8F0] flex items-center justify-center"
           >
             <svg
               className="w-10 h-10 text-[#B76E79]"
@@ -176,7 +176,7 @@ export default function BundlesPage() {
               />
             </svg>
           </div>
-          <p className="text-2xl font-semibold text-gray-700 mb-2">
+          <p className="text-xl font-semibold text-gray-700 mb-2">
             No bundles found
           </p>
           <p className="text-gray-500">
@@ -187,11 +187,11 @@ export default function BundlesPage() {
         </div>
       ) : (
         <>
-          <p className="text-gray-500 mb-6 text-center">
+          <p className="text-gray-500 mb-4 text-center">
             {bundles.length} bundle{bundles.length !== 1 ? "s" : ""} available
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {bundles.map((bundle) => {
               const totalValue = bundle.total_value || 0;
               const bundlePrice = bundle.bundle_price || 0;
@@ -260,11 +260,11 @@ export default function BundlesPage() {
 
                   {/* Bundle Details */}
                   <div className="p-5 flex flex-col flex-1">
-                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-[#B76E79] transition-colors">
+                    <h3 className="text-base font-bold text-gray-800 mb-1 group-hover:text-[#B76E79] transition-colors">
                       {bundle.name}
                     </h3>
                     {bundle.description && (
-                      <p className="text-sm text-gray-500 mb-4 line-clamp-2">
+                      <p className="text-xs text-gray-500 mb-4 line-clamp-2">
                         {bundle.description}
                       </p>
                     )}
@@ -288,10 +288,10 @@ export default function BundlesPage() {
                                   alt={item.product.name}
                                   width={24}
                                   height={24}
-                                  className="rounded-full object-cover w-6 h-6"
+                                  className="rounded-full object-cover w-5 h-5"
                                 />
                               ) : (
-                                <div className="w-6 h-6 rounded-full bg-[#B76E79]/20 flex items-center justify-center">
+                                <div className="w-5 h-5 rounded-full bg-[#B76E79]/20 flex items-center justify-center">
                                   <span className="text-[10px] text-[#B76E79]">
                                     ?
                                   </span>
@@ -323,7 +323,7 @@ export default function BundlesPage() {
                             Rs. {totalValue.toLocaleString()}
                           </p>
                         )}
-                        <p className="text-xl font-bold text-[#B76E79]">
+                        <p className="text-lg font-bold text-[#B76E79]">
                           Rs.{" "}
                           {bundlePrice > 0
                             ? bundlePrice.toLocaleString()
@@ -342,7 +342,7 @@ export default function BundlesPage() {
                           !bundle.items ||
                           bundle.items.length === 0
                         }
-                        className={`btn-primary flex-1 text-sm py-2.5 flex items-center justify-center gap-2 transition-all duration-200 ${
+                        className={`btn-primary flex-1 text-xs py-1.5 flex items-center justify-center gap-2 transition-all duration-200 ${
                           isAdded
                             ? "!bg-green-500 !border-green-500"
                             : ""
@@ -388,7 +388,7 @@ export default function BundlesPage() {
                       </button>
                       <Link
                         href={`/bundles/${bundle.id}`}
-                        className="btn-secondary text-sm py-2.5 px-4 flex items-center justify-center"
+                        className="btn-secondary text-xs py-1.5 px-4 flex items-center justify-center"
                       >
                         Details
                       </Link>

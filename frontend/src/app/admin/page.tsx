@@ -101,16 +101,16 @@ export default function AdminDashboardPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   if (!analytics) {
     return (
       <div className="py-20 text-center">
-        <h1 className="text-3xl font-bold mb-4">Failed to Load Dashboard</h1>
+        <h1 className="text-2xl font-bold mb-4">Failed to Load Dashboard</h1>
         <p className="text-medium mb-4">Could not load analytics data. Please try again.</p>
         {error && (
-          <p className="text-error text-sm bg-error/10 inline-block px-4 py-2 rounded-lg">{error}</p>
+          <p className="text-error text-xs bg-error/10 inline-block px-4 py-2 rounded-lg">{error}</p>
         )}
         <div className="mt-4">
           <button onClick={() => { setLoading(true); setError(null); fetchAll(); }} className="btn-primary">
@@ -131,16 +131,16 @@ export default function AdminDashboardPage() {
   return (
     <div>
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#B76E79] via-[#9A4C5A] to-[#D4A853] p-6 mb-6 text-white">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#B76E79] via-[#9A4C5A] to-[#D4A853] p-4 mb-4 text-white">
         {/* Decorative circles */}
         <div className="absolute top-4 right-10 w-24 h-24 rounded-full bg-white/10" />
         <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
         <div className="relative z-10">
-          <p className="text-white/70 text-sm mb-1">{todayStr}</p>
-          <h1 className="text-2xl font-bold mb-1">
+          <p className="text-white/70 text-xs mb-1">{todayStr}</p>
+          <h1 className="text-xl font-bold mb-1">
             {getGreeting()}, {user?.firstName || "Admin"}!
           </h1>
-          <p className="text-white/80 text-sm">
+          <p className="text-white/80 text-xs">
             Here&apos;s what&apos;s happening with your store today.
           </p>
         </div>
@@ -150,14 +150,14 @@ export default function AdminDashboardPage() {
       <AnalyticsCards data={analytics} />
 
       {/* Quick Action Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 mb-6">
         <Link href="/admin/orders?filter=pending" className="card p-4 border-l-4 border-l-yellow-400 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-yellow-600">{analytics.pending_orders}</p>
+              <p className="text-xl font-bold text-yellow-600">{analytics.pending_orders}</p>
               <p className="text-xs text-medium mt-1">Pending Orders</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-yellow-600">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -167,10 +167,10 @@ export default function AdminDashboardPage() {
         <Link href="/admin/orders?filter=delivered" className="card p-4 border-l-4 border-l-success hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-success">{analytics.delivered_orders}</p>
+              <p className="text-xl font-bold text-success">{analytics.delivered_orders}</p>
               <p className="text-xs text-medium mt-1">Delivered</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-success">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -180,10 +180,10 @@ export default function AdminDashboardPage() {
         <Link href="/admin/returns" className="card p-4 border-l-4 border-l-error hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-error">{analytics.pending_returns}</p>
+              <p className="text-xl font-bold text-error">{analytics.pending_returns}</p>
               <p className="text-xs text-medium mt-1">Pending Returns</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-error">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
               </svg>
@@ -193,10 +193,10 @@ export default function AdminDashboardPage() {
         <Link href="/admin/feedback" className="card p-4 border-l-4 border-l-blue-400 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-blue-600">{analytics.unread_feedback}</p>
+              <p className="text-xl font-bold text-blue-600">{analytics.unread_feedback}</p>
               <p className="text-xs text-medium mt-1">Unread Feedback</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-blue-600">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
               </svg>
@@ -206,7 +206,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Revenue Chart + Activity Feed */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         <RevenueChart
           data={chartData}
           period={chartPeriod}
@@ -216,22 +216,22 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Category Breakdown + Recent Orders */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         <CategoryBreakdown data={categoryData} />
 
         {/* Recent Orders */}
-        <div className="card p-6">
+        <div className="card p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-              <h2 className="text-lg font-bold text-dark">Recent Orders</h2>
+              <h2 className="text-base font-bold text-dark">Recent Orders</h2>
             </div>
-            <Link href="/admin/orders" className="text-sm text-primary hover:text-primary-dark">
+            <Link href="/admin/orders" className="text-xs text-primary hover:text-primary-dark">
               View All
             </Link>
           </div>
           {analytics.recent_orders.length === 0 ? (
-            <p className="text-medium text-sm py-4">No orders yet.</p>
+            <p className="text-medium text-xs py-4">No orders yet.</p>
           ) : (
             <div className="space-y-3">
               {analytics.recent_orders.map((order) => {
@@ -245,11 +245,11 @@ export default function AdminDashboardPage() {
                     className="flex items-center justify-between py-2 border-b border-border last:border-b-0 hover:bg-light -mx-2 px-2 rounded transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${avatarColors[colorIdx]}`}>
+                      <span className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${avatarColors[colorIdx]}`}>
                         {initial}
                       </span>
                       <div>
-                        <p className="text-sm font-medium text-dark">
+                        <p className="text-xs font-medium text-dark">
                           {order.shipping_name}
                         </p>
                         <p className="text-xs text-medium">{order.user_email}</p>
@@ -257,7 +257,7 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="text-right flex items-center gap-3">
                       <OrderStatusBadge status={order.status as import("@/types").OrderStatus} />
-                      <span className="text-sm font-medium">
+                      <span className="text-xs font-medium">
                         ${Number(order.total_amount).toFixed(2)}
                       </span>
                     </div>
@@ -270,18 +270,18 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Top Products */}
-      <div className="card p-6">
+      <div className="card p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <h2 className="text-lg font-bold text-dark">Top Selling Products</h2>
+            <h2 className="text-base font-bold text-dark">Top Selling Products</h2>
           </div>
-          <Link href="/admin/products" className="text-sm text-primary hover:text-primary-dark">
+          <Link href="/admin/products" className="text-xs text-primary hover:text-primary-dark">
             Manage Products
           </Link>
         </div>
         {analytics.top_products.length === 0 ? (
-          <p className="text-medium text-sm py-4">No sales data yet.</p>
+          <p className="text-medium text-xs py-4">No sales data yet.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {analytics.top_products.map((product, index) => (
@@ -299,7 +299,7 @@ export default function AdminDashboardPage() {
                   </span>
                 )}
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-dark truncate">
+                  <p className="text-xs font-medium text-dark truncate">
                     {product.product_name}
                   </p>
                   <p className="text-xs text-medium">{product.total_sold} sold</p>

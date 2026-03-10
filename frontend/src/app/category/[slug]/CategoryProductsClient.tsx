@@ -40,8 +40,8 @@ export default function CategoryProductsClient({ slug }: { slug: string }) {
   if (!category) {
     return (
       <div className="container-custom py-20 text-center">
-        <h1 className="text-3xl font-bold mb-4">Category Not Found</h1>
-        <p className="text-medium mb-6">
+        <h1 className="text-2xl font-bold mb-4">Category Not Found</h1>
+        <p className="text-medium mb-4">
           The category &quot;{slug}&quot; doesn&apos;t exist.
         </p>
         <Link href="/products" className="btn-primary">
@@ -54,7 +54,7 @@ export default function CategoryProductsClient({ slug }: { slug: string }) {
   return (
     <div className="container-custom py-8">
       {/* Breadcrumb */}
-      <nav className="text-sm text-medium mb-6">
+      <nav className="text-xs text-medium mb-4">
         <Link href="/" className="hover:text-primary">
           Home
         </Link>
@@ -70,7 +70,7 @@ export default function CategoryProductsClient({ slug }: { slug: string }) {
 
       {products.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-xl text-medium mb-4">
+          <p className="text-lg text-medium mb-4">
             No products in this category yet.
           </p>
           <Link href="/products" className="btn-primary">
@@ -79,11 +79,11 @@ export default function CategoryProductsClient({ slug }: { slug: string }) {
         </div>
       ) : (
         <>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             {products.length} product{products.length !== 1 ? "s" : ""} in{" "}
             {category.name}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

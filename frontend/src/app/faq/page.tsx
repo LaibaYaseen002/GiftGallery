@@ -125,7 +125,7 @@ function AccordionItem({
         </svg>
       </button>
       {isOpen && (
-        <div className="pb-4 text-sm text-medium leading-relaxed">
+        <div className="pb-4 text-xs text-medium leading-relaxed">
           {answer}
         </div>
       )}
@@ -138,16 +138,16 @@ export default function FAQPage() {
     <div className="container-custom py-8">
       <div className="max-w-3xl mx-auto">
         <h1 className="page-title text-center">Frequently Asked Questions</h1>
-        <p className="text-medium text-center mb-8">
+        <p className="text-medium text-center mb-6">
           Find answers to common questions about orders, shipping, returns, and
           more.
         </p>
 
         {/* FAQ Sections */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {faqs.map((section) => (
-            <div key={section.category} className="card p-6">
-              <h2 className="text-lg font-bold text-dark mb-3">
+            <div key={section.category} className="card p-4">
+              <h2 className="text-base font-bold text-dark mb-3">
                 {section.category}
               </h2>
               <div>
@@ -164,8 +164,8 @@ export default function FAQPage() {
         </div>
 
         {/* Still need help? */}
-        <div className="card p-8 mt-8 text-center">
-          <h2 className="text-xl font-bold text-dark mb-2">
+        <div className="card p-6 mt-8 text-center">
+          <h2 className="text-lg font-bold text-dark mb-2">
             Still have questions?
           </h2>
           <p className="text-medium mb-4">

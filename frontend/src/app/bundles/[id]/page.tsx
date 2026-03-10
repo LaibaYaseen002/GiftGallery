@@ -82,7 +82,7 @@ export default function BundleDetailPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <div className="animate-pulse space-y-6">
+        <div className="animate-pulse space-y-4">
           <div className="h-6 bg-gray-200 rounded w-1/4" />
           <div className="h-72 bg-gray-200 rounded-2xl" />
           <div className="h-8 bg-gray-200 rounded w-1/2" />
@@ -100,15 +100,15 @@ export default function BundleDetailPage() {
   if (error || !bundle) {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">
+        <h1 className="text-xl font-bold text-gray-800 mb-4">
           Bundle Not Found
         </h1>
-        <p className="text-gray-500 mb-6">
+        <p className="text-gray-500 mb-4">
           This bundle may have been removed or is no longer available.
         </p>
         <Link
           href="/bundles"
-          className="btn-primary inline-block px-6 py-2.5"
+          className="btn-primary inline-block px-6 py-1.5"
         >
           Browse Bundles
         </Link>
@@ -119,7 +119,7 @@ export default function BundleDetailPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+      <nav className="flex items-center gap-2 text-xs text-gray-500 mb-4">
         <Link href="/" className="hover:text-[#B76E79] transition-colors">
           Home
         </Link>
@@ -134,7 +134,7 @@ export default function BundleDetailPage() {
         <span className="text-gray-800 font-medium">{bundle.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Bundle Image */}
         <div className="relative h-80 md:h-96 rounded-2xl overflow-hidden shadow-lg">
           {bundle.image_url ? (
@@ -169,7 +169,7 @@ export default function BundleDetailPage() {
           {/* Occasion Badge */}
           {bundle.occasion && (
             <div
-              className={`absolute top-4 left-4 text-sm font-semibold px-4 py-2 rounded-full border ${getOccasionColor(
+              className={`absolute top-4 left-4 text-xs font-semibold px-4 py-2 rounded-full border ${getOccasionColor(
                 bundle.occasion
               )}`}
             >
@@ -180,7 +180,7 @@ export default function BundleDetailPage() {
 
           {/* Savings Badge */}
           {savings > 0 && (
-            <div className="absolute top-4 right-4 bg-[#D4A853] text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
+            <div className="absolute top-4 right-4 bg-[#D4A853] text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg">
               Save {savings}%
             </div>
           )}
@@ -188,28 +188,28 @@ export default function BundleDetailPage() {
 
         {/* Bundle Info */}
         <div className="flex flex-col">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
             {bundle.name}
           </h1>
 
           {bundle.description && (
-            <p className="text-gray-500 mb-6">{bundle.description}</p>
+            <p className="text-gray-500 mb-4">{bundle.description}</p>
           )}
 
           {/* Pricing */}
-          <div className="bg-[#FFF8F0] rounded-xl p-5 mb-6 border border-[#D4A853]/20">
+          <div className="bg-[#FFF8F0] rounded-xl p-4 mb-4 border border-[#D4A853]/20">
             <div className="flex items-end gap-3 mb-1">
-              <span className="text-3xl font-bold text-[#B76E79]">
+              <span className="text-2xl font-bold text-[#B76E79]">
                 {formatPrice(bundlePrice > 0 ? bundlePrice : totalValue)}
               </span>
               {totalValue > 0 && totalValue !== bundlePrice && (
-                <span className="text-lg text-gray-400 line-through mb-0.5">
+                <span className="text-base text-gray-400 line-through mb-0.5">
                   {formatPrice(totalValue)}
                 </span>
               )}
             </div>
             {savings > 0 && (
-              <p className="text-sm text-[#D4A853] font-medium">
+              <p className="text-xs text-[#D4A853] font-medium">
                 You save {formatPrice(totalValue - bundlePrice)} ({savings}%
                 off)
               </p>
@@ -220,7 +220,7 @@ export default function BundleDetailPage() {
           <button
             onClick={handleAddToCart}
             disabled={!bundle.items || bundle.items.length === 0}
-            className={`btn-primary w-full text-base py-3 flex items-center justify-center gap-2 mb-6 transition-all duration-200 ${
+            className={`btn-primary w-full text-base py-2 flex items-center justify-center gap-2 mb-4 transition-all duration-200 ${
               added ? "!bg-green-500 !border-green-500" : ""
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
@@ -263,7 +263,7 @@ export default function BundleDetailPage() {
 
           <Link
             href="/bundles"
-            className="text-sm text-[#B76E79] hover:underline text-center"
+            className="text-xs text-[#B76E79] hover:underline text-center"
           >
             Back to all bundles
           </Link>
@@ -273,7 +273,7 @@ export default function BundleDetailPage() {
       {/* Included Items Section */}
       {bundle.items && bundle.items.length > 0 && (
         <div className="mt-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-6">
+          <h2 className="text-lg font-bold text-gray-800 mb-4">
             Items in This Bundle ({bundle.items.length})
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -311,7 +311,7 @@ export default function BundleDetailPage() {
                   <h3 className="font-semibold text-gray-800 truncate">
                     {item.product?.name || "Product"}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs text-gray-500">
                     {formatPrice(item.product?.price || 0)}
                     {item.quantity > 1 && (
                       <span className="text-gray-400">
@@ -331,7 +331,7 @@ export default function BundleDetailPage() {
                 </div>
                 {item.quantity > 1 && (
                   <div className="text-right flex-shrink-0">
-                    <p className="text-sm font-semibold text-gray-700">
+                    <p className="text-xs font-semibold text-gray-700">
                       {formatPrice((item.product?.price || 0) * item.quantity)}
                     </p>
                   </div>

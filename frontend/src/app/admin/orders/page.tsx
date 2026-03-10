@@ -69,7 +69,7 @@ export default function AdminOrdersPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
@@ -77,12 +77,12 @@ export default function AdminOrdersPage() {
       <h1 className="page-title">Order Management</h1>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-4">
         {(["all", ...ALL_STATUSES] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setFilter(tab)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
               filter === tab
                 ? "bg-primary text-white"
                 : "bg-white text-medium border border-border hover:bg-light"
@@ -102,7 +102,7 @@ export default function AdminOrdersPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -110,7 +110,7 @@ export default function AdminOrdersPage() {
               d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">No orders found</h2>
+          <h2 className="text-xl font-bold text-dark mb-2">No orders found</h2>
           <p className="text-medium">
             {filter === "all"
               ? "No orders have been placed yet."
@@ -134,7 +134,7 @@ export default function AdminOrdersPage() {
                     </span>
                     <OrderStatusBadge status={order.status} />
                   </div>
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-medium">
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-medium">
                     <span>{order.shipping_name}</span>
                     <span>{order.user_email}</span>
                     <span>{order.shipping_city}</span>
@@ -150,7 +150,7 @@ export default function AdminOrdersPage() {
 
                 {/* Price */}
                 <div className="text-right mr-4">
-                  <p className="text-lg font-bold text-primary">
+                  <p className="text-base font-bold text-primary">
                     ${Number(order.total_amount).toFixed(2)}
                   </p>
                   {order.discount_code && (
@@ -172,7 +172,7 @@ export default function AdminOrdersPage() {
                       handleStatusUpdate(order.id, e.target.value);
                     }}
                     disabled={updatingId === order.id}
-                    className="input-field text-sm py-2 w-36"
+                    className="input-field text-xs py-2 w-36"
                   >
                     {ALL_STATUSES.map((s) => (
                       <option key={s} value={s}>

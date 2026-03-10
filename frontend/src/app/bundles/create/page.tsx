@@ -122,24 +122,24 @@ export default function CreateBundlePage() {
   if (success) {
     return (
       <div className="container-custom py-20 text-center">
-        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-success/10 flex items-center justify-center">
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-success/10 flex items-center justify-center">
           <svg className="w-10 h-10 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h1 className="text-3xl font-bold text-dark mb-2">{t("bundles.title")} Created!</h1>
+        <h1 className="text-2xl font-bold text-dark mb-2">{t("bundles.title")} Created!</h1>
         <p className="text-medium mb-2">
           &quot;{bundleName}&quot; with {bundleItems.length} items
         </p>
-        <p className="text-lg font-bold text-primary mb-8">
+        <p className="text-base font-bold text-primary mb-6">
           {formatPrice(bundlePrice)}
-          <span className="text-sm text-success ml-2">({t("bundles.youSave")} {formatPrice(savings)})</span>
+          <span className="text-xs text-success ml-2">({t("bundles.youSave")} {formatPrice(savings)})</span>
         </p>
         <div className="flex gap-4 justify-center">
-          <button onClick={handleAddBundleToCart} className="btn-primary px-8 py-3">
+          <button onClick={handleAddBundleToCart} className="btn-primary px-8 py-2">
             {t("products.addToCart")}
           </button>
-          <Link href="/bundles" className="btn-secondary px-8 py-3">
+          <Link href="/bundles" className="btn-secondary px-8 py-2">
             {t("bundles.title")}
           </Link>
         </div>
@@ -149,23 +149,23 @@ export default function CreateBundlePage() {
 
   return (
     <div className="container-custom py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="page-title mb-1">{t("bundles.createCustom")}</h1>
           <p className="text-medium">
             Pick any products you want and get {discountPercent}% off the total!
           </p>
         </div>
-        <Link href="/bundles" className="btn-secondary text-sm">
+        <Link href="/bundles" className="btn-secondary text-xs">
           {t("common.back")}
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Product browser */}
         <div className="lg:col-span-2">
           {/* Search */}
-          <div className="mb-6">
+          <div className="mb-4">
             <input
               type="text"
               value={search}
@@ -212,8 +212,8 @@ export default function CreateBundlePage() {
                       )}
                     </div>
                     <div className="p-3">
-                      <p className="text-sm font-medium text-dark line-clamp-1">{product.name}</p>
-                      <p className="text-sm text-primary font-bold mt-1">{formatPrice(product.price)}</p>
+                      <p className="text-xs font-medium text-dark line-clamp-1">{product.name}</p>
+                      <p className="text-xs text-primary font-bold mt-1">{formatPrice(product.price)}</p>
                       <button
                         onClick={() =>
                           inBundle ? removeFromBundle(product.id) : addToBundle(product)
@@ -236,12 +236,12 @@ export default function CreateBundlePage() {
 
         {/* Right: Bundle summary */}
         <div>
-          <div className="card p-6 sticky top-24">
-            <h2 className="text-lg font-bold text-dark mb-4">Your Bundle</h2>
+          <div className="card p-4 sticky top-24">
+            <h2 className="text-base font-bold text-dark mb-4">Your Bundle</h2>
 
             {/* Bundle name */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-dark mb-1">Bundle Name</label>
+              <label className="block text-xs font-medium text-dark mb-1">Bundle Name</label>
               <input
                 type="text"
                 value={bundleName}
@@ -258,7 +258,7 @@ export default function CreateBundlePage() {
                 <svg className="w-10 h-10 mx-auto text-medium mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-                <p className="text-sm text-medium">Add products from the left</p>
+                <p className="text-xs text-medium">Add products from the left</p>
                 <p className="text-xs text-medium mt-1">Minimum 2 items required</p>
               </div>
             ) : (
@@ -275,20 +275,20 @@ export default function CreateBundlePage() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-dark line-clamp-1">{item.product.name}</p>
+                      <p className="text-xs font-medium text-dark line-clamp-1">{item.product.name}</p>
                       <p className="text-xs text-medium">{formatPrice(item.product.price)}</p>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="w-6 h-6 rounded bg-border text-dark flex items-center justify-center text-sm hover:bg-primary/20"
+                        className="w-5 h-5 rounded bg-border text-dark flex items-center justify-center text-xs hover:bg-primary/20"
                       >
                         -
                       </button>
-                      <span className="text-sm font-medium w-5 text-center">{item.quantity}</span>
+                      <span className="text-xs font-medium w-5 text-center">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-6 h-6 rounded bg-border text-dark flex items-center justify-center text-sm hover:bg-primary/20"
+                        className="w-5 h-5 rounded bg-border text-dark flex items-center justify-center text-xs hover:bg-primary/20"
                       >
                         +
                       </button>
@@ -309,7 +309,7 @@ export default function CreateBundlePage() {
 
             {/* Pricing */}
             {bundleItems.length > 0 && (
-              <div className="border-t border-border pt-4 space-y-2 text-sm mb-4">
+              <div className="border-t border-border pt-4 space-y-2 text-xs mb-4">
                 <div className="flex justify-between text-medium">
                   <span>{t("bundles.totalValue")}</span>
                   <span className="line-through">{formatPrice(totalValue)}</span>
@@ -319,8 +319,8 @@ export default function CreateBundlePage() {
                   <span>-{formatPrice(savings)}</span>
                 </div>
                 <div className="flex justify-between border-t border-border pt-2">
-                  <span className="text-lg font-bold">{t("bundles.bundlePrice")}</span>
-                  <span className="text-lg font-bold text-primary">{formatPrice(bundlePrice)}</span>
+                  <span className="text-base font-bold">{t("bundles.bundlePrice")}</span>
+                  <span className="text-base font-bold text-primary">{formatPrice(bundlePrice)}</span>
                 </div>
                 {savings > 0 && (
                   <p className="text-xs text-success text-center font-medium">
@@ -330,13 +330,13 @@ export default function CreateBundlePage() {
               </div>
             )}
 
-            {error && <p className="text-error text-sm mb-3">{error}</p>}
+            {error && <p className="text-error text-xs mb-3">{error}</p>}
 
             <div className="space-y-2">
               <button
                 onClick={handleSaveBundle}
                 disabled={saving || bundleItems.length < 2}
-                className="btn-primary w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary w-full py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? (
                   <span className="flex items-center justify-center gap-2">
@@ -350,7 +350,7 @@ export default function CreateBundlePage() {
               <button
                 onClick={handleAddBundleToCart}
                 disabled={bundleItems.length === 0}
-                className="btn-secondary w-full py-2.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-secondary w-full py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {t("products.addToCart")}
               </button>

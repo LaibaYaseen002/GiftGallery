@@ -137,13 +137,13 @@ export default function AdminDiscountsPage() {
     d.max_uses !== null && d.current_uses >= d.max_uses;
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <h1 className="page-title mb-0">Discount Codes</h1>
         <button onClick={openCreate} className="btn-primary">
           + Create Discount
@@ -151,28 +151,28 @@ export default function AdminDiscountsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-dark">{discounts.length}</p>
-          <p className="text-sm text-medium">Total Codes</p>
+          <p className="text-xl font-bold text-dark">{discounts.length}</p>
+          <p className="text-xs text-medium">Total Codes</p>
         </div>
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-success">
+          <p className="text-xl font-bold text-success">
             {discounts.filter((d) => d.is_active && !isExpired(d)).length}
           </p>
-          <p className="text-sm text-medium">Active</p>
+          <p className="text-xs text-medium">Active</p>
         </div>
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-error">
+          <p className="text-xl font-bold text-error">
             {discounts.filter((d) => !d.is_active || isExpired(d)).length}
           </p>
-          <p className="text-sm text-medium">Inactive / Expired</p>
+          <p className="text-xs text-medium">Inactive / Expired</p>
         </div>
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-primary">
+          <p className="text-xl font-bold text-primary">
             {discounts.reduce((sum, d) => sum + d.current_uses, 0)}
           </p>
-          <p className="text-sm text-medium">Total Uses</p>
+          <p className="text-xs text-medium">Total Uses</p>
         </div>
       </div>
 
@@ -185,7 +185,7 @@ export default function AdminDiscountsPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -198,10 +198,10 @@ export default function AdminDiscountsPage() {
               d="M6 6h.008v.008H6V6z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">
+          <h2 className="text-xl font-bold text-dark mb-2">
             No discount codes yet
           </h2>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             Create your first discount code to get started.
           </p>
           <button onClick={openCreate} className="btn-primary">
@@ -224,10 +224,10 @@ export default function AdminDiscountsPage() {
                   {/* Left: Code & Details */}
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="font-mono text-lg font-bold text-dark bg-light px-3 py-1 rounded-lg">
+                      <span className="font-mono text-base font-bold text-dark bg-light px-3 py-1 rounded-lg">
                         {discount.code}
                       </span>
-                      <span className="text-lg font-bold text-primary">
+                      <span className="text-base font-bold text-primary">
                         {discount.discount_percent}% OFF
                       </span>
                       {/* Status badges */}
@@ -257,7 +257,7 @@ export default function AdminDiscountsPage() {
                         </span>
                       )}
                     </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-medium">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-medium">
                       <span>
                         Uses: {discount.current_uses}
                         {discount.max_uses !== null
@@ -298,13 +298,13 @@ export default function AdminDiscountsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => openEdit(discount)}
-                      className="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
+                      className="px-4 py-2 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => setDeleteId(discount.id)}
-                      className="px-4 py-2 text-sm font-medium text-error border border-error rounded-lg hover:bg-error hover:text-white transition-colors"
+                      className="px-4 py-2 text-xs font-medium text-error border border-error rounded-lg hover:bg-error hover:text-white transition-colors"
                     >
                       Delete
                     </button>
@@ -335,14 +335,14 @@ export default function AdminDiscountsPage() {
         onClose={() => setDeleteId(null)}
         title="Delete Discount Code"
       >
-        <p className="text-medium mb-6">
+        <p className="text-medium mb-4">
           Are you sure you want to delete this discount code? This action cannot
           be undone.
         </p>
         <div className="flex gap-3">
           <button
             onClick={() => deleteId && handleDelete(deleteId)}
-            className="flex-1 bg-error text-white px-4 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
+            className="flex-1 bg-error text-white px-4 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
             Delete
           </button>

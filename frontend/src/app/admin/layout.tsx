@@ -34,13 +34,13 @@ export default function AdminLayout({
                 className="lg:hidden text-medium hover:text-dark transition-colors"
                 aria-label="Open sidebar"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
               </button>
               <div className="hidden sm:flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary" />
-                <h1 className="text-sm font-semibold text-dark">
+                <h1 className="text-xs font-semibold text-dark">
                   Gift Gallery Admin
                 </h1>
               </div>
@@ -50,7 +50,7 @@ export default function AdminLayout({
             <div className="flex items-center gap-3">
               <NotificationBell />
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-medium text-dark">
+                <p className="text-xs font-medium text-dark">
                   {user?.firstName || user?.emailAddresses?.[0]?.emailAddress || "Admin"}
                 </p>
                 <span className="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full">

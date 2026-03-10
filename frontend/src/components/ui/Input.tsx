@@ -14,12 +14,12 @@ export default function Input({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-dark mb-1">
+        <label className="block text-xs font-medium text-dark mb-1">
           {label}
         </label>
       )}
       <input className={`input-field ${error ? "border-error" : ""} ${className}`} {...props} />
-      {error && <p className="text-error text-sm mt-1">{error}</p>}
+      {error && <p className="text-error text-xs mt-0.5">{error}</p>}
     </div>
   );
 }

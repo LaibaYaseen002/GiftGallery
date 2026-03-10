@@ -227,10 +227,10 @@ export default function ShopTogetherSessionPage() {
   if (!isSignedIn) {
     return (
       <div className="container-custom py-20 text-center">
-        <h1 className="text-3xl font-bold mb-4" style={{ color: "#B76E79" }}>
+        <h1 className="text-2xl font-bold mb-4" style={{ color: "#B76E79" }}>
           Shop Together
         </h1>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-4">
           Please sign in to join this shopping session.
         </p>
         <Link href="/sign-in" className="btn-primary">
@@ -251,10 +251,10 @@ export default function ShopTogetherSessionPage() {
   if (error && !session) {
     return (
       <div className="container-custom py-20 text-center">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">
+        <h1 className="text-xl font-bold text-gray-800 mb-4">
           Session Not Found
         </h1>
-        <p className="text-gray-500 mb-6">{error}</p>
+        <p className="text-gray-500 mb-4">{error}</p>
         <Link href="/shop-together" className="btn-primary">
           Back to Shop Together
         </Link>
@@ -266,28 +266,28 @@ export default function ShopTogetherSessionPage() {
   if (needsJoin && session) {
     return (
       <div className="container-custom py-20 max-w-md mx-auto">
-        <div className="card p-8 text-center">
+        <div className="card p-6 text-center">
           <h1
-            className="text-2xl font-bold mb-2"
+            className="text-xl font-bold mb-2"
             style={{ color: "#B76E79" }}
           >
             Join Session
           </h1>
-          <p className="text-gray-600 mb-1 text-lg">
+          <p className="text-gray-600 mb-1 text-base">
             {session.title || "Shopping Session"}
           </p>
-          <p className="text-gray-400 text-sm mb-6">
+          <p className="text-gray-400 text-xs mb-4">
             Code: <span className="font-mono" style={{ color: "#D4A853" }}>{session.session_code}</span>
           </p>
           {session.participants && session.participants.length > 0 && (
-            <p className="text-gray-500 text-sm mb-4">
+            <p className="text-gray-500 text-xs mb-4">
               {session.participants.length} participant
               {session.participants.length !== 1 ? "s" : ""} already in session
             </p>
           )}
           <form onSubmit={handleJoinSession} className="space-y-4">
             <div className="text-left">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
                 Your Display Name
               </label>
               <input
@@ -298,7 +298,7 @@ export default function ShopTogetherSessionPage() {
                 onChange={(e) => setDisplayName(e.target.value)}
               />
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-red-500 text-xs">{error}</p>}
             <button
               type="submit"
               className="btn-primary w-full"
@@ -325,7 +325,7 @@ export default function ShopTogetherSessionPage() {
   return (
     <div className="container-custom py-6">
       {/* Session Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
         <div>
           <div className="flex items-center gap-3">
             <Link
@@ -347,7 +347,7 @@ export default function ShopTogetherSessionPage() {
               </svg>
             </Link>
             <h1
-              className="text-2xl font-bold"
+              className="text-xl font-bold"
               style={{ color: "#B76E79" }}
             >
               {session.title || "Shopping Session"}
@@ -365,7 +365,7 @@ export default function ShopTogetherSessionPage() {
               </span>
             )}
           </div>
-          <p className="text-sm text-gray-400 mt-1 ml-8">
+          <p className="text-xs text-gray-400 mt-1 ml-8">
             Code:{" "}
             <span className="font-mono" style={{ color: "#D4A853" }}>
               {session.session_code}
@@ -379,7 +379,7 @@ export default function ShopTogetherSessionPage() {
               {!showVideo && (
                 <button
                   onClick={handleStartVideoCall}
-                  className="text-sm px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                  className="text-xs px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
                   style={{
                     backgroundColor: "#B76E7915",
                     color: "#B76E79",
@@ -396,7 +396,7 @@ export default function ShopTogetherSessionPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setVideoMinimized(!videoMinimized)}
-                    className="text-sm px-3 py-2 rounded-lg transition-colors"
+                    className="text-xs px-3 py-2 rounded-lg transition-colors"
                     style={{
                       backgroundColor: "#D4A85320",
                       color: "#D4A853",
@@ -407,7 +407,7 @@ export default function ShopTogetherSessionPage() {
                   </button>
                   <button
                     onClick={handleEndVideoCall}
-                    className="text-sm px-3 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
+                    className="text-xs px-3 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
                   >
                     Leave Call
                   </button>
@@ -419,7 +419,7 @@ export default function ShopTogetherSessionPage() {
           {isHost && session.is_active && (
             <button
               onClick={handleEndSession}
-              className="text-sm px-4 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
+              className="text-xs px-4 py-2 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition-colors"
             >
               End Session
             </button>
@@ -430,7 +430,7 @@ export default function ShopTogetherSessionPage() {
       {/* Video Call Panel (Jitsi Meet) */}
       {showVideo && (
         <div
-          className={`mb-6 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
+          className={`mb-4 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
             videoMinimized ? "h-16" : ""
           }`}
           style={{ border: "2px solid #B76E7940" }}
@@ -445,7 +445,7 @@ export default function ShopTogetherSessionPage() {
                 <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
                 <span className="font-medium text-gray-700">Video call in progress</span>
               </div>
-              <span className="text-sm" style={{ color: "#B76E79" }}>
+              <span className="text-xs" style={{ color: "#B76E79" }}>
                 Click to expand
               </span>
             </div>
@@ -462,7 +462,7 @@ export default function ShopTogetherSessionPage() {
       )}
 
       {/* Main Layout */}
-      <div className="flex flex-col lg:flex-row gap-6" style={{ minHeight: "calc(100vh - 220px)" }}>
+      <div className="flex flex-col lg:flex-row gap-4" style={{ minHeight: "calc(100vh - 220px)" }}>
         {/* Left Panel - Products (2/3 width) */}
         <div className="lg:w-2/3">
           {/* Search Bar */}
@@ -497,7 +497,7 @@ export default function ShopTogetherSessionPage() {
               <LoadingSpinner />
             </div>
           ) : products.length === 0 ? (
-            <div className="card p-8 text-center">
+            <div className="card p-6 text-center">
               <p className="text-gray-500">No products found.</p>
             </div>
           ) : (
@@ -516,12 +516,12 @@ export default function ShopTogetherSessionPage() {
                   </Link>
                   <div className="p-3">
                     <Link href={`/products/${product.id}`}>
-                      <h3 className="font-medium text-gray-800 text-sm truncate hover:text-[#B76E79] transition-colors">
+                      <h3 className="font-medium text-gray-800 text-xs truncate hover:text-[#B76E79] transition-colors">
                         {product.name}
                       </h3>
                     </Link>
                     <p
-                      className="font-semibold text-sm mt-1"
+                      className="font-semibold text-xs mt-1"
                       style={{ color: "#B76E79" }}
                     >
                       Rs. {product.price.toLocaleString()}
@@ -573,7 +573,7 @@ export default function ShopTogetherSessionPage() {
               className="p-4 border-b"
               style={{ borderColor: "#B76E7920" }}
             >
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">
+              <h3 className="text-xs font-semibold text-gray-700 mb-2">
                 Participants ({session.participants?.length || 0})
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -602,7 +602,7 @@ export default function ShopTogetherSessionPage() {
               style={{ backgroundColor: "#FFF8F0" }}
             >
               {messages.length === 0 ? (
-                <div className="text-center text-gray-400 text-sm py-8">
+                <div className="text-center text-gray-400 text-xs py-6">
                   No messages yet. Start chatting or share a product!
                 </div>
               ) : (
@@ -636,11 +636,11 @@ export default function ShopTogetherSessionPage() {
                             />
                           </div>
                           <div className="p-3">
-                            <h4 className="text-sm font-semibold text-gray-800 truncate">
+                            <h4 className="text-xs font-semibold text-gray-800 truncate">
                               {msg.product.name}
                             </h4>
                             <p
-                              className="text-sm font-bold mt-1"
+                              className="text-xs font-bold mt-1"
                               style={{ color: "#B76E79" }}
                             >
                               Rs. {msg.product.price.toLocaleString()}
@@ -691,7 +691,7 @@ export default function ShopTogetherSessionPage() {
                               }
                         }
                       >
-                        <p className="text-sm leading-relaxed break-words">
+                        <p className="text-xs leading-relaxed break-words">
                           {msg.message}
                         </p>
                       </div>
@@ -714,7 +714,7 @@ export default function ShopTogetherSessionPage() {
               >
                 <input
                   type="text"
-                  className="input-field flex-1 text-sm"
+                  className="input-field flex-1 text-xs"
                   placeholder="Type a message..."
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
@@ -723,7 +723,7 @@ export default function ShopTogetherSessionPage() {
                 <button
                   type="submit"
                   disabled={sendingMessage || !messageInput.trim()}
-                  className="p-2.5 rounded-xl transition-colors disabled:opacity-40"
+                  className="p-1.5 rounded-xl transition-colors disabled:opacity-40"
                   style={{
                     backgroundColor: "#B76E79",
                     color: "#ffffff",
@@ -746,7 +746,7 @@ export default function ShopTogetherSessionPage() {
               </form>
             ) : (
               <div
-                className="p-4 text-center text-sm text-gray-500 border-t"
+                className="p-4 text-center text-xs text-gray-500 border-t"
                 style={{ borderColor: "#B76E7920" }}
               >
                 This session has ended.

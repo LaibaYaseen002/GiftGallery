@@ -210,7 +210,7 @@ export default function GiftRegistryPage() {
 
   return (
     <div className="container-custom py-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <h1 className="page-title mb-0">My Gift Registries</h1>
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
@@ -225,11 +225,11 @@ export default function GiftRegistryPage() {
 
       {/* Create Registry Form */}
       {showCreateForm && (
-        <div className="card p-6 mb-8">
-          <h2 className="text-xl font-bold text-dark mb-4">Create New Registry</h2>
+        <div className="card p-4 mb-6">
+          <h2 className="text-lg font-bold text-dark mb-4">Create New Registry</h2>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
-              <label htmlFor="event-name" className="block text-sm font-medium text-dark mb-1">Event Name *</label>
+              <label htmlFor="event-name" className="block text-xs font-medium text-dark mb-1">Event Name *</label>
               <input
                 id="event-name"
                 type="text"
@@ -242,7 +242,7 @@ export default function GiftRegistryPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="event-type" className="block text-sm font-medium text-dark mb-1">Event Type</label>
+                <label htmlFor="event-type" className="block text-xs font-medium text-dark mb-1">Event Type</label>
                 <select
                   id="event-type"
                   value={form.event_type}
@@ -258,7 +258,7 @@ export default function GiftRegistryPage() {
                 </select>
               </div>
               <div>
-                <label htmlFor="event-date" className="block text-sm font-medium text-dark mb-1">Event Date</label>
+                <label htmlFor="event-date" className="block text-xs font-medium text-dark mb-1">Event Date</label>
                 <input
                   id="event-date"
                   type="date"
@@ -269,7 +269,7 @@ export default function GiftRegistryPage() {
               </div>
             </div>
             <div>
-              <label htmlFor="registry-description" className="block text-sm font-medium text-dark mb-1">Description</label>
+              <label htmlFor="registry-description" className="block text-xs font-medium text-dark mb-1">Description</label>
               <textarea
                 id="registry-description"
                 value={form.description}
@@ -298,30 +298,30 @@ export default function GiftRegistryPage() {
       {/* Registries List */}
       {registries.length === 0 ? (
         <div className="text-center py-20">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-20 h-20 text-border mx-auto mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-20 h-20 text-border mx-auto mb-4">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">No registries yet</h2>
-          <p className="text-medium mb-6">
+          <h2 className="text-xl font-bold text-dark mb-2">No registries yet</h2>
+          <p className="text-medium mb-4">
             Create a gift registry for your special event and share it with friends and family.
           </p>
-          <button onClick={() => setShowCreateForm(true)} className="btn-primary text-lg">
+          <button onClick={() => setShowCreateForm(true)} className="btn-primary text-base">
             Create Your First Registry
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {registries.map((registry) => {
             const { totalItems, totalPurchased } = getItemStats(registry);
             const shareUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/gift-registry/${registry.share_code}`;
 
             return (
               <div key={registry.id} className="card overflow-hidden">
-                <div className="p-6">
+                <div className="p-4">
                   {/* Header */}
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h3 className="text-xl font-bold text-dark">{registry.event_name}</h3>
+                      <h3 className="text-lg font-bold text-dark">{registry.event_name}</h3>
                       <span
                         className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
                           EVENT_TYPE_COLORS[registry.event_type as EventType] || EVENT_TYPE_COLORS.other
@@ -331,7 +331,7 @@ export default function GiftRegistryPage() {
                       </span>
                     </div>
                     {registry.event_date && (
-                      <div className="text-right text-sm text-medium">
+                      <div className="text-right text-xs text-medium">
                         <span className="block font-medium">
                           {new Date(registry.event_date).toLocaleDateString("en-US", {
                             month: "short",
@@ -344,11 +344,11 @@ export default function GiftRegistryPage() {
                   </div>
 
                   {registry.description && (
-                    <p className="text-medium text-sm mb-4 line-clamp-2">{registry.description}</p>
+                    <p className="text-medium text-xs mb-4 line-clamp-2">{registry.description}</p>
                   )}
 
                   {/* Stats */}
-                  <div className="flex items-center gap-4 mb-4 text-sm">
+                  <div className="flex items-center gap-4 mb-4 text-xs">
                     <span className="text-dark font-medium">
                       {totalItems} item{totalItems !== 1 ? "s" : ""}
                     </span>
@@ -399,13 +399,13 @@ export default function GiftRegistryPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleManageItems(registry)}
-                      className="btn-primary text-sm py-2 flex-1"
+                      className="btn-primary text-xs py-2 flex-1"
                     >
                       {managingRegistryId === registry.id ? "Close Items" : "Manage Items"}
                     </button>
                     <button
                       onClick={() => handleDelete(registry.id)}
-                      className="btn-secondary text-sm py-2 px-3"
+                      className="btn-secondary text-xs py-2 px-3"
                       title="Delete Registry"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-red-500">
@@ -417,7 +417,7 @@ export default function GiftRegistryPage() {
 
                 {/* Manage Items Panel */}
                 {managingRegistryId === registry.id && (
-                  <div className="border-t border-gray-200 p-6">
+                  <div className="border-t border-gray-200 p-4">
                     {managingLoading ? (
                       <LoadingSpinner size="md" className="py-8" />
                     ) : (
@@ -426,7 +426,7 @@ export default function GiftRegistryPage() {
                           <h4 className="font-bold text-dark">Registry Items</h4>
                           <button
                             onClick={() => setShowAddItems(!showAddItems)}
-                            className="btn-secondary text-sm py-1.5 flex items-center gap-1"
+                            className="btn-secondary text-xs py-1.5 flex items-center gap-1"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -437,8 +437,8 @@ export default function GiftRegistryPage() {
 
                         {/* Add Items Search */}
                         {showAddItems && (
-                          <div className="mb-6 p-4 rounded-lg border border-gray-200" style={{ backgroundColor: "#FFF8F0" }}>
-                            <h5 className="font-medium text-dark text-sm mb-3">Search Products to Add</h5>
+                          <div className="mb-4 p-4 rounded-lg border border-gray-200" style={{ backgroundColor: "#FFF8F0" }}>
+                            <h5 className="font-medium text-dark text-xs mb-3">Search Products to Add</h5>
                             <div className="flex gap-2 mb-3">
                               <input
                                 type="text"
@@ -451,14 +451,14 @@ export default function GiftRegistryPage() {
                               />
                               <button
                                 onClick={handleSearchProducts}
-                                className="btn-primary text-sm py-2"
+                                className="btn-primary text-xs py-2"
                                 disabled={searching}
                               >
                                 {searching ? "..." : "Search"}
                               </button>
                             </div>
                             {searchError && (
-                              <p className="text-red-500 text-sm text-center py-3">{searchError}</p>
+                              <p className="text-red-500 text-xs text-center py-3">{searchError}</p>
                             )}
                             {searchResults.length > 0 ? (
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto">
@@ -502,7 +502,7 @@ export default function GiftRegistryPage() {
                               </div>
                             ) : (
                               hasSearched && !searchError && (
-                                <p className="text-medium text-sm text-center py-3">
+                                <p className="text-medium text-xs text-center py-3">
                                   No products found for &quot;{searchQuery}&quot;. Try a different search term.
                                 </p>
                               )
@@ -512,7 +512,7 @@ export default function GiftRegistryPage() {
 
                         {/* Items List */}
                         {(!managingRegistry?.items || managingRegistry.items.length === 0) ? (
-                          <p className="text-medium text-sm text-center py-6">
+                          <p className="text-medium text-xs text-center py-4">
                             No items in this registry yet. Add some products above!
                           </p>
                         ) : (
@@ -536,7 +536,7 @@ export default function GiftRegistryPage() {
                                     </div>
                                   )}
                                   <div className="flex-1 min-w-0">
-                                    <p className="font-medium text-dark text-sm truncate">
+                                    <p className="font-medium text-dark text-xs truncate">
                                       {item.product?.name || "Unknown Product"}
                                     </p>
                                     <p className="text-xs" style={{ color: "#B76E79" }}>

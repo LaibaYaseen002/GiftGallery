@@ -42,13 +42,13 @@ export default function EditProductPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   if (!product) {
     return (
       <div className="text-center py-20">
-        <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+        <h1 className="text-xl font-bold mb-4">Product Not Found</h1>
         <Link href="/admin/products" className="btn-primary">
           Back to Products
         </Link>
@@ -60,14 +60,14 @@ export default function EditProductPage() {
     <div>
       <Link
         href="/admin/products"
-        className="text-sm text-medium hover:text-primary mb-4 inline-block"
+        className="text-xs text-medium hover:text-primary mb-4 inline-block"
       >
         &larr; Back to Products
       </Link>
       <h1 className="page-title">Edit Product</h1>
 
       <div className="max-w-xl">
-        <div className="card p-6">
+        <div className="card p-4">
           <ProductForm
             product={product}
             onSubmit={handleUpdate}

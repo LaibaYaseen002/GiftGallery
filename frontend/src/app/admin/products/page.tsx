@@ -52,13 +52,13 @@ export default function AdminProductsPage() {
     : products;
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <h1 className="page-title mb-0">Products ({products.length})</h1>
         <Link href="/admin/products/new" className="btn-primary">
           + Add Product
@@ -66,7 +66,7 @@ export default function AdminProductsPage() {
       </div>
 
       {/* Search */}
-      <div className="mb-6">
+      <div className="mb-4">
         <input
           type="text"
           value={search}
@@ -79,10 +79,10 @@ export default function AdminProductsPage() {
       {/* Products Table */}
       {filteredProducts.length === 0 ? (
         <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-dark mb-2">
+          <h2 className="text-xl font-bold text-dark mb-2">
             {search ? "No products match your search" : "No products yet"}
           </h2>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             {search
               ? "Try a different search term."
               : "Add your first product to get started."}
@@ -121,7 +121,7 @@ export default function AdminProductsPage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-x-4 text-sm text-medium">
+                  <div className="flex flex-wrap gap-x-4 text-xs text-medium">
                     <span className="font-medium text-primary">
                       ${Number(product.price).toFixed(2)}
                     </span>
@@ -135,13 +135,13 @@ export default function AdminProductsPage() {
                 <div className="flex gap-2 flex-shrink-0">
                   <Link
                     href={`/admin/products/${product.id}/edit`}
-                    className="px-3 py-1.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={() => setDeleteId(product.id)}
-                    className="px-3 py-1.5 text-sm font-medium text-error border border-error rounded-lg hover:bg-error hover:text-white transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium text-error border border-error rounded-lg hover:bg-error hover:text-white transition-colors"
                   >
                     Delete
                   </button>
@@ -158,14 +158,14 @@ export default function AdminProductsPage() {
         onClose={() => setDeleteId(null)}
         title="Delete Product"
       >
-        <p className="text-medium mb-6">
+        <p className="text-medium mb-4">
           Are you sure you want to delete this product? This action cannot be
           undone.
         </p>
         <div className="flex gap-3">
           <button
             onClick={() => deleteId && handleDelete(deleteId)}
-            className="flex-1 bg-error text-white px-4 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
+            className="flex-1 bg-error text-white px-4 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
             Delete
           </button>

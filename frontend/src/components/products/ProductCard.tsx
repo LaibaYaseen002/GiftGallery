@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <div className="group relative bg-white rounded-xl overflow-hidden border border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
       {/* Image Section */}
       <Link href={`/products/${product.id}`}>
-        <div className="relative w-full h-44 overflow-hidden bg-gradient-to-br from-secondary to-light">
+        <div className="relative w-full h-40 overflow-hidden bg-gradient-to-br from-secondary to-light">
           <ProductImage
             src={product.image_url}
             alt={product.name}
@@ -71,7 +71,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Price + Cart row */}
         <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-border/40">
           <div className="flex flex-col">
-            <span className="text-sm font-bold text-primary leading-none">
+            <span className="text-xs font-bold text-primary leading-none">
               ${product.price.toFixed(2)}
             </span>
           </div>

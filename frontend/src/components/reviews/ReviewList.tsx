@@ -36,7 +36,7 @@ export default function ReviewList({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {reviews.map((review) => (
         <div
           key={review.id}

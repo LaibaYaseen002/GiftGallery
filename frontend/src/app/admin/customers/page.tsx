@@ -54,21 +54,21 @@ export default function AdminCustomersPage() {
     });
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <div>
           <h1 className="page-title mb-1">Customer Management</h1>
-          <p className="text-medium text-sm">{customers.length} customers total</p>
+          <p className="text-medium text-xs">{customers.length} customers total</p>
         </div>
       </div>
 
       {/* Search & Sort */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="flex-1">
           <input
             type="text"
@@ -92,7 +92,7 @@ export default function AdminCustomersPage() {
 
       {/* Customer List */}
       {filtered.length === 0 ? (
-        <div className="card p-8 text-center">
+        <div className="card p-6 text-center">
           <p className="text-medium">
             {search ? "No customers match your search." : "No customers yet."}
           </p>
@@ -117,7 +117,7 @@ export default function AdminCustomersPage() {
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 {/* Customer Info */}
                 <div className="col-span-4 flex items-center gap-3">
-                  <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-100 shrink-0">
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden bg-gray-100 shrink-0">
                     {customer.image_url ? (
                       <Image
                         src={customer.image_url}
@@ -127,7 +127,7 @@ export default function AdminCustomersPage() {
                         sizes="40px"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary font-semibold text-sm">
+                      <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary font-semibold text-xs">
                         {customer.name.charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -155,7 +155,7 @@ export default function AdminCustomersPage() {
                 {/* Last Order */}
                 <div className="col-span-2 text-center">
                   <span className="md:hidden text-xs text-medium mr-2">Last Order:</span>
-                  <span className="text-sm text-medium">
+                  <span className="text-xs text-medium">
                     {new Date(customer.last_order).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -167,7 +167,7 @@ export default function AdminCustomersPage() {
                 {/* Member Since */}
                 <div className="col-span-2 text-center">
                   <span className="md:hidden text-xs text-medium mr-2">Member:</span>
-                  <span className="text-sm text-medium">
+                  <span className="text-xs text-medium">
                     {new Date(customer.member_since).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",

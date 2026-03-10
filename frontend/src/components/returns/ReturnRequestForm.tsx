@@ -42,9 +42,9 @@ export default function ReturnRequestForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <div>
-        <label htmlFor="reason" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="reason" className="block text-xs font-medium text-dark mb-1">
           Reason for Return
         </label>
         <textarea
@@ -58,7 +58,7 @@ export default function ReturnRequestForm({
       </div>
 
       {error && (
-        <p className="text-sm text-error">{error}</p>
+        <p className="text-xs text-error">{error}</p>
       )}
 
       <button

@@ -53,14 +53,14 @@ function OrderDetailContent() {
   }, [id, getToken, fetchReturnRequest]);
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   if (!order) {
     return (
       <div className="container-custom py-20 text-center">
-        <h1 className="text-3xl font-bold mb-4">Order Not Found</h1>
-        <p className="text-medium mb-6">
+        <h1 className="text-2xl font-bold mb-4">Order Not Found</h1>
+        <p className="text-medium mb-4">
           This order doesn&apos;t exist or you don&apos;t have access to it.
         </p>
         <Link href="/orders" className="btn-primary">
@@ -74,8 +74,8 @@ function OrderDetailContent() {
     <div className="container-custom py-8">
       {/* Success Banner */}
       {isSuccess && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 text-center">
-          <h2 className="text-lg sm:text-2xl font-bold text-green-800 mb-2">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-4 mb-4 sm:mb-6 text-center">
+          <h2 className="text-base sm:text-xl font-bold text-green-800 mb-2">
             Order Placed Successfully!
           </h2>
           <p className="text-green-700">
@@ -85,15 +85,15 @@ function OrderDetailContent() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
         <div>
           <Link
             href="/orders"
-            className="text-xs sm:text-sm text-medium hover:text-primary mb-2 inline-block"
+            className="text-xs sm:text-xs text-medium hover:text-primary mb-2 inline-block"
           >
             &larr; Back to Orders
           </Link>
-          <h1 className="text-xl sm:text-3xl font-bold text-dark">
+          <h1 className="text-lg sm:text-2xl font-bold text-dark">
             Order #{order.id.slice(0, 8)}
           </h1>
           <p className="text-medium mt-1">
@@ -112,22 +112,22 @@ function OrderDetailContent() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-4">
         {/* Order Items */}
         <div className="lg:col-span-2">
-          <div className="card p-3 sm:p-6">
-            <h2 className="text-lg font-bold text-dark mb-4">Order Items</h2>
-            <div className="space-y-4">
+          <div className="card p-3 sm:p-4">
+            <h2 className="text-base font-bold text-dark mb-4">Order Items</h2>
+            <div className="space-y-3">
               {order.items?.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between py-3 border-b border-border last:border-b-0"
+                  className="flex items-center justify-between py-2 border-b border-border last:border-b-0"
                 >
                   <div>
                     <p className="font-medium text-dark">
                       {item.product_name}
                     </p>
-                    <p className="text-sm text-medium">
+                    <p className="text-xs text-medium">
                       ${Number(item.price).toFixed(2)} x {item.quantity}
                     </p>
                   </div>
@@ -162,8 +162,8 @@ function OrderDetailContent() {
                 <span className="text-success">Free</span>
               </div>
               <div className="flex justify-between border-t border-border pt-2">
-                <span className="text-lg font-bold">Total</span>
-                <span className="text-lg font-bold text-primary">
+                <span className="text-base font-bold">Total</span>
+                <span className="text-base font-bold text-primary">
                   ${Number(order.total_amount).toFixed(2)}
                 </span>
               </div>
@@ -172,16 +172,16 @@ function OrderDetailContent() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Order Timeline */}
           <OrderTimeline status={order.status} updatedAt={order.updated_at} statusHistory={order.status_history} />
 
           {/* Shipping Info */}
-          <div className="card p-6">
-            <h2 className="text-lg font-bold text-dark mb-3">
+          <div className="card p-4">
+            <h2 className="text-base font-bold text-dark mb-3">
               Shipping Details
             </h2>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs">
               <p>
                 <span className="text-medium">Name:</span>{" "}
                 <span className="text-dark">{order.shipping_name}</span>
@@ -203,13 +203,13 @@ function OrderDetailContent() {
 
           {/* Gift Message */}
           {order.gift_message && (
-            <div className="card p-6">
-              <h2 className="text-lg font-bold text-dark mb-3">
+            <div className="card p-4">
+              <h2 className="text-base font-bold text-dark mb-3">
                 Gift Message
               </h2>
               <div className="bg-secondary border-l-4 border-accent rounded-lg p-4">
                 <p
-                  className={`text-lg text-dark italic ${
+                  className={`text-base text-dark italic ${
                     order.gift_font === "handwritten"
                       ? "font-[family-name:var(--font-dancing)]"
                       : order.gift_font === "elegant"
@@ -227,23 +227,23 @@ function OrderDetailContent() {
 
           {/* Return Request Section */}
           {returnRequest ? (
-            <div className="card p-6">
-              <h2 className="text-lg font-bold text-dark mb-3">
+            <div className="card p-4">
+              <h2 className="text-base font-bold text-dark mb-3">
                 Return Request
               </h2>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-medium">Status:</span>
+                  <span className="text-xs text-medium">Status:</span>
                   <ReturnStatusBadge status={returnRequest.status} />
                 </div>
                 <div>
-                  <p className="text-sm text-medium">Reason:</p>
-                  <p className="text-sm text-dark mt-1">{returnRequest.reason}</p>
+                  <p className="text-xs text-medium">Reason:</p>
+                  <p className="text-xs text-dark mt-1">{returnRequest.reason}</p>
                 </div>
                 {returnRequest.admin_notes && (
                   <div>
-                    <p className="text-sm text-medium">Admin Response:</p>
-                    <p className="text-sm text-dark mt-1">{returnRequest.admin_notes}</p>
+                    <p className="text-xs text-medium">Admin Response:</p>
+                    <p className="text-xs text-dark mt-1">{returnRequest.admin_notes}</p>
                   </div>
                 )}
                 <p className="text-xs text-medium">
@@ -257,8 +257,8 @@ function OrderDetailContent() {
               </div>
             </div>
           ) : ["delivered", "confirmed", "shipped"].includes(order.status) ? (
-            <div className="card p-6">
-              <h2 className="text-lg font-bold text-dark mb-3">
+            <div className="card p-4">
+              <h2 className="text-base font-bold text-dark mb-3">
                 Request a Return
               </h2>
               {showReturnForm ? (
@@ -272,7 +272,7 @@ function OrderDetailContent() {
                 />
               ) : (
                 <div>
-                  <p className="text-sm text-medium mb-3">
+                  <p className="text-xs text-medium mb-3">
                     Not satisfied with your order? You can request a return.
                   </p>
                   <button
@@ -309,7 +309,7 @@ function OrderDetailContent() {
 
 export default function OrderDetailPage() {
   return (
-    <Suspense fallback={<LoadingSpinner size="lg" className="py-32" />}>
+    <Suspense fallback={<LoadingSpinner size="lg" className="py-22" />}>
       <OrderDetailContent />
     </Suspense>
   );

@@ -166,7 +166,7 @@ export default function GroupGiftPage() {
 
   return (
     <div className="container-custom py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <h1 className="page-title mb-0">Group Gifting</h1>
         <button
           onClick={() => setShowForm(!showForm)}
@@ -177,21 +177,21 @@ export default function GroupGiftPage() {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg mb-4">
           {error}
         </div>
       )}
 
       {/* Create Form */}
       {showForm && (
-        <div className="card p-6 mb-8">
-          <h2 className="text-xl font-bold text-dark mb-4">
+        <div className="card p-4 mb-6">
+          <h2 className="text-lg font-bold text-dark mb-4">
             Start a Group Gift
           </h2>
           <form onSubmit={handleCreate} className="space-y-4">
             {/* Product Selector */}
             <div className="relative">
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Select Product
               </label>
               {selectedProduct ? (
@@ -207,7 +207,7 @@ export default function GroupGiftPage() {
                   </div>
                   <div className="flex-1">
                     <p className="font-medium text-dark">{selectedProduct.name}</p>
-                    <p className="text-sm" style={{ color: "#B76E79" }}>
+                    <p className="text-xs" style={{ color: "#B76E79" }}>
                       ${selectedProduct.price.toFixed(2)}
                     </p>
                   </div>
@@ -217,7 +217,7 @@ export default function GroupGiftPage() {
                       setSelectedProduct(null);
                       setProductSearch("");
                     }}
-                    className="text-red-500 hover:text-red-700 text-sm"
+                    className="text-red-500 hover:text-red-700 text-xs"
                   >
                     Change
                   </button>
@@ -270,7 +270,7 @@ export default function GroupGiftPage() {
                             />
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-dark">
+                            <p className="text-xs font-medium text-dark">
                               {product.name}
                             </p>
                             <p className="text-xs" style={{ color: "#B76E79" }}>
@@ -287,7 +287,7 @@ export default function GroupGiftPage() {
 
             {/* Recipient Name */}
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Recipient Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -302,7 +302,7 @@ export default function GroupGiftPage() {
 
             {/* Recipient Email */}
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Recipient Email
               </label>
               <input
@@ -316,7 +316,7 @@ export default function GroupGiftPage() {
 
             {/* Message */}
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Message
               </label>
               <textarea
@@ -330,7 +330,7 @@ export default function GroupGiftPage() {
 
             {/* Expiry Date */}
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Expiry Date
               </label>
               <input
@@ -345,7 +345,7 @@ export default function GroupGiftPage() {
             </div>
 
             {formError && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-xs">
                 {formError}
               </div>
             )}
@@ -379,7 +379,7 @@ export default function GroupGiftPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 mx-auto mb-6"
+            className="w-20 h-20 mx-auto mb-4"
             style={{ color: "#B76E79" }}
           >
             <path
@@ -388,21 +388,21 @@ export default function GroupGiftPage() {
               d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.25-9.75h16.5"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">
+          <h2 className="text-xl font-bold text-dark mb-2">
             No group gifts yet
           </h2>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             Start a group gift and invite friends to contribute together!
           </p>
           <button
             onClick={() => setShowForm(true)}
-            className="btn-primary text-lg"
+            className="btn-primary text-base"
           >
             Start a Group Gift
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {groupGifts.map((gift) => {
             const percentage =
               gift.target_amount > 0
@@ -432,11 +432,11 @@ export default function GroupGiftPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         {gift.product && (
-                          <h3 className="font-semibold text-dark text-lg line-clamp-1">
+                          <h3 className="font-semibold text-dark text-base line-clamp-1">
                             {gift.product.name}
                           </h3>
                         )}
-                        <p className="text-sm text-medium">
+                        <p className="text-xs text-medium">
                           For: <span className="font-medium">{gift.recipient_name}</span>
                         </p>
                       </div>
@@ -451,7 +451,7 @@ export default function GroupGiftPage() {
 
                 {/* Progress */}
                 <div className="p-4">
-                  <div className="flex justify-between text-sm mb-2">
+                  <div className="flex justify-between text-xs mb-2">
                     <span className="text-medium">
                       ${gift.current_amount.toFixed(2)} of ${gift.target_amount.toFixed(2)}
                     </span>
@@ -479,14 +479,14 @@ export default function GroupGiftPage() {
                 {/* Contributors */}
                 {gift.contributions && gift.contributions.length > 0 && (
                   <div className="px-4 pb-3">
-                    <h4 className="text-sm font-medium text-dark mb-2">
+                    <h4 className="text-xs font-medium text-dark mb-2">
                       Contributors ({gift.contributions.length})
                     </h4>
                     <div className="space-y-1.5 max-h-32 overflow-y-auto">
                       {gift.contributions.map((contrib) => (
                         <div
                           key={contrib.id}
-                          className="flex items-center justify-between text-sm"
+                          className="flex items-center justify-between text-xs"
                         >
                           <span className="text-medium">{contrib.contributor_name}</span>
                           <span className="font-medium" style={{ color: "#D4A853" }}>
@@ -504,7 +504,7 @@ export default function GroupGiftPage() {
                     <>
                       <button
                         onClick={() => copyShareLink(gift.id)}
-                        className="btn-accent text-sm py-2 flex items-center gap-1.5"
+                        className="btn-accent text-xs py-2 flex items-center gap-1.5"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -524,7 +524,7 @@ export default function GroupGiftPage() {
                       </button>
                       <button
                         onClick={() => handleCancel(gift.id)}
-                        className="btn-secondary text-sm py-2 text-red-600 hover:text-red-700"
+                        className="btn-secondary text-xs py-2 text-red-600 hover:text-red-700"
                       >
                         Cancel
                       </button>
@@ -532,7 +532,7 @@ export default function GroupGiftPage() {
                   )}
                   <Link
                     href={`/group-gift/${gift.id}/contribute`}
-                    className="btn-secondary text-sm py-2"
+                    className="btn-secondary text-xs py-2"
                   >
                     View Page
                   </Link>

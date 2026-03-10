@@ -51,17 +51,17 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: number)
 
   return (
     <div
-      className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg text-white text-sm font-medium
-        animate-slide-in-right min-w-[250px] max-w-[360px]
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg shadow-lg text-white text-xs font-medium
+        animate-slide-in-right min-w-[220px] max-w-[320px]
         ${toast.type === "success" ? "bg-green-600" : "bg-red-600"}`}
     >
-      <span className="text-base">
+      <span className="text-sm">
         {toast.type === "success" ? "\u2713" : "\u2717"}
       </span>
       <span className="flex-1">{toast.message}</span>
       <button
         onClick={() => onDismiss(toast.id)}
-        className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
+        className="ml-1 opacity-70 hover:opacity-100 transition-opacity"
       >
         &times;
       </button>

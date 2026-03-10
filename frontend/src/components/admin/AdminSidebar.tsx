@@ -181,10 +181,10 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         <div className="h-[2px] bg-gradient-to-r from-primary to-accent" />
 
         {/* Logo */}
-        <div className="flex items-center justify-between h-12 px-3 border-b border-white/10">
+        <div className="flex items-center justify-between h-11 px-3 border-b border-white/10">
           <Link href="/admin" className="flex items-center gap-1.5" onClick={onClose}>
-            <span className="text-base">🎁</span>
-            <span className="text-sm font-bold text-primary">Gift Gallery</span>
+            <span className="text-sm">🎁</span>
+            <span className="text-xs font-bold text-primary">Gift Gallery</span>
           </Link>
           <button
             onClick={onClose}
@@ -199,19 +199,19 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="mt-3 px-2 space-y-3">
+        <nav className="mt-2 px-2 space-y-2">
           {navGroups.map((group) => (
             <div key={group.label}>
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 px-2 mb-1">
+              <p className="text-[9px] font-semibold uppercase tracking-wider text-gray-500 px-2 mb-0.5">
                 {group.label}
               </p>
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {group.items.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={onClose}
-                    className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`flex items-center gap-2 px-2 py-1 rounded-md text-2xs font-medium transition-colors ${
                       isActive(item.href)
                         ? "bg-primary/20 text-primary border-l-[3px] border-primary"
                         : "text-gray-300 hover:bg-white/5 hover:text-white"
@@ -227,10 +227,10 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         </nav>
 
         {/* View Store Link */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-xs text-gray-400 hover:text-white transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />

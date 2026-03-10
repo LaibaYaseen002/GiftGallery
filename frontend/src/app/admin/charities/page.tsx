@@ -132,16 +132,16 @@ export default function AdminCharitiesPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <div>
           <h1 className="page-title mb-1">Charity Partners</h1>
-          <p className="text-medium text-sm">
+          <p className="text-medium text-xs">
             {charities.length} charit{charities.length !== 1 ? "ies" : "y"}{" "}
             total
           </p>
@@ -155,22 +155,22 @@ export default function AdminCharitiesPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-dark">{charities.length}</p>
-          <p className="text-sm text-medium">Total Partners</p>
+          <p className="text-xl font-bold text-dark">{charities.length}</p>
+          <p className="text-xs text-medium">Total Partners</p>
         </div>
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-success">
+          <p className="text-xl font-bold text-success">
             {charities.filter((c) => c.is_active).length}
           </p>
-          <p className="text-sm text-medium">Active</p>
+          <p className="text-xs text-medium">Active</p>
         </div>
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-error">
+          <p className="text-xl font-bold text-error">
             {charities.filter((c) => !c.is_active).length}
           </p>
-          <p className="text-sm text-medium">Inactive</p>
+          <p className="text-xs text-medium">Inactive</p>
         </div>
       </div>
 
@@ -183,7 +183,7 @@ export default function AdminCharitiesPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -191,10 +191,10 @@ export default function AdminCharitiesPage() {
               d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">
+          <h2 className="text-xl font-bold text-dark mb-2">
             No charity partners yet
           </h2>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             Add your first charity partner to get started.
           </p>
           <button onClick={openCreate} className="btn-primary">
@@ -245,7 +245,7 @@ export default function AdminCharitiesPage() {
                     {charity.name}
                   </h3>
                   {charity.description && (
-                    <p className="text-sm text-medium mt-1 line-clamp-2">
+                    <p className="text-xs text-medium mt-1 line-clamp-2">
                       {charity.description}
                     </p>
                   )}
@@ -277,19 +277,19 @@ export default function AdminCharitiesPage() {
               <div className="flex gap-2 mt-3 pt-3 border-t border-border">
                 <button
                   onClick={() => handleToggleActive(charity)}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
                 >
                   {charity.is_active ? "Deactivate" : "Activate"}
                 </button>
                 <button
                   onClick={() => openEdit(charity)}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => setDeleteId(charity.id)}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-error hover:border-error transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-error hover:border-error transition-colors"
                 >
                   Delete
                 </button>
@@ -305,15 +305,15 @@ export default function AdminCharitiesPage() {
         onClose={closeModal}
         title={editing ? "Edit Charity" : "Add Charity"}
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-2 text-xs">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Charity Name *
             </label>
             <input
@@ -326,7 +326,7 @@ export default function AdminCharitiesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Description
             </label>
             <textarea
@@ -339,7 +339,7 @@ export default function AdminCharitiesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Logo URL
             </label>
             <input
@@ -366,7 +366,7 @@ export default function AdminCharitiesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Website URL
             </label>
             <input
@@ -403,7 +403,7 @@ export default function AdminCharitiesPage() {
         onClose={() => setDeleteId(null)}
         title="Delete Charity"
       >
-        <p className="text-medium mb-6">
+        <p className="text-medium mb-4">
           Are you sure you want to delete this charity partner? This action
           cannot be undone.
         </p>
@@ -416,7 +416,7 @@ export default function AdminCharitiesPage() {
           </button>
           <button
             onClick={() => deleteId && handleDelete(deleteId)}
-            className="flex-1 bg-error text-white px-4 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
+            className="flex-1 bg-error text-white px-4 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
             Delete
           </button>

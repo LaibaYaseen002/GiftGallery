@@ -90,7 +90,7 @@ export default function DiscountForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Code */}
       <div>
-        <label htmlFor="code" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="code" className="block text-xs font-medium text-dark mb-1">
           Discount Code
         </label>
         <input
@@ -105,7 +105,7 @@ export default function DiscountForm({
 
       {/* Discount Percent */}
       <div>
-        <label htmlFor="percent" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="percent" className="block text-xs font-medium text-dark mb-1">
           Discount Percentage
         </label>
         <div className="relative">
@@ -134,9 +134,9 @@ export default function DiscountForm({
             onChange={(e) => setIsFlashSale(e.target.checked)}
             className="sr-only peer"
           />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent"></div>
         </label>
-        <span className="text-sm font-medium text-dark">
+        <span className="text-xs font-medium text-dark">
           Flash Sale
         </span>
         {isFlashSale && (
@@ -146,7 +146,7 @@ export default function DiscountForm({
 
       {/* Expiry Date */}
       <div>
-        <label htmlFor="expires" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="expires" className="block text-xs font-medium text-dark mb-1">
           Expiry Date {isFlashSale ? <span className="text-error font-normal">(required for flash sales)</span> : <span className="text-medium font-normal">(optional)</span>}
         </label>
         <input
@@ -161,7 +161,7 @@ export default function DiscountForm({
 
       {/* Max Uses */}
       <div>
-        <label htmlFor="maxUses" className="block text-sm font-medium text-dark mb-1">
+        <label htmlFor="maxUses" className="block text-xs font-medium text-dark mb-1">
           Max Uses <span className="text-medium font-normal">(optional, leave empty for unlimited)</span>
         </label>
         <input
@@ -185,15 +185,15 @@ export default function DiscountForm({
               onChange={(e) => setIsActive(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
           </label>
-          <span className="text-sm font-medium text-dark">
+          <span className="text-xs font-medium text-dark">
             {isActive ? "Active" : "Inactive"}
           </span>
         </div>
       )}
 
-      {error && <p className="text-sm text-error">{error}</p>}
+      {error && <p className="text-xs text-error">{error}</p>}
 
       {/* Actions */}
       <div className="flex gap-3 pt-2">

@@ -87,8 +87,8 @@ export default function SharedRegistryPage() {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-20 h-20 mx-auto mb-6" style={{ color: "#B76E79" }}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
         </svg>
-        <h1 className="text-2xl font-bold text-dark mb-2">Registry Not Found</h1>
-        <p className="text-medium mb-6">{error || "This gift registry does not exist."}</p>
+        <h1 className="text-xl font-bold text-dark mb-2">Registry Not Found</h1>
+        <p className="text-medium mb-4">{error || "This gift registry does not exist."}</p>
         <Link href="/products" className="btn-primary">
           Browse Products
         </Link>
@@ -117,12 +117,12 @@ export default function SharedRegistryPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d={eventIcon} />
             </svg>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2">{registry.event_name}</h1>
-          <span className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium mb-3">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">{registry.event_name}</h1>
+          <span className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-xs font-medium mb-3">
             {EVENT_TYPE_LABELS[registry.event_type] || registry.event_type}
           </span>
           {registry.event_date && (
-            <p className="text-white/90 text-lg">
+            <p className="text-white/90 text-base">
               {new Date(registry.event_date).toLocaleDateString("en-US", {
                 weekday: "long",
                 month: "long",
@@ -144,22 +144,22 @@ export default function SharedRegistryPage() {
       </div>
 
       {/* Progress Summary */}
-      <div className="container-custom -mt-6 relative z-10 mb-8">
-        <div className="card p-6 text-center">
-          <div className="flex items-center justify-center gap-8 flex-wrap">
+      <div className="container-custom -mt-6 relative z-10 mb-6">
+        <div className="card p-4 text-center">
+          <div className="flex items-center justify-center gap-6 flex-wrap">
             <div>
-              <p className="text-3xl font-bold" style={{ color: "#B76E79" }}>{totalItems}</p>
-              <p className="text-sm text-medium">Total Gifts</p>
+              <p className="text-2xl font-bold" style={{ color: "#B76E79" }}>{totalItems}</p>
+              <p className="text-xs text-medium">Total Gifts</p>
             </div>
             <div className="w-px h-10 bg-gray-200 hidden sm:block" />
             <div>
-              <p className="text-3xl font-bold" style={{ color: "#22c55e" }}>{fulfilledItems}</p>
-              <p className="text-sm text-medium">Purchased</p>
+              <p className="text-2xl font-bold" style={{ color: "#22c55e" }}>{fulfilledItems}</p>
+              <p className="text-xs text-medium">Purchased</p>
             </div>
             <div className="w-px h-10 bg-gray-200 hidden sm:block" />
             <div>
-              <p className="text-3xl font-bold" style={{ color: "#D4A853" }}>{totalItems - fulfilledItems}</p>
-              <p className="text-sm text-medium">Still Needed</p>
+              <p className="text-2xl font-bold" style={{ color: "#D4A853" }}>{totalItems - fulfilledItems}</p>
+              <p className="text-xs text-medium">Still Needed</p>
             </div>
           </div>
           <div className="mt-4 max-w-md mx-auto">
@@ -181,10 +181,10 @@ export default function SharedRegistryPage() {
       <div className="container-custom pb-16">
         {items.length === 0 ? (
           <div className="card p-12 text-center">
-            <p className="text-medium text-lg">No items in this registry yet.</p>
+            <p className="text-medium text-base">No items in this registry yet.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {items.map((item: GiftRegistryItem) => {
               const remaining = Math.max(0, item.quantity_requested - item.quantity_purchased);
               const isFulfilled = remaining === 0;
@@ -213,7 +213,7 @@ export default function SharedRegistryPage() {
                         />
                         {isFulfilled && (
                           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <span className="bg-green-500 text-white px-4 py-2 rounded-full font-bold text-sm flex items-center gap-1.5">
+                            <span className="bg-green-500 text-white px-4 py-2 rounded-full font-bold text-xs flex items-center gap-1.5">
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                               </svg>
@@ -228,25 +228,25 @@ export default function SharedRegistryPage() {
                   <div className="p-4">
                     {/* Product Info */}
                     <Link href={`/products/${item.product?.id || "#"}`}>
-                      <h3 className="font-semibold text-dark text-lg mb-1 hover:transition-colors line-clamp-1" style={{ color: isFulfilled ? "#9ca3af" : undefined }}>
+                      <h3 className="font-semibold text-dark text-base mb-1 hover:transition-colors line-clamp-1" style={{ color: isFulfilled ? "#9ca3af" : undefined }}>
                         {item.product?.name || "Unknown Product"}
                       </h3>
                     </Link>
-                    <p className="text-xl font-bold mb-3" style={{ color: "#B76E79" }}>
+                    <p className="text-lg font-bold mb-3" style={{ color: "#B76E79" }}>
                       ${item.product?.price.toFixed(2) || "0.00"}
                     </p>
 
                     {/* Quantity Info */}
                     <div className="space-y-2 mb-4">
-                      <div className="flex justify-between text-sm">
+                      <div className="flex justify-between text-xs">
                         <span className="text-medium">Requested</span>
                         <span className="font-medium text-dark">{item.quantity_requested}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
+                      <div className="flex justify-between text-xs">
                         <span className="text-medium">Purchased</span>
                         <span className="font-medium" style={{ color: "#22c55e" }}>{item.quantity_purchased}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
+                      <div className="flex justify-between text-xs">
                         <span className="text-medium">Still Needed</span>
                         <span className="font-bold" style={{ color: remaining > 0 ? "#D4A853" : "#22c55e" }}>
                           {remaining}
@@ -269,7 +269,7 @@ export default function SharedRegistryPage() {
                       <button
                         onClick={() => handlePurchase(item.id)}
                         disabled={purchasingItemId === item.id}
-                        className="w-full py-2.5 rounded-lg font-medium text-white transition-all duration-200 flex items-center justify-center gap-2"
+                        className="w-full py-1.5 rounded-lg font-medium text-white transition-all duration-200 flex items-center justify-center gap-2"
                         style={{
                           backgroundColor: purchaseSuccess === item.id ? "#22c55e" : "#B76E79",
                         }}
@@ -308,7 +308,7 @@ export default function SharedRegistryPage() {
 
         {/* Footer */}
         <div className="mt-12 text-center">
-          <p className="text-medium text-sm mb-4">Want to create your own gift registry?</p>
+          <p className="text-medium text-xs mb-4">Want to create your own gift registry?</p>
           <Link href="/gift-registry" className="btn-secondary">
             Create a Registry
           </Link>

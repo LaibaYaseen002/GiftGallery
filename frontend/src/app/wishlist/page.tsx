@@ -53,7 +53,7 @@ export default function WishlistPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
@@ -68,7 +68,7 @@ export default function WishlistPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -76,19 +76,19 @@ export default function WishlistPage() {
               d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">
+          <h2 className="text-xl font-bold text-dark mb-2">
             {t("wishlist.empty")}
           </h2>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             Save your favorite gifts to find them later.
           </p>
-          <Link href="/products" className="btn-primary text-lg">
+          <Link href="/products" className="btn-primary text-base">
             Browse Products
           </Link>
         </div>
       ) : (
         <>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             {items.length} item{items.length !== 1 ? "s" : ""} saved
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
@@ -108,7 +108,7 @@ export default function WishlistPage() {
                   </Link>
                   <div className="p-2.5 sm:p-3">
                     <Link href={`/products/${item.product.id}`}>
-                      <h3 className="font-semibold text-dark text-xs sm:text-sm mb-0.5 hover:text-primary transition-colors line-clamp-1">
+                      <h3 className="font-semibold text-dark text-xs sm:text-xs mb-0.5 hover:text-primary transition-colors line-clamp-1">
                         {item.product.name}
                       </h3>
                     </Link>
@@ -117,7 +117,7 @@ export default function WishlistPage() {
                         {item.product.category.name}
                       </p>
                     )}
-                    <p className="text-sm sm:text-base font-bold text-primary mt-1.5">
+                    <p className="text-xs sm:text-base font-bold text-primary mt-1.5">
                       {formatPrice(item.product.price)}
                     </p>
                     <div className="flex gap-1.5 sm:gap-2 mt-2">

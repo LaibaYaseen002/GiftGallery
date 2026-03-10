@@ -49,13 +49,13 @@ export default function ContactPage() {
     <div className="container-custom py-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="page-title text-center">Contact Us</h1>
-        <p className="text-medium text-center mb-8">
+        <p className="text-medium text-center mb-6">
           Have a question, suggestion, or need help? Send us a message and
           we&apos;ll get back to you as soon as possible.
         </p>
 
         {success ? (
-          <div className="card p-8 text-center">
+          <div className="card p-6 text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -70,10 +70,10 @@ export default function ContactPage() {
                 d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <h2 className="text-2xl font-bold text-dark mb-2">
+            <h2 className="text-xl font-bold text-dark mb-2">
               Message Sent!
             </h2>
-            <p className="text-medium mb-6">
+            <p className="text-medium mb-4">
               Thank you for your feedback. We&apos;ll get back to you soon.
             </p>
             <button
@@ -84,14 +84,14 @@ export default function ContactPage() {
             </button>
           </div>
         ) : (
-          <div className="card p-6 sm:p-8">
+          <div className="card p-4 sm:p-6">
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name & Email row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label
                     htmlFor="name"
-                    className="block text-sm font-medium text-dark mb-1"
+                    className="block text-xs font-medium text-dark mb-1"
                   >
                     Your Name
                   </label>
@@ -107,7 +107,7 @@ export default function ContactPage() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-dark mb-1"
+                    className="block text-xs font-medium text-dark mb-1"
                   >
                     Email Address
                   </label>
@@ -126,7 +126,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="subject"
-                  className="block text-sm font-medium text-dark mb-1"
+                  className="block text-xs font-medium text-dark mb-1"
                 >
                   Subject
                 </label>
@@ -144,7 +144,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-dark mb-1"
+                  className="block text-xs font-medium text-dark mb-1"
                 >
                   Message
                 </label>
@@ -158,7 +158,7 @@ export default function ContactPage() {
                 />
               </div>
 
-              {error && <p className="text-sm text-error">{error}</p>}
+              {error && <p className="text-xs text-error">{error}</p>}
 
               <button
                 type="submit"
@@ -188,8 +188,8 @@ export default function ContactPage() {
                 d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
               />
             </svg>
-            <p className="font-medium text-dark text-sm">Email</p>
-            <p className="text-medium text-sm">support@giftgallery.com</p>
+            <p className="font-medium text-dark text-xs">Email</p>
+            <p className="text-medium text-xs">support@giftgallery.com</p>
           </div>
           <div className="card p-5 text-center">
             <svg
@@ -206,8 +206,8 @@ export default function ContactPage() {
                 d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
               />
             </svg>
-            <p className="font-medium text-dark text-sm">Phone</p>
-            <p className="text-medium text-sm">+92 300 1234567</p>
+            <p className="font-medium text-dark text-xs">Phone</p>
+            <p className="text-medium text-xs">+92 300 1234567</p>
           </div>
           <div className="card p-5 text-center">
             <svg
@@ -229,8 +229,8 @@ export default function ContactPage() {
                 d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
               />
             </svg>
-            <p className="font-medium text-dark text-sm">Location</p>
-            <p className="text-medium text-sm">Lahore, Pakistan</p>
+            <p className="font-medium text-dark text-xs">Location</p>
+            <p className="text-medium text-xs">Lahore, Pakistan</p>
           </div>
         </div>
       </div>

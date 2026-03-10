@@ -31,14 +31,14 @@ export default function LanguageSwitcher() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm hover:bg-primary/10 transition-colors border border-border"
+        className="flex items-center gap-1 px-1.5 py-1 rounded-md text-xs hover:bg-primary/10 transition-colors border border-border"
         title="Change Language"
       >
-        <span className="text-base">{FLAG_EMOJI[current.flag]}</span>
-        <span className="hidden sm:inline text-xs font-medium text-dark">
+        <span className="text-sm">{FLAG_EMOJI[current.flag]}</span>
+        <span className="hidden sm:inline text-2xs font-medium text-dark">
           {current.code.toUpperCase()}
         </span>
-        <span className="hidden sm:inline text-xs text-medium">
+        <span className="hidden sm:inline text-2xs text-medium">
           ({currency.code})
         </span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3 text-medium">
@@ -47,7 +47,7 @@ export default function LanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-border py-1 z-50 min-w-[180px]">
+        <div className="absolute right-0 top-full mt-1 bg-white rounded-md shadow-lg border border-border py-0.5 z-50 min-w-[160px]">
           {locales.map((l) => (
             <button
               key={l.code}
@@ -55,14 +55,14 @@ export default function LanguageSwitcher() {
                 setLocale(l.code);
                 setOpen(false);
               }}
-              className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-primary/5 transition-colors ${
+              className={`flex items-center gap-2 w-full px-2.5 py-1.5 text-xs hover:bg-primary/5 transition-colors ${
                 locale === l.code ? "bg-primary/10 text-primary font-medium" : "text-dark"
               }`}
             >
-              <span className="text-lg">{FLAG_EMOJI[l.flag]}</span>
+              <span className="text-sm">{FLAG_EMOJI[l.flag]}</span>
               <div className="flex-1 text-left">
-                <p className="font-medium">{l.name}</p>
-                <p className="text-xs text-medium">{CURRENCIES_DISPLAY[l.code]}</p>
+                <p className="text-xs font-medium">{l.name}</p>
+                <p className="text-2xs text-medium">{CURRENCIES_DISPLAY[l.code]}</p>
               </div>
               {locale === l.code && (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-primary">

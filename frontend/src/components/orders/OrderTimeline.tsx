@@ -74,17 +74,17 @@ export default function OrderTimeline({ status, updatedAt, statusHistory }: Orde
   // Cancelled order — show special state
   if (status === "cancelled") {
     return (
-      <div className="card p-6">
-        <h2 className="text-lg font-bold text-dark mb-4">Order Status</h2>
+      <div className="card p-4">
+        <h2 className="text-base font-bold text-dark mb-4">Order Status</h2>
         <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="w-10 h-10 rounded-full bg-error flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-full bg-error flex items-center justify-center shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
           <div>
             <p className="font-semibold text-red-800">Order Cancelled</p>
-            <p className="text-sm text-red-600">
+            <p className="text-xs text-red-600">
               Cancelled on{" "}
               {new Date(updatedAt).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -99,8 +99,8 @@ export default function OrderTimeline({ status, updatedAt, statusHistory }: Orde
   }
 
   return (
-    <div className="card p-6">
-      <h2 className="text-lg font-bold text-dark mb-6">Order Tracking</h2>
+    <div className="card p-4">
+      <h2 className="text-base font-bold text-dark mb-4">Order Tracking</h2>
 
       <div className="relative">
         {steps.map((step, index) => {
@@ -120,7 +120,7 @@ export default function OrderTimeline({ status, updatedAt, statusHistory }: Orde
 
               {/* Circle */}
               <div
-                className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all ${
                   isCompleted
                     ? "bg-primary shadow-md"
                     : "bg-white border-2 border-border"

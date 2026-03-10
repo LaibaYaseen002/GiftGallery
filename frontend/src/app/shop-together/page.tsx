@@ -71,10 +71,10 @@ export default function ShopTogetherPage() {
   if (!isSignedIn) {
     return (
       <div className="container-custom py-20 text-center">
-        <h1 className="text-3xl font-bold mb-4" style={{ color: "#B76E79" }}>
+        <h1 className="text-2xl font-bold mb-4" style={{ color: "#B76E79" }}>
           Shop Together
         </h1>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-4">
           Please sign in to use the social shopping feature.
         </p>
         <Link href="/sign-in" className="btn-primary">
@@ -91,47 +91,47 @@ export default function ShopTogetherPage() {
     <div className="container-custom py-10">
       {/* Hero Section */}
       <div
-        className="rounded-2xl p-8 md:p-12 mb-10 text-center"
+        className="rounded-2xl p-6 md:p-12 mb-10 text-center"
         style={{
           background: "linear-gradient(135deg, #FFF8F0 0%, #f9e8e0 50%, #FFF8F0 100%)",
           border: "1px solid #B76E7930",
         }}
       >
         <h1
-          className="text-3xl md:text-4xl font-bold mb-4"
+          className="text-2xl md:text-3xl font-bold mb-4"
           style={{ color: "#B76E79" }}
         >
           Shop Together
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-2 text-lg">
+        <p className="text-gray-600 max-w-2xl mx-auto mb-2 text-base">
           Browse gifts with friends and family in real time. Create a session,
           share the code, and explore products together while chatting and
           sharing your favorites.
         </p>
-        <p className="text-gray-500 text-sm max-w-xl mx-auto">
+        <p className="text-gray-500 text-xs max-w-xl mx-auto">
           Perfect for picking group gifts, planning events, or simply getting a
           second opinion on your choices.
         </p>
       </div>
 
       {/* Actions */}
-      <div className="grid md:grid-cols-2 gap-6 mb-12">
+      <div className="grid md:grid-cols-2 gap-4 mb-12">
         {/* Create Session */}
-        <div className="card p-6">
+        <div className="card p-4">
           <h2
-            className="text-xl font-semibold mb-3"
+            className="text-lg font-semibold mb-3"
             style={{ color: "#B76E79" }}
           >
             Create a Session
           </h2>
-          <p className="text-gray-500 text-sm mb-4">
+          <p className="text-gray-500 text-xs mb-4">
             Start a new shopping session and invite others with a unique code.
           </p>
 
           {showCreateForm ? (
             <form onSubmit={handleCreateSession} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
                   Session Title (optional)
                 </label>
                 <input
@@ -143,7 +143,7 @@ export default function ShopTogetherPage() {
                 />
               </div>
               {error && (
-                <p className="text-red-500 text-sm">{error}</p>
+                <p className="text-red-500 text-xs">{error}</p>
               )}
               <div className="flex gap-3">
                 <button
@@ -176,14 +176,14 @@ export default function ShopTogetherPage() {
         </div>
 
         {/* Join Session */}
-        <div className="card p-6">
+        <div className="card p-4">
           <h2
-            className="text-xl font-semibold mb-3"
+            className="text-lg font-semibold mb-3"
             style={{ color: "#B76E79" }}
           >
             Join a Session
           </h2>
-          <p className="text-gray-500 text-sm mb-4">
+          <p className="text-gray-500 text-xs mb-4">
             Enter a session code shared by a friend to start shopping together.
           </p>
           <form onSubmit={handleJoinSession} className="space-y-4">
@@ -210,7 +210,7 @@ export default function ShopTogetherPage() {
       {/* My Sessions */}
       <div>
         <h2
-          className="text-2xl font-bold mb-6"
+          className="text-xl font-bold mb-4"
           style={{ color: "#B76E79" }}
         >
           My Sessions
@@ -219,7 +219,7 @@ export default function ShopTogetherPage() {
         {loading ? (
           <LoadingSpinner />
         ) : sessions.length === 0 ? (
-          <div className="card p-8 text-center">
+          <div className="card p-6 text-center">
             <p className="text-gray-500">
               You have not created or joined any sessions yet. Start one above!
             </p>
@@ -228,8 +228,8 @@ export default function ShopTogetherPage() {
           <>
             {/* Active Sessions */}
             {activeSessions.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+              <div className="mb-6">
+                <h3 className="text-base font-semibold text-gray-700 mb-3">
                   Active Sessions
                 </h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -243,7 +243,7 @@ export default function ShopTogetherPage() {
             {/* Ended Sessions */}
             {endedSessions.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                <h3 className="text-base font-semibold text-gray-700 mb-3">
                   Past Sessions
                 </h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -271,7 +271,7 @@ function SessionCard({ session }: { session: ShoppingSession }) {
   return (
     <Link href={`/shop-together/${session.session_code}`}>
       <div
-        className="card p-5 hover:shadow-lg transition-shadow cursor-pointer"
+        className="card p-4 hover:shadow-lg transition-shadow cursor-pointer"
         style={{
           borderLeft: session.is_active
             ? "4px solid #B76E79"
@@ -293,7 +293,7 @@ function SessionCard({ session }: { session: ShoppingSession }) {
           </span>
         </div>
 
-        <div className="space-y-2 text-sm text-gray-500">
+        <div className="space-y-2 text-xs text-gray-500">
           <div className="flex items-center gap-2">
             <svg
               className="w-4 h-4"

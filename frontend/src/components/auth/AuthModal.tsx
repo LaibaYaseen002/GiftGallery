@@ -29,7 +29,7 @@ export default function AuthModal({ isOpen, onClose, redirectUrl = "/checkout" }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={mode === "sign-in" ? "Sign In to Continue" : "Create an Account"}>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Info message */}
         <p className="text-xs text-medium text-center">
           {mode === "sign-in"

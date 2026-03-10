@@ -49,8 +49,8 @@ export default function ReviewForm({
   };
 
   return (
-    <div className="card p-6">
-      <h3 className="text-lg font-bold text-dark mb-4">Write a Review</h3>
+    <div className="card p-4">
+      <h3 className="text-base font-bold text-dark mb-4">Write a Review</h3>
 
       <SignedOut>
         <p className="text-medium">
@@ -62,9 +62,9 @@ export default function ReviewForm({
       </SignedOut>
 
       <SignedIn>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-dark mb-2">
+            <label className="block text-xs font-medium text-dark mb-2">
               Your Rating
             </label>
             <StarRating
@@ -76,7 +76,7 @@ export default function ReviewForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Your Review (Optional)
             </label>
             <textarea
@@ -89,7 +89,7 @@ export default function ReviewForm({
             />
           </div>
 
-          {error && <p className="text-error text-sm">{error}</p>}
+          {error && <p className="text-error text-xs">{error}</p>}
 
           <button
             type="submit"

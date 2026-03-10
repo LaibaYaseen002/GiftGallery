@@ -154,16 +154,16 @@ export default function AdminGiftWrappingPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <div>
           <h1 className="page-title mb-1">Gift Wrapping & Packaging</h1>
-          <p className="text-medium text-sm">
+          <p className="text-medium text-xs">
             {options.length} option{options.length !== 1 ? "s" : ""} total
           </p>
         </div>
@@ -176,10 +176,10 @@ export default function AdminGiftWrappingPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 bg-light rounded-lg p-1 w-fit">
+      <div className="flex gap-1 mb-4 bg-light rounded-lg p-1 w-fit">
         <button
           onClick={() => setActiveTab("wrapping")}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
+          className={`px-5 py-2 rounded-md text-xs font-medium transition-colors ${
             activeTab === "wrapping"
               ? "bg-white text-primary shadow-sm"
               : "text-medium hover:text-dark"
@@ -192,7 +192,7 @@ export default function AdminGiftWrappingPage() {
         </button>
         <button
           onClick={() => setActiveTab("packaging")}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
+          className={`px-5 py-2 rounded-md text-xs font-medium transition-colors ${
             activeTab === "packaging"
               ? "bg-white text-primary shadow-sm"
               : "text-medium hover:text-dark"
@@ -207,7 +207,7 @@ export default function AdminGiftWrappingPage() {
 
       {/* Options Grid */}
       {filteredOptions.length === 0 ? (
-        <div className="card p-8 text-center">
+        <div className="card p-6 text-center">
           <p className="text-medium">
             No {activeTab} options yet. Add your first one.
           </p>
@@ -250,7 +250,7 @@ export default function AdminGiftWrappingPage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-medium">
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-medium">
                     <span className="font-medium text-dark">
                       ${option.price.toFixed(2)}
                     </span>
@@ -283,19 +283,19 @@ export default function AdminGiftWrappingPage() {
               <div className="flex gap-2 mt-3 pt-3 border-t border-border">
                 <button
                   onClick={() => handleToggleActive(option)}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
                 >
                   {option.is_active ? "Deactivate" : "Activate"}
                 </button>
                 <button
                   onClick={() => openEdit(option)}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-primary hover:border-primary transition-colors"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => setDeleteId(option.id)}
-                  className="flex-1 text-sm py-1.5 px-3 rounded-lg border border-border text-medium hover:text-error hover:border-error transition-colors"
+                  className="flex-1 text-xs py-1.5 px-3 rounded-lg border border-border text-medium hover:text-error hover:border-error transition-colors"
                 >
                   Delete
                 </button>
@@ -315,15 +315,15 @@ export default function AdminGiftWrappingPage() {
             : `Add ${activeTab === "wrapping" ? "Wrapping" : "Packaging"} Option`
         }
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-2 text-xs">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Name *
             </label>
             <input
@@ -336,7 +336,7 @@ export default function AdminGiftWrappingPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Description
             </label>
             <textarea
@@ -349,7 +349,7 @@ export default function AdminGiftWrappingPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Image URL
             </label>
             <input
@@ -377,7 +377,7 @@ export default function AdminGiftWrappingPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Price *
               </label>
               <input
@@ -391,7 +391,7 @@ export default function AdminGiftWrappingPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Color
               </label>
               <div className="flex gap-2 items-center">
@@ -399,7 +399,7 @@ export default function AdminGiftWrappingPage() {
                   type="color"
                   value={formColor}
                   onChange={(e) => setFormColor(e.target.value)}
-                  className="w-10 h-10 rounded-lg border border-border cursor-pointer"
+                  className="w-8 h-8 rounded-lg border border-border cursor-pointer"
                 />
                 <input
                   type="text"
@@ -413,7 +413,7 @@ export default function AdminGiftWrappingPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Theme
             </label>
             <input
@@ -433,7 +433,7 @@ export default function AdminGiftWrappingPage() {
               onChange={(e) => setFormEcoFriendly(e.target.checked)}
               className="w-4 h-4 text-primary border-border rounded focus:ring-primary"
             />
-            <label htmlFor="ecoFriendly" className="text-sm font-medium text-dark">
+            <label htmlFor="ecoFriendly" className="text-xs font-medium text-dark">
               Eco-Friendly Option
             </label>
           </div>
@@ -463,7 +463,7 @@ export default function AdminGiftWrappingPage() {
         onClose={() => setDeleteId(null)}
         title="Delete Option"
       >
-        <p className="text-medium mb-6">
+        <p className="text-medium mb-4">
           Are you sure you want to delete this {activeTab} option? This action
           cannot be undone.
         </p>
@@ -476,7 +476,7 @@ export default function AdminGiftWrappingPage() {
           </button>
           <button
             onClick={() => deleteId && handleDelete(deleteId)}
-            className="flex-1 bg-error text-white px-4 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
+            className="flex-1 bg-error text-white px-4 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
             Delete
           </button>

@@ -35,13 +35,13 @@ export default function AdminCustomerDetailPage() {
   }, [userId, getToken]);
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   if (!customer) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-bold text-dark mb-2">Customer not found</h2>
+        <h2 className="text-xl font-bold text-dark mb-2">Customer not found</h2>
         <button onClick={() => router.push("/admin/customers")} className="btn-primary mt-4">
           Back to Customers
         </button>
@@ -60,7 +60,7 @@ export default function AdminCustomerDetailPage() {
       {/* Header */}
       <Link
         href="/admin/customers"
-        className="text-sm text-medium hover:text-primary transition-colors mb-4 inline-flex items-center gap-1"
+        className="text-xs text-medium hover:text-primary transition-colors mb-4 inline-flex items-center gap-1"
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -69,9 +69,9 @@ export default function AdminCustomerDetailPage() {
       </Link>
 
       {/* Profile + Stats */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
         {/* Profile Card */}
-        <div className="card p-6">
+        <div className="card p-4">
           <div className="flex items-center gap-4 mb-4">
             <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-100 shrink-0">
               {customer.image_url ? (
@@ -83,17 +83,17 @@ export default function AdminCustomerDetailPage() {
                   sizes="64px"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary font-bold text-xl">
+                <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary font-bold text-lg">
                   {customer.name.charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
             <div>
-              <h1 className="text-xl font-bold text-dark">{customer.name}</h1>
-              <p className="text-sm text-medium">{customer.email}</p>
+              <h1 className="text-lg font-bold text-dark">{customer.name}</h1>
+              <p className="text-xs text-medium">{customer.email}</p>
             </div>
           </div>
-          <div className="text-sm text-medium">
+          <div className="text-xs text-medium">
             <p>
               Member since{" "}
               {customer.member_since
@@ -110,23 +110,23 @@ export default function AdminCustomerDetailPage() {
         {/* Stats Cards */}
         <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="card p-4 text-center">
-            <p className="text-2xl font-bold text-primary">{customer.stats.total_orders}</p>
+            <p className="text-xl font-bold text-primary">{customer.stats.total_orders}</p>
             <p className="text-xs text-medium mt-1">Total Orders</p>
           </div>
           <div className="card p-4 text-center">
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-xl font-bold text-primary">
               ${customer.stats.total_spent.toFixed(2)}
             </p>
             <p className="text-xs text-medium mt-1">Total Spent</p>
           </div>
           <div className="card p-4 text-center">
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-xl font-bold text-primary">
               ${customer.stats.avg_order_value.toFixed(2)}
             </p>
             <p className="text-xs text-medium mt-1">Avg. Order</p>
           </div>
           <div className="card p-4 text-center">
-            <p className="text-2xl font-bold text-primary">{customer.stats.total_reviews}</p>
+            <p className="text-xl font-bold text-primary">{customer.stats.total_reviews}</p>
             <p className="text-xs text-medium mt-1">Reviews</p>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function AdminCustomerDetailPage() {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
               activeTab === tab.key
                 ? "bg-primary text-white"
                 : "bg-white text-medium border border-border hover:bg-light"
@@ -153,7 +153,7 @@ export default function AdminCustomerDetailPage() {
       {activeTab === "orders" && (
         <div className="space-y-2">
           {customer.orders.length === 0 ? (
-            <div className="card p-6 text-center text-medium">No orders found.</div>
+            <div className="card p-4 text-center text-medium">No orders found.</div>
           ) : (
             customer.orders.map((order) => (
               <Link
@@ -197,7 +197,7 @@ export default function AdminCustomerDetailPage() {
       {activeTab === "returns" && (
         <div className="space-y-2">
           {customer.returns.length === 0 ? (
-            <div className="card p-6 text-center text-medium">No return requests.</div>
+            <div className="card p-4 text-center text-medium">No return requests.</div>
           ) : (
             customer.returns.map((ret) => (
               <div key={ret.id} className="card p-4">
@@ -221,7 +221,7 @@ export default function AdminCustomerDetailPage() {
                         {ret.status.charAt(0).toUpperCase() + ret.status.slice(1)}
                       </span>
                     </div>
-                    <p className="text-sm text-medium">{ret.reason}</p>
+                    <p className="text-xs text-medium">{ret.reason}</p>
                     <p className="text-xs text-medium mt-1">
                       {new Date(ret.created_at).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -240,7 +240,7 @@ export default function AdminCustomerDetailPage() {
       {activeTab === "reviews" && (
         <div className="space-y-2">
           {customer.reviews.length === 0 ? (
-            <div className="card p-6 text-center text-medium">No reviews yet.</div>
+            <div className="card p-4 text-center text-medium">No reviews yet.</div>
           ) : (
             customer.reviews.map((review) => (
               <div key={review.id} className="card p-4">
@@ -275,7 +275,7 @@ export default function AdminCustomerDetailPage() {
                   </span>
                 </div>
                 {review.comment && (
-                  <p className="text-sm text-dark">{review.comment}</p>
+                  <p className="text-xs text-dark">{review.comment}</p>
                 )}
               </div>
             ))

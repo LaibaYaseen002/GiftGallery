@@ -75,16 +75,16 @@ export default function AdminFeedbackPage() {
   const unreadCount = feedbacks.filter((f) => !f.is_read).length;
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <h1 className="page-title mb-0">
           Customer Feedback
           {unreadCount > 0 && (
-            <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-primary/10 text-primary">
+            <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
               {unreadCount} new
             </span>
           )}
@@ -92,7 +92,7 @@ export default function AdminFeedbackPage() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-4">
         {(["all", "unread", "read"] as const).map((tab) => {
           const count =
             tab === "all"
@@ -104,7 +104,7 @@ export default function AdminFeedbackPage() {
             <button
               key={tab}
               onClick={() => setFilter(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
                 filter === tab
                   ? "bg-primary text-white"
                   : "bg-white text-medium border border-border hover:bg-light"
@@ -125,7 +125,7 @@ export default function AdminFeedbackPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -133,7 +133,7 @@ export default function AdminFeedbackPage() {
               d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">No feedback</h2>
+          <h2 className="text-xl font-bold text-dark mb-2">No feedback</h2>
           <p className="text-medium">
             {filter === "all"
               ? "No customer feedback has been submitted yet."
@@ -157,7 +157,7 @@ export default function AdminFeedbackPage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-x-3 text-sm text-medium mb-3">
+                  <div className="flex flex-wrap gap-x-3 text-xs text-medium mb-3">
                     <span className="font-medium">{fb.name}</span>
                     <span>{fb.email}</span>
                     <span>
@@ -170,7 +170,7 @@ export default function AdminFeedbackPage() {
                       })}
                     </span>
                   </div>
-                  <p className="text-sm text-dark leading-relaxed">
+                  <p className="text-xs text-dark leading-relaxed">
                     {fb.message}
                   </p>
                 </div>
@@ -182,14 +182,14 @@ export default function AdminFeedbackPage() {
                       setReplyMessage("");
                       setReplySuccess("");
                     }}
-                    className="px-3 py-1.5 text-sm font-medium text-accent border border-accent rounded-lg hover:bg-accent hover:text-white transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium text-accent border border-accent rounded-lg hover:bg-accent hover:text-white transition-colors"
                   >
                     Reply
                   </button>
                   {!fb.is_read && (
                     <button
                       onClick={() => handleMarkRead(fb.id)}
-                      className="px-3 py-1.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
+                      className="px-3 py-1.5 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
                     >
                       Mark Read
                     </button>
@@ -204,19 +204,19 @@ export default function AdminFeedbackPage() {
       {/* Reply Modal */}
       {replyTo && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
-            <h2 className="text-lg font-semibold text-dark mb-1">Reply to Feedback</h2>
-            <p className="text-sm text-medium mb-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-4">
+            <h2 className="text-base font-semibold text-dark mb-1">Reply to Feedback</h2>
+            <p className="text-xs text-medium mb-4">
               Replying to <span className="font-medium text-dark">{replyTo.name}</span> ({replyTo.email}) about &quot;{replyTo.subject}&quot;
             </p>
 
-            <div className="bg-gray-50 rounded-lg p-3 mb-4 text-sm text-medium">
+            <div className="bg-gray-50 rounded-lg p-3 mb-4 text-xs text-medium">
               <p className="font-medium text-dark text-xs mb-1">Original message:</p>
               <p className="line-clamp-3">{replyTo.message}</p>
             </div>
 
             {replySuccess && (
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-lg mb-4 text-sm">
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-lg mb-4 text-xs">
                 {replySuccess}
               </div>
             )}

@@ -61,7 +61,7 @@ function ProductsContent() {
       <h1 className="page-title">{t("products.title")}</h1>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
         {/* Search */}
         <div className="flex-1">
           <input
@@ -97,7 +97,7 @@ function ProductsContent() {
         <ProductCardSkeletonGrid count={8} />
       ) : products.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-2xl mb-2">{t("products.noResults")}</p>
+          <p className="text-xl mb-2">{t("products.noResults")}</p>
           <p className="text-medium">
             {search || selectedCategory
               ? "Try adjusting your search or filters."
@@ -131,7 +131,7 @@ function ProductsContent() {
 
 export default function AllProductsPage() {
   return (
-    <Suspense fallback={<LoadingSpinner size="lg" className="py-32" />}>
+    <Suspense fallback={<LoadingSpinner size="lg" className="py-22" />}>
       <ProductsContent />
     </Suspense>
   );

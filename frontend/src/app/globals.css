@@ -3,44 +3,83 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* ── Sizing Design Tokens ── */
+    --font-xs: 0.6875rem;   /* 11px – captions, badges */
+    --font-sm: 0.75rem;     /* 12px – body text, buttons */
+    --font-base: 0.8125rem; /* 13px – primary body */
+    --font-md: 0.875rem;    /* 14px – labels, emphasis */
+    --font-lg: 1rem;        /* 16px – section headings */
+    --font-xl: 1.125rem;    /* 18px – page headings */
+    --font-2xl: 1.25rem;    /* 20px – hero/large headings */
+
+    /* Spacing tokens */
+    --space-xs: 0.25rem;    /* 4px */
+    --space-sm: 0.375rem;   /* 6px */
+    --space-md: 0.5rem;     /* 8px */
+    --space-lg: 0.75rem;    /* 12px */
+    --space-xl: 1rem;       /* 16px */
+
+    /* Component tokens */
+    --btn-py: 0.375rem;     /* 6px – button vertical padding */
+    --btn-px: 1rem;         /* 16px – button horizontal padding */
+    --input-py: 0.375rem;   /* 6px – input vertical padding */
+    --input-px: 0.625rem;   /* 10px – input horizontal padding */
+    --nav-h: 3.5rem;        /* 56px – navbar height */
+    --modal-p: 1rem;        /* 16px – modal padding */
+    --dropdown-py: 0.375rem;/* 6px – dropdown item padding */
+  }
+
   html {
-    font-size: 100%; /* 16px base – prevents browser/OS scaling overrides */
-    -webkit-text-size-adjust: 100%; /* Prevent iOS font scaling */
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
 
   * {
-    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-secondary text-dark antialiased text-xs;
-    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+    @apply bg-secondary text-dark antialiased;
+    font-size: var(--font-sm);
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold text-dark;
   }
+
+  h1 { font-size: var(--font-xl); }
+  h2 { font-size: var(--font-lg); }
+  h3 { font-size: var(--font-md); }
+  h4 { font-size: var(--font-sm); }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-white px-4 py-1.5 rounded-md text-xs font-medium
+    @apply bg-primary text-white rounded-md font-medium
            hover:bg-primary-dark transition-colors duration-200
-           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1
            disabled:opacity-50 disabled:cursor-not-allowed;
+    padding: var(--btn-py) var(--btn-px);
+    font-size: var(--font-sm);
   }
 
   .btn-secondary {
-    @apply bg-white text-dark px-4 py-1.5 rounded-md text-xs font-medium
+    @apply bg-white text-dark rounded-md font-medium
            border border-border hover:bg-light transition-colors duration-200
-           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1;
+    padding: var(--btn-py) var(--btn-px);
+    font-size: var(--font-sm);
   }
 
   .btn-accent {
-    @apply bg-accent text-white px-4 py-1.5 rounded-md text-xs font-medium
+    @apply bg-accent text-white rounded-md font-medium
            hover:opacity-90 transition-opacity duration-200
-           focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+           focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1;
+    padding: var(--btn-py) var(--btn-px);
+    font-size: var(--font-sm);
   }
 
   .card {
@@ -49,16 +88,17 @@
   }
 
   .input-field {
-    @apply w-full px-3 py-2 sm:py-1.5 rounded-md border border-border bg-white text-xs
+    @apply w-full rounded-md border border-border bg-white
            text-dark placeholder-medium
            focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
            transition-all duration-200;
+    padding: var(--input-py) var(--input-px);
     font-size: 16px; /* Prevents iOS zoom on input focus */
   }
 
   @media (min-width: 640px) {
     .input-field {
-      font-size: inherit;
+      font-size: var(--font-sm);
     }
   }
 
@@ -67,11 +107,32 @@
   }
 
   .page-title {
-    @apply text-lg sm:text-xl font-bold text-dark mb-3 sm:mb-4;
+    @apply font-bold text-dark mb-3 sm:mb-4;
+    font-size: var(--font-lg);
+  }
+
+  @media (min-width: 640px) {
+    .page-title {
+      font-size: var(--font-xl);
+    }
   }
 
   .section-title {
-    @apply text-base sm:text-lg font-bold text-dark mb-2 sm:mb-3;
+    @apply font-bold text-dark mb-2 sm:mb-3;
+    font-size: var(--font-md);
+  }
+
+  @media (min-width: 640px) {
+    .section-title {
+      font-size: var(--font-lg);
+    }
+  }
+
+  /* Dropdown items – consistent compact sizing */
+  .dropdown-item {
+    @apply block w-full text-left hover:bg-primary/5 transition-colors;
+    padding: var(--dropdown-py) var(--input-px);
+    font-size: var(--font-sm);
   }
 }
 

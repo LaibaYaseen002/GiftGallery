@@ -75,8 +75,8 @@ export default function ProductDetailClient({ id }: { id: string }) {
   if (!product) {
     return (
       <div className="container-custom py-20 text-center">
-        <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
-        <p className="text-medium mb-6">
+        <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+        <p className="text-medium mb-4">
           The product you&apos;re looking for doesn&apos;t exist or has been removed.
         </p>
         <Link href="/products" className="btn-primary">
@@ -89,7 +89,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
   return (
     <div className="container-custom py-8">
       {/* Breadcrumb */}
-      <nav className="text-sm text-medium mb-6">
+      <nav className="text-xs text-medium mb-4">
         <Link href="/" className="hover:text-primary">
           Home
         </Link>
@@ -112,7 +112,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
         <span className="text-dark">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-10">
         {/* Product Image */}
         <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border">
           <ProductImage
@@ -125,7 +125,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
           />
           {!product.in_stock && (
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <span className="bg-white text-dark px-4 py-2 rounded-full text-lg font-medium">
+              <span className="bg-white text-dark px-4 py-2 rounded-full text-base font-medium">
                 {t("products.outOfStock")}
               </span>
             </div>
@@ -137,13 +137,13 @@ export default function ProductDetailClient({ id }: { id: string }) {
           {product.category && (
             <Link
               href={`/category/${product.category.slug}`}
-              className="text-sm text-primary font-medium hover:text-primary-dark"
+              className="text-xs text-primary font-medium hover:text-primary-dark"
             >
               {product.category.name}
             </Link>
           )}
           <div className="flex items-start justify-between mt-1 mb-2 gap-2">
-            <h1 className="text-xl sm:text-3xl font-bold text-dark">
+            <h1 className="text-lg sm:text-2xl font-bold text-dark">
               {product.name}
             </h1>
             <WishlistButton productId={product.id} size="md" />
@@ -153,22 +153,22 @@ export default function ProductDetailClient({ id }: { id: string }) {
           {reviewCount > 0 && (
             <div className="flex items-center gap-2 mb-4">
               <StarRating rating={averageRating} size="sm" />
-              <span className="text-sm text-medium">
+              <span className="text-xs text-medium">
                 {averageRating.toFixed(1)} ({reviewCount} {t("products.reviews")})
               </span>
             </div>
           )}
 
-          <p className="text-xl sm:text-3xl font-bold text-primary mb-4 sm:mb-6">
+          <p className="text-lg sm:text-2xl font-bold text-primary mb-4 sm:mb-4">
             {formatPrice(product.price)}
           </p>
 
-          <p className="text-medium text-sm leading-relaxed mb-4 sm:mb-8">
+          <p className="text-medium text-xs leading-relaxed mb-4 sm:mb-6">
             {product.description}
           </p>
 
           {/* Stock Status */}
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center gap-2 mb-4">
             <span
               className={`w-3 h-3 rounded-full ${
                 product.in_stock ? "bg-success" : "bg-error"
@@ -181,20 +181,20 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
           {/* Quantity + Add to Cart */}
           {product.in_stock && (
-            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-4">
               <div className="flex items-center border border-border rounded-lg">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:bg-light transition-colors"
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-base hover:bg-light transition-colors"
                 >
                   -
                 </button>
-                <span className="px-3 py-1.5 sm:px-4 sm:py-2 font-medium min-w-[40px] text-center text-sm">
+                <span className="px-3 py-1.5 sm:px-4 sm:py-2 font-medium min-w-[40px] text-center text-xs">
                   {quantity}
                 </span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:bg-light transition-colors"
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-base hover:bg-light transition-colors"
                 >
                   +
                 </button>
@@ -202,7 +202,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
               <button
                 onClick={handleAddToCart}
-                className="btn-primary flex-1 text-sm sm:text-lg py-2 sm:py-3"
+                className="btn-primary flex-1 text-xs sm:text-base py-2 sm:py-2"
               >
                 {t("products.addToCart")}
               </button>
@@ -210,7 +210,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
           )}
 
           {/* Product Meta */}
-          <div className="border-t border-border pt-6 mt-6 space-y-2 text-sm text-medium">
+          <div className="border-t border-border pt-6 mt-6 space-y-2 text-xs text-medium">
             <p>
               <span className="font-medium text-dark">Category:</span>{" "}
               {product.category ? product.category.name : "Uncategorized"}
@@ -228,13 +228,13 @@ export default function ProductDetailClient({ id }: { id: string }) {
         <h2 className="section-title">
           {t("reviews.title")}
           {reviewCount > 0 && (
-            <span className="text-medium font-normal text-lg ml-2">
+            <span className="text-medium font-normal text-base ml-2">
               ({reviewCount})
             </span>
           )}
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Review Form */}
           <div>
             <ReviewForm productId={id} onReviewSubmitted={fetchReviews} />

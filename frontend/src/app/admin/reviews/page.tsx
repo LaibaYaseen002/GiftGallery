@@ -67,23 +67,23 @@ export default function AdminReviewsPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
-      <h1 className="page-title mb-6">Review Moderation</h1>
+      <h1 className="page-title mb-4">Review Moderation</h1>
 
       {/* Stats Bar */}
       {stats && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
           <div className="card p-4 text-center">
-            <p className="text-2xl font-bold text-primary">{stats.total_reviews}</p>
+            <p className="text-xl font-bold text-primary">{stats.total_reviews}</p>
             <p className="text-xs text-medium mt-1">Total Reviews</p>
           </div>
           <div className="card p-4 text-center">
             <div className="flex items-center justify-center gap-1">
-              <p className="text-2xl font-bold text-primary">{stats.average_rating}</p>
+              <p className="text-xl font-bold text-primary">{stats.average_rating}</p>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-yellow-400">
                 <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
               </svg>
@@ -121,12 +121,12 @@ export default function AdminReviewsPage() {
       )}
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-4">
         {(["all", 5, 4, 3, 2, 1] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setFilter(tab)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
               filter === tab
                 ? "bg-primary text-white"
                 : "bg-white text-medium border border-border hover:bg-light"
@@ -139,7 +139,7 @@ export default function AdminReviewsPage() {
 
       {/* Reviews List */}
       {filtered.length === 0 ? (
-        <div className="card p-8 text-center">
+        <div className="card p-6 text-center">
           <p className="text-medium">
             {filter === "all" ? "No reviews yet." : `No ${filter}-star reviews.`}
           </p>
@@ -160,7 +160,7 @@ export default function AdminReviewsPage() {
                       sizes="56px"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-xl">
+                    <div className="w-full h-full flex items-center justify-center text-lg">
                       🎁
                     </div>
                   )}
@@ -170,7 +170,7 @@ export default function AdminReviewsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
                     <div>
-                      <p className="font-medium text-dark text-sm truncate">
+                      <p className="font-medium text-dark text-xs truncate">
                         {review.product_name}
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">
@@ -220,7 +220,7 @@ export default function AdminReviewsPage() {
                   </div>
 
                   {review.comment && (
-                    <p className="text-sm text-dark mt-1">{review.comment}</p>
+                    <p className="text-xs text-dark mt-1">{review.comment}</p>
                   )}
                 </div>
               </div>
@@ -235,14 +235,14 @@ export default function AdminReviewsPage() {
         onClose={() => setDeleting(null)}
         title="Delete Review"
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           <p className="text-medium">
             Are you sure you want to delete this review by{" "}
             <strong className="text-dark">{deleting?.user_name}</strong> on{" "}
             <strong className="text-dark">{deleting?.product_name}</strong>?
           </p>
           {deleting?.comment && (
-            <div className="bg-gray-50 rounded-lg p-3 text-sm text-medium italic">
+            <div className="bg-gray-50 rounded-lg p-3 text-xs text-medium italic">
               &ldquo;{deleting.comment}&rdquo;
             </div>
           )}
@@ -256,7 +256,7 @@ export default function AdminReviewsPage() {
             </button>
             <button
               onClick={handleDelete}
-              className="flex-1 bg-error text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="flex-1 bg-error text-white px-6 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
               disabled={isDeleting}
             >
               {isDeleting ? "Deleting..." : "Delete"}

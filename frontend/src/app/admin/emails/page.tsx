@@ -88,16 +88,16 @@ export default function EmailsPage() {
 
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className="page-title mb-1">Email Management</h1>
-        <p className="text-medium text-sm">Send emails to customers and view sent history</p>
+        <p className="text-medium text-xs">Send emails to customers and view sent history</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-4">
         <button
           onClick={() => setTab("compose")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
             tab === "compose"
               ? "bg-primary text-white"
               : "bg-white text-medium hover:text-dark border border-border"
@@ -107,7 +107,7 @@ export default function EmailsPage() {
         </button>
         <button
           onClick={() => setTab("history")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
             tab === "history"
               ? "bg-primary text-white"
               : "bg-white text-medium hover:text-dark border border-border"
@@ -119,24 +119,24 @@ export default function EmailsPage() {
 
       {/* Compose Tab */}
       {tab === "compose" && (
-        <div className="card p-6 max-w-2xl">
-          <h2 className="text-lg font-semibold text-dark mb-4">Compose New Email</h2>
+        <div className="card p-4 max-w-2xl">
+          <h2 className="text-base font-semibold text-dark mb-4">Compose New Email</h2>
 
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 text-sm">
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-lg mb-4 text-xs">
               {success}
             </div>
           )}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg mb-4 text-xs">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSend} className="space-y-4">
+          <form onSubmit={handleSend} className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-dark mb-1">
+                <label className="block text-xs font-medium text-dark mb-1">
                   Recipient Email <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -149,7 +149,7 @@ export default function EmailsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-dark mb-1">
+                <label className="block text-xs font-medium text-dark mb-1">
                   Recipient Name
                 </label>
                 <input
@@ -163,7 +163,7 @@ export default function EmailsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Subject <span className="text-red-500">*</span>
               </label>
               <input
@@ -177,7 +177,7 @@ export default function EmailsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark mb-1">
+              <label className="block text-xs font-medium text-dark mb-1">
                 Message <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -234,7 +234,7 @@ export default function EmailsPage() {
                 <div key={email.id} className="card p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <h3 className="font-medium text-dark text-sm truncate">
+                      <h3 className="font-medium text-dark text-xs truncate">
                         {email.subject}
                       </h3>
                       {getTypeBadge(email.type)}
@@ -248,7 +248,7 @@ export default function EmailsPage() {
                       To: <span className="text-dark">{email.to_name ? `${email.to_name} (${email.to_email})` : email.to_email}</span>
                     </span>
                   </div>
-                  <p className="text-sm text-medium line-clamp-2">{email.message}</p>
+                  <p className="text-xs text-medium line-clamp-2">{email.message}</p>
                 </div>
               ))}
             </div>

@@ -22,7 +22,7 @@ export default function ShoppingCartPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-14 h-14 sm:w-20 sm:h-20 text-border mx-auto mb-4 sm:mb-6"
+            className="w-14 h-14 sm:w-20 sm:h-20 text-border mx-auto mb-4 sm:mb-4"
           >
             <path
               strokeLinecap="round"
@@ -30,28 +30,28 @@ export default function ShoppingCartPage() {
               d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
             />
           </svg>
-          <h2 className="text-lg sm:text-2xl font-bold text-dark mb-2">
+          <h2 className="text-base sm:text-xl font-bold text-dark mb-2">
             {t("cart.empty")}
           </h2>
-          <p className="text-medium text-sm mb-4 sm:mb-6">
+          <p className="text-medium text-xs mb-4 sm:mb-4">
             Looks like you haven&apos;t added any gifts yet.
           </p>
-          <Link href="/products" className="btn-primary text-sm">
+          <Link href="/products" className="btn-primary text-xs">
             {t("cart.continueShopping")}
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-4">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="card p-3 sm:p-6">
+            <div className="card p-3 sm:p-4">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-dark">
+                <h2 className="text-base font-semibold text-dark">
                   {items.length} item{items.length !== 1 ? "s" : ""} in cart
                 </h2>
                 <button
                   onClick={clearCart}
-                  className="text-sm text-error hover:text-red-700 transition-colors"
+                  className="text-xs text-error hover:text-red-700 transition-colors"
                 >
                   Clear Cart
                 </button>

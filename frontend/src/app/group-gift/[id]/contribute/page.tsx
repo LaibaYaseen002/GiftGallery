@@ -110,10 +110,10 @@ export default function ContributePage() {
             d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
           />
         </svg>
-        <h2 className="text-2xl font-bold text-dark mb-2">
+        <h2 className="text-xl font-bold text-dark mb-2">
           Group Gift Not Found
         </h2>
-        <p className="text-medium mb-6">
+        <p className="text-medium mb-4">
           {error || "This group gift could not be found."}
         </p>
         <Link href="/" className="btn-primary">
@@ -142,7 +142,7 @@ export default function ContributePage() {
     <div className="container-custom py-8">
       <Link
         href="/group-gift"
-        className="inline-flex items-center gap-1 text-medium hover:text-dark transition-colors mb-6"
+        className="inline-flex items-center gap-1 text-medium hover:text-dark transition-colors mb-4"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +163,7 @@ export default function ContributePage() {
 
       <div className="max-w-3xl mx-auto">
         {/* Gift Details Card */}
-        <div className="card overflow-hidden mb-8">
+        <div className="card overflow-hidden mb-6">
           {/* Product Section */}
           {groupGift.product && (
             <div className="flex flex-col sm:flex-row">
@@ -176,9 +176,9 @@ export default function ContributePage() {
                   sizes="(max-width: 640px) 100vw, 256px"
                 />
               </div>
-              <div className="p-6 flex-1">
+              <div className="p-4 flex-1">
                 <div className="flex items-start justify-between gap-3 mb-3">
-                  <h1 className="text-2xl font-bold text-dark">
+                  <h1 className="text-xl font-bold text-dark">
                     {groupGift.product.name}
                   </h1>
                   <span
@@ -195,10 +195,10 @@ export default function ContributePage() {
                     {groupGift.status}
                   </span>
                 </div>
-                <p className="text-2xl font-bold mb-4" style={{ color: "#B76E79" }}>
+                <p className="text-xl font-bold mb-4" style={{ color: "#B76E79" }}>
                   ${groupGift.product.price.toFixed(2)}
                 </p>
-                <p className="text-medium text-sm">
+                <p className="text-medium text-xs">
                   A group gift for{" "}
                   <span className="font-semibold text-dark">
                     {groupGift.recipient_name}
@@ -209,8 +209,8 @@ export default function ContributePage() {
           )}
 
           {/* Progress Bar */}
-          <div className="px-6 py-4 border-t border-gray-100">
-            <div className="flex justify-between text-sm mb-2">
+          <div className="px-4 py-4 border-t border-gray-100">
+            <div className="flex justify-between text-xs mb-2">
               <span className="text-medium">
                 ${groupGift.current_amount.toFixed(2)} raised of $
                 {groupGift.target_amount.toFixed(2)}
@@ -230,7 +230,7 @@ export default function ContributePage() {
               />
             </div>
             {isActive && remaining > 0 && (
-              <p className="text-sm text-medium mt-2">
+              <p className="text-xs text-medium mt-2">
                 <span className="font-medium" style={{ color: "#D4A853" }}>
                   ${remaining.toFixed(2)}
                 </span>{" "}
@@ -241,22 +241,22 @@ export default function ContributePage() {
 
           {/* Organizer Message */}
           {groupGift.message && (
-            <div className="px-6 py-4 border-t border-gray-100" style={{ backgroundColor: "#FFF8F0" }}>
-              <h3 className="text-sm font-medium text-dark mb-1">
+            <div className="px-4 py-4 border-t border-gray-100" style={{ backgroundColor: "#FFF8F0" }}>
+              <h3 className="text-xs font-medium text-dark mb-1">
                 Message from the organizer
               </h3>
-              <p className="text-medium text-sm italic">
+              <p className="text-medium text-xs italic">
                 &ldquo;{groupGift.message}&rdquo;
               </p>
             </div>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Contribution Form */}
           <div>
             {success ? (
-              <div className="card p-6 text-center">
+              <div className="card p-4 text-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -272,7 +272,7 @@ export default function ContributePage() {
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <h2 className="text-xl font-bold text-dark mb-2">
+                <h2 className="text-lg font-bold text-dark mb-2">
                   Thank you for contributing!
                 </h2>
                 <p className="text-medium mb-4">
@@ -286,19 +286,19 @@ export default function ContributePage() {
                     setContributorEmail("");
                     setAmount("");
                   }}
-                  className="btn-secondary text-sm"
+                  className="btn-secondary text-xs"
                 >
                   Make Another Contribution
                 </button>
               </div>
             ) : isActive && remaining > 0 ? (
-              <div className="card p-6">
-                <h2 className="text-xl font-bold text-dark mb-4">
+              <div className="card p-4">
+                <h2 className="text-lg font-bold text-dark mb-4">
                   Contribute to this Gift
                 </h2>
                 <form onSubmit={handleContribute} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-dark mb-1">
+                    <label className="block text-xs font-medium text-dark mb-1">
                       Your Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -312,7 +312,7 @@ export default function ContributePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-dark mb-1">
+                    <label className="block text-xs font-medium text-dark mb-1">
                       Your Email <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -326,7 +326,7 @@ export default function ContributePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-dark mb-1">
+                    <label className="block text-xs font-medium text-dark mb-1">
                       Amount ($) <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -346,7 +346,7 @@ export default function ContributePage() {
                   </div>
 
                   {formError && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-xs">
                       {formError}
                     </div>
                   )}
@@ -361,8 +361,8 @@ export default function ContributePage() {
                 </form>
               </div>
             ) : (
-              <div className="card p-6 text-center">
-                <h2 className="text-xl font-bold text-dark mb-2">
+              <div className="card p-4 text-center">
+                <h2 className="text-lg font-bold text-dark mb-2">
                   {groupGift.status === "funded" || groupGift.status === "purchased"
                     ? "This gift has been fully funded!"
                     : groupGift.status === "cancelled"
@@ -380,11 +380,11 @@ export default function ContributePage() {
 
           {/* Contributors List */}
           <div>
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-dark mb-4">
+            <div className="card p-4">
+              <h2 className="text-lg font-bold text-dark mb-4">
                 Contributors
                 {groupGift.contributions && groupGift.contributions.length > 0 && (
-                  <span className="text-sm font-normal text-medium ml-2">
+                  <span className="text-xs font-normal text-medium ml-2">
                     ({groupGift.contributions.length})
                   </span>
                 )}
@@ -397,7 +397,7 @@ export default function ContributePage() {
                       className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
                     >
                       <div>
-                        <p className="font-medium text-dark text-sm">
+                        <p className="font-medium text-dark text-xs">
                           {contrib.contributor_name}
                         </p>
                         <p className="text-xs text-medium">
@@ -405,7 +405,7 @@ export default function ContributePage() {
                         </p>
                       </div>
                       <span
-                        className="font-semibold text-sm"
+                        className="font-semibold text-xs"
                         style={{ color: "#D4A853" }}
                       >
                         ${contrib.amount.toFixed(2)}
@@ -414,7 +414,7 @@ export default function ContributePage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-medium text-sm text-center py-4">
+                <p className="text-medium text-xs text-center py-4">
                   No contributions yet. Be the first to contribute!
                 </p>
               )}

@@ -28,14 +28,14 @@ export default function AddNewProductPage() {
     <div>
       <Link
         href="/admin/products"
-        className="text-sm text-medium hover:text-primary mb-4 inline-block"
+        className="text-xs text-medium hover:text-primary mb-4 inline-block"
       >
         &larr; Back to Products
       </Link>
       <h1 className="page-title">Add New Product</h1>
 
       <div className="max-w-xl">
-        <div className="card p-6">
+        <div className="card p-4">
           <ProductForm
             onSubmit={handleCreate}
             onCancel={() => router.push("/admin/products")}

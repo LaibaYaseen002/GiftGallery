@@ -198,16 +198,16 @@ export default function AdminBundlesPage() {
   );
 
   if (loading) {
-    return <LoadingSpinner size="lg" className="py-32" />;
+    return <LoadingSpinner size="lg" className="py-22" />;
   }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
         <div>
           <h1 className="page-title mb-1">Manage Bundles</h1>
-          <p className="text-medium text-sm">
+          <p className="text-medium text-xs">
             {bundles.length} bundle{bundles.length !== 1 ? "s" : ""} total
           </p>
         </div>
@@ -220,22 +220,22 @@ export default function AdminBundlesPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-dark">{bundles.length}</p>
-          <p className="text-sm text-medium">Total Bundles</p>
+          <p className="text-xl font-bold text-dark">{bundles.length}</p>
+          <p className="text-xs text-medium">Total Bundles</p>
         </div>
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-success">
+          <p className="text-xl font-bold text-success">
             {bundles.filter((b) => b.is_active).length}
           </p>
-          <p className="text-sm text-medium">Active</p>
+          <p className="text-xs text-medium">Active</p>
         </div>
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-error">
+          <p className="text-xl font-bold text-error">
             {bundles.filter((b) => !b.is_active).length}
           </p>
-          <p className="text-sm text-medium">Inactive</p>
+          <p className="text-xs text-medium">Inactive</p>
         </div>
       </div>
 
@@ -248,7 +248,7 @@ export default function AdminBundlesPage() {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-20 h-20 text-border mx-auto mb-6"
+            className="w-20 h-20 text-border mx-auto mb-4"
           >
             <path
               strokeLinecap="round"
@@ -256,10 +256,10 @@ export default function AdminBundlesPage() {
               d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-dark mb-2">
+          <h2 className="text-xl font-bold text-dark mb-2">
             No bundles yet
           </h2>
-          <p className="text-medium mb-6">
+          <p className="text-medium mb-4">
             Create your first product bundle to get started.
           </p>
           <button onClick={openCreate} className="btn-primary">
@@ -302,7 +302,7 @@ export default function AdminBundlesPage() {
                         </span>
                       )}
                     </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-medium">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-medium">
                       {bundle.occasion && (
                         <span className="capitalize">{bundle.occasion}</span>
                       )}
@@ -321,19 +321,19 @@ export default function AdminBundlesPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleToggleActive(bundle)}
-                    className="px-4 py-2 text-sm font-medium text-medium border border-border rounded-lg hover:text-primary hover:border-primary transition-colors"
+                    className="px-4 py-2 text-xs font-medium text-medium border border-border rounded-lg hover:text-primary hover:border-primary transition-colors"
                   >
                     {bundle.is_active ? "Deactivate" : "Activate"}
                   </button>
                   <button
                     onClick={() => openEdit(bundle)}
-                    className="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
+                    className="px-4 py-2 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => setDeleteId(bundle.id)}
-                    className="px-4 py-2 text-sm font-medium text-error border border-error rounded-lg hover:bg-error hover:text-white transition-colors"
+                    className="px-4 py-2 text-xs font-medium text-error border border-error rounded-lg hover:bg-error hover:text-white transition-colors"
                   >
                     Delete
                   </button>
@@ -350,15 +350,15 @@ export default function AdminBundlesPage() {
         onClose={closeModal}
         title={editing ? "Edit Bundle" : "Create Bundle"}
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-2 text-xs">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Bundle Name *
             </label>
             <input
@@ -371,7 +371,7 @@ export default function AdminBundlesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Description
             </label>
             <textarea
@@ -384,7 +384,7 @@ export default function AdminBundlesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Image URL
             </label>
             <input
@@ -398,7 +398,7 @@ export default function AdminBundlesPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="bundle-occasion" className="block text-sm font-medium text-dark mb-1">
+              <label htmlFor="bundle-occasion" className="block text-xs font-medium text-dark mb-1">
                 Occasion
               </label>
               <select
@@ -417,7 +417,7 @@ export default function AdminBundlesPage() {
             </div>
 
             <div>
-              <label htmlFor="bundle-discount" className="block text-sm font-medium text-dark mb-1">
+              <label htmlFor="bundle-discount" className="block text-xs font-medium text-dark mb-1">
                 Discount %
               </label>
               <input
@@ -436,7 +436,7 @@ export default function AdminBundlesPage() {
 
           {/* Product Search */}
           <div>
-            <label className="block text-sm font-medium text-dark mb-1">
+            <label className="block text-xs font-medium text-dark mb-1">
               Add Products *
             </label>
             <div className="relative">
@@ -465,7 +465,7 @@ export default function AdminBundlesPage() {
                           sizes="32px"
                         />
                       </div>
-                      <span className="text-sm text-dark truncate">
+                      <span className="text-xs text-dark truncate">
                         {product.name}
                       </span>
                       <span className="text-xs text-medium ml-auto">
@@ -481,7 +481,7 @@ export default function AdminBundlesPage() {
           {/* Selected Items */}
           {formItems.length > 0 && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-dark">
+              <p className="text-xs font-medium text-dark">
                 Bundle Items ({formItems.length})
               </p>
               {formItems.map((item) => {
@@ -492,7 +492,7 @@ export default function AdminBundlesPage() {
                     key={item.product_id}
                     className="flex items-center gap-3 bg-light rounded-lg px-3 py-2"
                   >
-                    <span className="text-sm text-dark flex-1 truncate">
+                    <span className="text-xs text-dark flex-1 truncate">
                       {product?.name || item.product_id}
                     </span>
                     <div className="flex items-center gap-2">
@@ -504,7 +504,7 @@ export default function AdminBundlesPage() {
                         onChange={(e) =>
                           updateQuantity(item.product_id, Number(e.target.value))
                         }
-                        className="w-16 text-center text-sm border border-border rounded-lg px-2 py-1"
+                        className="w-16 text-center text-xs border border-border rounded-lg px-2 py-1"
                         min={1}
                       />
                     </div>
@@ -560,7 +560,7 @@ export default function AdminBundlesPage() {
         onClose={() => setDeleteId(null)}
         title="Delete Bundle"
       >
-        <p className="text-medium mb-6">
+        <p className="text-medium mb-4">
           Are you sure you want to delete this bundle? This action cannot be
           undone.
         </p>
@@ -573,7 +573,7 @@ export default function AdminBundlesPage() {
           </button>
           <button
             onClick={() => deleteId && handleDelete(deleteId)}
-            className="flex-1 bg-error text-white px-4 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
+            className="flex-1 bg-error text-white px-4 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
             Delete
           </button>
