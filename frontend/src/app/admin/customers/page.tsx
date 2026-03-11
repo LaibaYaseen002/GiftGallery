@@ -6,11 +6,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { customersApi, CustomerSummary } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 type SortKey = "total_spent" | "total_orders" | "last_order" | "name";
 
 export default function AdminCustomersPage() {
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
   const [customers, setCustomers] = useState<CustomerSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -148,7 +150,7 @@ export default function AdminCustomersPage() {
                 <div className="col-span-2 text-center">
                   <span className="md:hidden text-xs text-medium mr-2">Spent:</span>
                   <span className="font-semibold text-primary">
-                    ${customer.total_spent.toFixed(2)}
+                    {formatPrice(customer.total_spent)}
                   </span>
                 </div>
 

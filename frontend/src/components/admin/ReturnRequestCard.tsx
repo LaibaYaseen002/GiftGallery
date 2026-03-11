@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ReturnRequest } from "@/types";
 import ReturnStatusBadge from "@/components/returns/ReturnStatusBadge";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ReturnRequestCardProps {
   returnRequest: ReturnRequest;
@@ -17,6 +18,7 @@ export default function ReturnRequestCard({
   returnRequest,
   onUpdateStatus,
 }: ReturnRequestCardProps) {
+  const { formatPrice } = useLanguage();
   const [adminNotes, setAdminNotes] = useState(returnRequest.admin_notes || "");
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +48,7 @@ export default function ReturnRequestCard({
             {order && (
               <span>
                 {" "}&middot; {String(order.user_email || "")}
-                {" "}&middot; ${Number(order.total_amount || 0).toFixed(2)}
+                {" "}&middot; {formatPrice(Number(order.total_amount || 0))}
               </span>
             )}
           </p>

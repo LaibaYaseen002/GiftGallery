@@ -7,11 +7,13 @@ import { giftWrappingApi } from "@/lib/api";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
 
 type TabType = "wrapping" | "packaging";
 
 export default function AdminGiftWrappingPage() {
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
   const [options, setOptions] = useState<GiftWrappingOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>("wrapping");
@@ -252,7 +254,7 @@ export default function AdminGiftWrappingPage() {
                   </div>
                   <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-medium">
                     <span className="font-medium text-dark">
-                      ${option.price.toFixed(2)}
+                      {formatPrice(option.price)}
                     </span>
                     {option.theme && <span>{option.theme}</span>}
                     {option.color && (

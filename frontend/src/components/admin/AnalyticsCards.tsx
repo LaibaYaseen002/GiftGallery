@@ -1,4 +1,7 @@
+"use client";
+
 import { AnalyticsData } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface AnalyticsCardsProps {
   data: AnalyticsData;
@@ -8,7 +11,7 @@ const cards = [
   {
     key: "total_revenue" as const,
     label: "Total Revenue",
-    format: (v: number) => `$${v.toFixed(2)}`,
+    isPrice: true,
     gradient: "from-[#B76E79] to-[#9A4C5A]",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -19,7 +22,7 @@ const cards = [
   {
     key: "total_orders" as const,
     label: "Total Orders",
-    format: (v: number) => String(v),
+    isPrice: false,
     gradient: "from-[#D4A853] to-[#B8922E]",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -30,7 +33,7 @@ const cards = [
   {
     key: "total_products" as const,
     label: "Products",
-    format: (v: number) => String(v),
+    isPrice: false,
     gradient: "from-[#6B9E78] to-[#4A7A57]",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -41,7 +44,7 @@ const cards = [
   {
     key: "total_customers" as const,
     label: "Customers",
-    format: (v: number) => String(v),
+    isPrice: false,
     gradient: "from-[#6B7FBF] to-[#4A5A9E]",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -52,6 +55,8 @@ const cards = [
 ];
 
 export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
+  const { formatPrice } = useLanguage();
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((card) => (
@@ -66,7 +71,7 @@ export default function AnalyticsCards({ data }: AnalyticsCardsProps) {
             <div>
               <p className="text-sm text-white/80 mb-1">{card.label}</p>
               <p className="text-2xl font-bold text-white">
-                {card.format(data[card.key])}
+                {card.isPrice ? formatPrice(data[card.key]) : String(data[card.key])}
               </p>
             </div>
             <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-white">

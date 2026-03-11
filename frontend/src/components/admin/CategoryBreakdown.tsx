@@ -1,6 +1,7 @@
 "use client";
 
 import { CategoryBreakdownItem } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CategoryBreakdownProps {
   data: CategoryBreakdownItem[];
@@ -16,6 +17,7 @@ const categoryColors = [
 ];
 
 export default function CategoryBreakdown({ data }: CategoryBreakdownProps) {
+  const { formatPrice } = useLanguage();
   const maxRevenue = Math.max(...data.map((d) => d.total_revenue), 1);
   const totalRevenue = data.reduce((sum, d) => sum + d.total_revenue, 0);
 
@@ -44,7 +46,7 @@ export default function CategoryBreakdown({ data }: CategoryBreakdownProps) {
                   <div className="flex items-center gap-3 text-xs text-medium">
                     <span>{cat.total_orders} sold</span>
                     <span className="font-semibold text-primary">
-                      ${cat.total_revenue.toFixed(2)}
+                      {formatPrice(cat.total_revenue)}
                     </span>
                     <span className="text-medium/70">{revPct}%</span>
                   </div>

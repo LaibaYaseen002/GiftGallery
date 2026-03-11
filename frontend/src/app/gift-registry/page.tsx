@@ -6,6 +6,7 @@ import Image from "next/image";
 import { GiftRegistry, GiftRegistryItem, Product } from "@/types";
 import { registryApi, productsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 type EventType = "birthday" | "wedding" | "baby_shower" | "anniversary" | "other";
 
@@ -34,6 +35,7 @@ interface CreateRegistryForm {
 
 export default function GiftRegistryPage() {
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
   const [registries, setRegistries] = useState<GiftRegistry[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -482,7 +484,7 @@ export default function GiftRegistryPage() {
                                       </div>
                                       <div className="flex-1 min-w-0">
                                         <p className="text-xs font-medium text-dark truncate">{product.name}</p>
-                                        <p className="text-xs" style={{ color: "#B76E79" }}>${product.price.toFixed(2)}</p>
+                                        <p className="text-xs" style={{ color: "#B76E79" }}>{formatPrice(product.price)}</p>
                                       </div>
                                       <button
                                         onClick={() => handleAddItem(product.id)}
@@ -540,7 +542,7 @@ export default function GiftRegistryPage() {
                                       {item.product?.name || "Unknown Product"}
                                     </p>
                                     <p className="text-xs" style={{ color: "#B76E79" }}>
-                                      ${item.product?.price.toFixed(2) || "0.00"}
+                                      {item.product ? formatPrice(item.product.price) : "0.00"}
                                     </p>
                                     <div className="flex items-center gap-2 mt-1">
                                       <div className="flex-1 bg-gray-200 rounded-full h-1.5">

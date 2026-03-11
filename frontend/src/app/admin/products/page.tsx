@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
-import Image from "next/image";
+import ProductImage from "@/components/ui/ProductImage";
 import { Product } from "@/types";
 import { productsApi } from "@/lib/api";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AdminProductsPage() {
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -100,7 +102,7 @@ export default function AdminProductsPage() {
               <div className="flex items-center gap-4">
                 {/* Image */}
                 <div className="w-16 h-16 rounded-lg overflow-hidden border border-border flex-shrink-0 relative">
-                  <Image
+                  <ProductImage
                     src={product.image_url}
                     alt={product.name}
                     fill
@@ -123,7 +125,7 @@ export default function AdminProductsPage() {
                   </div>
                   <div className="flex flex-wrap gap-x-4 text-xs text-medium">
                     <span className="font-medium text-primary">
-                      ${Number(product.price).toFixed(2)}
+                      {formatPrice(Number(product.price))}
                     </span>
                     {product.category && (
                       <span>{product.category.name}</span>

@@ -6,11 +6,13 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import AuthModal from "@/components/auth/AuthModal";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function CartSummary() {
   const { totalItems, totalPrice } = useCart();
   const { isSignedIn } = useUser();
   const router = useRouter();
+  const { formatPrice } = useLanguage();
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleCheckout = () => {
@@ -29,7 +31,7 @@ export default function CartSummary() {
         <div className="space-y-2 mb-4">
           <div className="flex justify-between text-medium">
             <span>Items ({totalItems})</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>{formatPrice(totalPrice)}</span>
           </div>
           <div className="flex justify-between text-medium">
             <span>Shipping</span>
@@ -38,7 +40,7 @@ export default function CartSummary() {
           <div className="border-t border-border pt-2 flex justify-between">
             <span className="text-sm font-bold text-dark">Total</span>
             <span className="text-sm font-bold text-primary">
-              ${totalPrice.toFixed(2)}
+              {formatPrice(totalPrice)}
             </span>
           </div>
         </div>

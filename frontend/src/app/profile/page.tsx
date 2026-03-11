@@ -8,10 +8,12 @@ import { Order } from "@/types";
 import { ordersApi } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ProfilePage() {
   const { user, isLoaded } = useUser();
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -146,7 +148,7 @@ export default function ProfilePage() {
             </div>
             <div className="card p-3 sm:p-4 text-center">
               <p className="text-base sm:text-xl font-bold text-accent">
-                ${totalSpent.toFixed(2)}
+                {formatPrice(totalSpent)}
               </p>
               <p className="text-xs text-medium">Total Spent</p>
             </div>
@@ -202,7 +204,7 @@ export default function ProfilePage() {
                       </p>
                     </div>
                     <span className="font-medium text-primary">
-                      ${Number(order.total_amount).toFixed(2)}
+                      {formatPrice(Number(order.total_amount))}
                     </span>
                   </Link>
                 ))}

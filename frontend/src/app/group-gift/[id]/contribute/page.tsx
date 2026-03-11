@@ -8,11 +8,13 @@ import { useParams } from "next/navigation";
 import { GroupGift } from "@/types";
 import { groupGiftsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ContributePage() {
   const { getToken } = useAuth();
   const params = useParams();
   const id = params.id as string;
+  const { formatPrice } = useLanguage();
 
   const [groupGift, setGroupGift] = useState<GroupGift | null>(null);
   const [loading, setLoading] = useState(true);
@@ -196,7 +198,7 @@ export default function ContributePage() {
                   </span>
                 </div>
                 <p className="text-xl font-bold mb-4" style={{ color: "#B76E79" }}>
-                  ${groupGift.product.price.toFixed(2)}
+                  {formatPrice(groupGift.product.price)}
                 </p>
                 <p className="text-medium text-xs">
                   A group gift for{" "}
@@ -212,8 +214,8 @@ export default function ContributePage() {
           <div className="px-4 py-4 border-t border-gray-100">
             <div className="flex justify-between text-xs mb-2">
               <span className="text-medium">
-                ${groupGift.current_amount.toFixed(2)} raised of $
-                {groupGift.target_amount.toFixed(2)}
+                {formatPrice(groupGift.current_amount)} raised of{" "}
+                {formatPrice(groupGift.target_amount)}
               </span>
               <span className="font-semibold" style={{ color: "#B76E79" }}>
                 {percentage}%
@@ -232,7 +234,7 @@ export default function ContributePage() {
             {isActive && remaining > 0 && (
               <p className="text-xs text-medium mt-2">
                 <span className="font-medium" style={{ color: "#D4A853" }}>
-                  ${remaining.toFixed(2)}
+                  {formatPrice(remaining)}
                 </span>{" "}
                 still needed to reach the goal
               </p>
@@ -333,7 +335,7 @@ export default function ContributePage() {
                       type="number"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      placeholder={`Up to $${remaining.toFixed(2)} remaining`}
+                      placeholder={`Up to ${formatPrice(remaining)} remaining`}
                       className="input-field"
                       min="0.01"
                       max={remaining}
@@ -341,7 +343,7 @@ export default function ContributePage() {
                       required
                     />
                     <p className="text-xs text-medium mt-1">
-                      ${remaining.toFixed(2)} still needed to reach the goal
+                      {formatPrice(remaining)} still needed to reach the goal
                     </p>
                   </div>
 
@@ -408,7 +410,7 @@ export default function ContributePage() {
                         className="font-semibold text-xs"
                         style={{ color: "#D4A853" }}
                       >
-                        ${contrib.amount.toFixed(2)}
+                        {formatPrice(contrib.amount)}
                       </span>
                     </div>
                   ))}

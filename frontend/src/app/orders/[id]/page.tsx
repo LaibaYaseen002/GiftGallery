@@ -12,6 +12,7 @@ import OrderTimeline from "@/components/orders/OrderTimeline";
 import ReturnRequestForm from "@/components/returns/ReturnRequestForm";
 import ReturnStatusBadge from "@/components/returns/ReturnStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 function OrderDetailContent() {
   const params = useParams();
@@ -19,6 +20,7 @@ function OrderDetailContent() {
   const id = params.id as string;
   const isSuccess = searchParams.get("success") === "true";
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
@@ -128,11 +130,11 @@ function OrderDetailContent() {
                       {item.product_name}
                     </p>
                     <p className="text-xs text-medium">
-                      ${Number(item.price).toFixed(2)} x {item.quantity}
+                      {formatPrice(Number(item.price))} x {item.quantity}
                     </p>
                   </div>
                   <span className="font-medium">
-                    ${(Number(item.price) * item.quantity).toFixed(2)}
+                    {formatPrice(Number(item.price) * item.quantity)}
                   </span>
                 </div>
               ))}
@@ -143,10 +145,9 @@ function OrderDetailContent() {
               <div className="flex justify-between text-medium">
                 <span>Subtotal</span>
                 <span>
-                  $
-                  {(
+                  {formatPrice(
                     Number(order.total_amount) + Number(order.discount_amount)
-                  ).toFixed(2)}
+                  )}
                 </span>
               </div>
               {order.discount_code && (
@@ -154,7 +155,7 @@ function OrderDetailContent() {
                   <span>
                     Discount ({order.discount_code})
                   </span>
-                  <span>-${Number(order.discount_amount).toFixed(2)}</span>
+                  <span>-{formatPrice(Number(order.discount_amount))}</span>
                 </div>
               )}
               <div className="flex justify-between text-medium">
@@ -164,7 +165,7 @@ function OrderDetailContent() {
               <div className="flex justify-between border-t border-border pt-2">
                 <span className="text-base font-bold">Total</span>
                 <span className="text-base font-bold text-primary">
-                  ${Number(order.total_amount).toFixed(2)}
+                  {formatPrice(Number(order.total_amount))}
                 </span>
               </div>
             </div>

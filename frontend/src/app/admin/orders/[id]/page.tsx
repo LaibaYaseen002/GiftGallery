@@ -8,6 +8,7 @@ import { Order, OrderStatus } from "@/types";
 import { ordersApi } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 const ALL_STATUSES: OrderStatus[] = [
   "pending",
@@ -21,6 +22,7 @@ export default function AdminOrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
@@ -152,11 +154,11 @@ export default function AdminOrderDetailPage() {
                   <div>
                     <p className="font-medium text-dark">{item.product_name}</p>
                     <p className="text-xs text-medium">
-                      ${Number(item.price).toFixed(2)} x {item.quantity}
+                      {formatPrice(Number(item.price))} x {item.quantity}
                     </p>
                   </div>
                   <p className="font-semibold text-dark">
-                    ${(Number(item.price) * item.quantity).toFixed(2)}
+                    {formatPrice(Number(item.price) * item.quantity)}
                   </p>
                 </div>
               ))}
@@ -166,7 +168,7 @@ export default function AdminOrderDetailPage() {
             <div className="border-t border-border mt-3 pt-3 space-y-1">
               <div className="flex justify-between text-xs">
                 <span className="text-medium">Subtotal</span>
-                <span className="text-dark">${subtotal.toFixed(2)}</span>
+                <span className="text-dark">{formatPrice(subtotal)}</span>
               </div>
               {order.discount_code && (
                 <div className="flex justify-between text-xs">
@@ -174,14 +176,14 @@ export default function AdminOrderDetailPage() {
                     Discount ({order.discount_code})
                   </span>
                   <span className="text-success">
-                    -${Number(order.discount_amount).toFixed(2)}
+                    -{formatPrice(Number(order.discount_amount))}
                   </span>
                 </div>
               )}
               <div className="flex justify-between font-bold text-base pt-1">
                 <span className="text-dark">Total</span>
                 <span className="text-primary">
-                  ${Number(order.total_amount).toFixed(2)}
+                  {formatPrice(Number(order.total_amount))}
                 </span>
               </div>
             </div>
@@ -339,7 +341,7 @@ export default function AdminOrderDetailPage() {
               <div className="flex justify-between">
                 <span className="text-medium">Total</span>
                 <span className="text-dark font-bold">
-                  ${Number(order.total_amount).toFixed(2)}
+                  {formatPrice(Number(order.total_amount))}
                 </span>
               </div>
               {order.discount_code && (

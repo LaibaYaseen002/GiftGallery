@@ -6,6 +6,7 @@ import { useCart } from "@/context/CartContext";
 import { useToast } from "@/components/ui/Toast";
 import ProductImage from "@/components/ui/ProductImage";
 import WishlistButton from "@/components/wishlist/WishlistButton";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +15,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const { showToast } = useToast();
+  const { formatPrice } = useLanguage();
 
   return (
     <div className="group relative bg-white rounded-xl overflow-hidden border border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
@@ -72,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-border/40">
           <div className="flex flex-col">
             <span className="text-xs font-bold text-primary leading-none">
-              ${product.price.toFixed(2)}
+              {formatPrice(product.price)}
             </span>
           </div>
           <button

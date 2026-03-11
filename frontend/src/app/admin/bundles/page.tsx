@@ -7,6 +7,7 @@ import { bundlesApi, productsApi } from "@/lib/api";
 import Modal from "@/components/ui/Modal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface BundleItemEntry {
   product_id: string;
@@ -18,6 +19,7 @@ const OCCASIONS = ["birthday", "wedding", "anniversary", "festival", "custom"];
 
 export default function AdminBundlesPage() {
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
   const [bundles, setBundles] = useState<ProductBundle[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -469,7 +471,7 @@ export default function AdminBundlesPage() {
                         {product.name}
                       </span>
                       <span className="text-xs text-medium ml-auto">
-                        ${product.price.toFixed(2)}
+                        {formatPrice(product.price)}
                       </span>
                     </button>
                   ))}

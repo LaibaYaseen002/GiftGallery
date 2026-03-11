@@ -1,6 +1,7 @@
 "use client";
 
 import { ChartDataPoint } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface RevenueChartProps {
   data: ChartDataPoint[];
@@ -9,6 +10,7 @@ interface RevenueChartProps {
 }
 
 export default function RevenueChart({ data, period, onPeriodChange }: RevenueChartProps) {
+  const { formatPrice } = useLanguage();
   const maxRevenue = Math.max(...data.map((d) => d.revenue), 1);
   const totalRevenue = data.reduce((sum, d) => sum + d.revenue, 0);
   const totalOrders = data.reduce((sum, d) => sum + d.orders, 0);
@@ -46,7 +48,7 @@ export default function RevenueChart({ data, period, onPeriodChange }: RevenueCh
 
       {/* Period summary */}
       <div className="flex items-baseline gap-2 mb-4">
-        <span className="text-2xl font-bold text-dark">${totalRevenue.toFixed(2)}</span>
+        <span className="text-2xl font-bold text-dark">{formatPrice(totalRevenue)}</span>
         <span className="text-xs text-medium">{totalOrders} orders in {period === "7d" ? "7 days" : "30 days"}</span>
       </div>
 

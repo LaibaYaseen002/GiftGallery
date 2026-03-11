@@ -11,6 +11,7 @@ import CategoryBreakdown from "@/components/admin/CategoryBreakdown";
 import ActivityFeed from "@/components/admin/ActivityFeed";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -44,6 +45,7 @@ const medalGradients = [
 export default function AdminDashboardPage() {
   const { getToken } = useAuth();
   const { user } = useUser();
+  const { formatPrice } = useLanguage();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [categoryData, setCategoryData] = useState<CategoryBreakdownItem[]>([]);
@@ -258,7 +260,7 @@ export default function AdminDashboardPage() {
                     <div className="text-right flex items-center gap-3">
                       <OrderStatusBadge status={order.status as import("@/types").OrderStatus} />
                       <span className="text-xs font-medium">
-                        ${Number(order.total_amount).toFixed(2)}
+                        {formatPrice(Number(order.total_amount))}
                       </span>
                     </div>
                   </Link>

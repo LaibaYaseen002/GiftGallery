@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { GiftRegistry, GiftRegistryItem } from "@/types";
 import { registryApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   birthday: "Birthday",
@@ -29,6 +30,7 @@ export default function SharedRegistryPage() {
   const params = useParams();
   const shareCode = params.shareCode as string;
   const { getToken, isSignedIn } = useAuth();
+  const { formatPrice } = useLanguage();
 
   const [registry, setRegistry] = useState<GiftRegistry | null>(null);
   const [loading, setLoading] = useState(true);
@@ -233,7 +235,7 @@ export default function SharedRegistryPage() {
                       </h3>
                     </Link>
                     <p className="text-lg font-bold mb-3" style={{ color: "#B76E79" }}>
-                      ${item.product?.price.toFixed(2) || "0.00"}
+                      {item.product ? formatPrice(item.product.price) : "0.00"}
                     </p>
 
                     {/* Quantity Info */}

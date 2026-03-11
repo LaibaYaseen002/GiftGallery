@@ -8,11 +8,13 @@ import Image from "next/image";
 import { customersApi, CustomerDetail } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AdminCustomerDetailPage() {
   const { userId } = useParams<{ userId: string }>();
   const router = useRouter();
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
 
   const [customer, setCustomer] = useState<CustomerDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -115,13 +117,13 @@ export default function AdminCustomerDetailPage() {
           </div>
           <div className="card p-4 text-center">
             <p className="text-xl font-bold text-primary">
-              ${customer.stats.total_spent.toFixed(2)}
+              {formatPrice(customer.stats.total_spent)}
             </p>
             <p className="text-xs text-medium mt-1">Total Spent</p>
           </div>
           <div className="card p-4 text-center">
             <p className="text-xl font-bold text-primary">
-              ${customer.stats.avg_order_value.toFixed(2)}
+              {formatPrice(customer.stats.avg_order_value)}
             </p>
             <p className="text-xs text-medium mt-1">Avg. Order</p>
           </div>
@@ -181,7 +183,7 @@ export default function AdminCustomerDetailPage() {
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-primary">
-                      ${Number(order.total_amount).toFixed(2)}
+                      {formatPrice(Number(order.total_amount))}
                     </p>
                     {order.discount_code && (
                       <p className="text-xs text-success">{order.discount_code}</p>

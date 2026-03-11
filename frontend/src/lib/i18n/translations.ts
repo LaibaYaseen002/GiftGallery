@@ -14,6 +14,16 @@ export const CURRENCIES: Record<Locale, { code: string; symbol: string; rate: nu
   fr: { code: "EUR", symbol: "\u20AC", rate: 0.92 },
 };
 
+export type CurrencyCode = "USD" | "PKR" | "EUR" | "GBP" | "SAR";
+
+export const ALL_CURRENCIES: { code: CurrencyCode; symbol: string; rate: number; name: string; flag: string }[] = [
+  { code: "USD", symbol: "$", rate: 1, name: "US Dollar", flag: "\uD83C\uDDFA\uD83C\uDDF8" },
+  { code: "PKR", symbol: "Rs", rate: 278.5, name: "Pakistani Rupee", flag: "\uD83C\uDDF5\uD83C\uDDF0" },
+  { code: "EUR", symbol: "\u20AC", rate: 0.92, name: "Euro", flag: "\uD83C\uDDEA\uD83C\uDDFA" },
+  { code: "GBP", symbol: "\u00A3", rate: 0.79, name: "British Pound", flag: "\uD83C\uDDEC\uD83C\uDDE7" },
+  { code: "SAR", symbol: "SR", rate: 3.75, name: "Saudi Riyal", flag: "\uD83C\uDDF8\uD83C\uDDE6" },
+];
+
 type TranslationKeys = {
   // Navigation
   "nav.home": string;

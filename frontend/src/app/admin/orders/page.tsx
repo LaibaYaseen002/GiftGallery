@@ -7,6 +7,7 @@ import { Order, OrderStatus } from "@/types";
 import { ordersApi } from "@/lib/api";
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 const ALL_STATUSES: OrderStatus[] = [
   "pending",
@@ -18,6 +19,7 @@ const ALL_STATUSES: OrderStatus[] = [
 
 export default function AdminOrdersPage() {
   const { getToken } = useAuth();
+  const { formatPrice } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | OrderStatus>("all");
@@ -151,11 +153,11 @@ export default function AdminOrdersPage() {
                 {/* Price */}
                 <div className="text-right mr-4">
                   <p className="text-base font-bold text-primary">
-                    ${Number(order.total_amount).toFixed(2)}
+                    {formatPrice(Number(order.total_amount))}
                   </p>
                   {order.discount_code && (
                     <p className="text-xs text-success">
-                      {order.discount_code} (-${Number(order.discount_amount).toFixed(2)})
+                      {order.discount_code} (-{formatPrice(Number(order.discount_amount))})
                     </p>
                   )}
                 </div>

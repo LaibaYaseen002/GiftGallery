@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CartItem as CartItemType } from "@/types";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CartItemProps {
   item: CartItemType;
@@ -11,6 +12,7 @@ interface CartItemProps {
 
 export default function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem } = useCart();
+  const { formatPrice } = useLanguage();
   const { product, quantity } = item;
 
   return (
@@ -41,7 +43,7 @@ export default function CartItem({ item }: CartItemProps) {
             <p className="text-xs text-medium">{product.category.name}</p>
           )}
           <p className="text-primary font-bold text-xs mt-1">
-            ${product.price.toFixed(2)}
+            {formatPrice(product.price)}
           </p>
         </div>
       </div>
@@ -70,7 +72,7 @@ export default function CartItem({ item }: CartItemProps) {
         {/* Subtotal + Remove */}
         <div className="flex flex-col items-end gap-1">
           <span className="font-bold text-dark text-xs">
-            ${(product.price * quantity).toFixed(2)}
+            {formatPrice(product.price * quantity)}
           </span>
           <button
             onClick={() => removeItem(product.id)}

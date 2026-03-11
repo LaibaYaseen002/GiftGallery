@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import { GroupGift, Product } from "@/types";
 import { groupGiftsApi, productsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function GroupGiftPage() {
   const { getToken } = useAuth();
   const router = useRouter();
+  const { formatPrice } = useLanguage();
   const [groupGifts, setGroupGifts] = useState<GroupGift[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -208,7 +210,7 @@ export default function GroupGiftPage() {
                   <div className="flex-1">
                     <p className="font-medium text-dark">{selectedProduct.name}</p>
                     <p className="text-xs" style={{ color: "#B76E79" }}>
-                      ${selectedProduct.price.toFixed(2)}
+                      {formatPrice(selectedProduct.price)}
                     </p>
                   </div>
                   <button
@@ -274,7 +276,7 @@ export default function GroupGiftPage() {
                               {product.name}
                             </p>
                             <p className="text-xs" style={{ color: "#B76E79" }}>
-                              ${product.price.toFixed(2)}
+                              {formatPrice(product.price)}
                             </p>
                           </div>
                         </button>
@@ -453,7 +455,7 @@ export default function GroupGiftPage() {
                 <div className="p-4">
                   <div className="flex justify-between text-xs mb-2">
                     <span className="text-medium">
-                      ${gift.current_amount.toFixed(2)} of ${gift.target_amount.toFixed(2)}
+                      {formatPrice(gift.current_amount)} of {formatPrice(gift.target_amount)}
                     </span>
                     <span className="font-semibold" style={{ color: "#B76E79" }}>
                       {percentage}% funded
@@ -471,7 +473,7 @@ export default function GroupGiftPage() {
                   </div>
                   {gift.status === "active" && remaining > 0 && (
                     <p className="text-xs text-medium mt-1">
-                      ${remaining.toFixed(2)} still needed
+                      {formatPrice(remaining)} still needed
                     </p>
                   )}
                 </div>
@@ -490,7 +492,7 @@ export default function GroupGiftPage() {
                         >
                           <span className="text-medium">{contrib.contributor_name}</span>
                           <span className="font-medium" style={{ color: "#D4A853" }}>
-                            ${contrib.amount.toFixed(2)}
+                            {formatPrice(contrib.amount)}
                           </span>
                         </div>
                       ))}
