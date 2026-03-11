@@ -90,9 +90,9 @@ describe("Discount Code Validation in Order", () => {
 describe("Order Total Calculation", () => {
   it("calculates total from multiple items", () => {
     const items = [
-      { price: 29.99, quantity: 2 },
-      { price: 49.99, quantity: 1 },
-      { price: 9.99, quantity: 3 },
+      { price: 8.99, quantity: 2 },
+      { price: 14.99, quantity: 1 },
+      { price: 3.99, quantity: 3 },
     ];
 
     const subtotal = items.reduce(
@@ -100,7 +100,7 @@ describe("Order Total Calculation", () => {
       0
     );
 
-    expect(subtotal).toBeCloseTo(139.94, 2);
+    expect(subtotal).toBeCloseTo(44.94, 2);
   });
 
   it("applies discount to subtotal", () => {

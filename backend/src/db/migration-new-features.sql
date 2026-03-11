@@ -201,14 +201,14 @@ ON CONFLICT DO NOTHING;
 
 -- Insert seed gift wrapping options
 INSERT INTO gift_wrapping_options (name, description, price, type, color, theme, is_eco_friendly) VALUES
-  ('Classic Red', 'Traditional red wrapping paper with gold ribbon', 2.99, 'wrapping', '#C41E3A', 'classic', false),
-  ('Elegant Gold', 'Premium gold foil wrapping with satin bow', 4.99, 'wrapping', '#D4A853', 'luxury', false),
-  ('Floral Garden', 'Beautiful floral pattern wrapping', 3.49, 'wrapping', '#FF69B4', 'floral', false),
-  ('Birthday Fun', 'Colorful birthday themed wrapping with confetti', 2.99, 'wrapping', '#FF6347', 'birthday', false),
-  ('Eco Kraft', 'Recyclable kraft paper with twine bow', 1.99, 'wrapping', '#8B7355', 'minimal', true),
-  ('Eco Botanical', 'Biodegradable paper with botanical prints', 2.49, 'wrapping', '#228B22', 'nature', true),
-  ('Gift Box - Small', 'Elegant small gift box with tissue paper', 3.99, 'packaging', '#FFFFFF', 'box', false),
-  ('Gift Box - Medium', 'Premium medium gift box with ribbon', 5.99, 'packaging', '#FFFFFF', 'box', false),
-  ('Gift Box - Large', 'Luxury large gift box with bow', 7.99, 'packaging', '#FFFFFF', 'box', false),
-  ('Reusable Gift Bag', 'Branded reusable fabric gift bag', 4.99, 'packaging', '#B76E79', 'reusable', true)
+  ('Classic Red', 'Traditional red wrapping paper with gold ribbon', 0.99, 'wrapping', '#C41E3A', 'classic', false),
+  ('Elegant Gold', 'Premium gold foil wrapping with satin bow', 1.49, 'wrapping', '#D4A853', 'luxury', false),
+  ('Floral Garden', 'Beautiful floral pattern wrapping', 0.99, 'wrapping', '#FF69B4', 'floral', false),
+  ('Birthday Fun', 'Colorful birthday themed wrapping with confetti', 0.99, 'wrapping', '#FF6347', 'birthday', false),
+  ('Eco Kraft', 'Recyclable kraft paper with twine bow', 0.49, 'wrapping', '#8B7355', 'minimal', true),
+  ('Eco Botanical', 'Biodegradable paper with botanical prints', 0.69, 'wrapping', '#228B22', 'nature', true),
+  ('Gift Box - Small', 'Elegant small gift box with tissue paper', 1.29, 'packaging', '#FFFFFF', 'box', false),
+  ('Gift Box - Medium', 'Premium medium gift box with ribbon', 1.99, 'packaging', '#FFFFFF', 'box', false),
+  ('Gift Box - Large', 'Luxury large gift box with bow', 2.49, 'packaging', '#FFFFFF', 'box', false),
+  ('Reusable Gift Bag', 'Branded reusable fabric gift bag', 1.49, 'packaging', '#B76E79', 'reusable', true)
 ON CONFLICT DO NOTHING;
