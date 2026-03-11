@@ -5,6 +5,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import AdminGuard from "@/components/admin/AdminGuard";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import NotificationBell from "@/components/admin/NotificationBell";
+import CurrencySwitcher from "@/components/CurrencySwitcher";
 
 export default function AdminLayout({
   children,
@@ -48,6 +49,7 @@ export default function AdminLayout({
 
             {/* Right: Notifications + Admin info + UserButton */}
             <div className="flex items-center gap-3">
+              <CurrencySwitcher />
               <NotificationBell />
               <div className="hidden sm:block text-right">
                 <p className="text-xs font-medium text-dark">

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/context/CartContext";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
@@ -140,7 +140,7 @@ export default function Navbar() {
 
           {/* Right Side: Language, Wishlist, Cart, Auth, Hamburger */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <LanguageSwitcher />
+            <CurrencySwitcher />
 
             <SignedIn>
               <Link
